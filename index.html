@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>نوات STEM | علوم الصف الأول</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar no-print">
+        <div class="brand-card">
+          <p class="eyebrow">نوات STEM</p>
+          <h1>علوم الصف الأول الابتدائي</h1>
+          <p class="brand-note">
+            موقع كامل للدروس مبني على عناوين الكتاب، مع أقسام معتمدة من قالب الغيوم وصياغة تعليمية مناسبة للصف الأول.
+          </p>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card">
+            <strong id="unitCount">0</strong>
+            <span>وحدات</span>
+          </article>
+          <article class="stat-card">
+            <strong id="lessonCount">0</strong>
+            <span>درسًا</span>
+          </article>
+          <article class="stat-card">
+            <strong>RTL</strong>
+            <span>جاهز للطباعة</span>
+          </article>
+        </div>
+
+        <label class="search-wrap" for="lessonSearch">
+          <span>ابحث عن درس</span>
+          <input id="lessonSearch" type="search" placeholder="مثال: الحيوانات أو الطقس" />
+        </label>
+
+        <!-- هنا تُنشأ قائمة الوحدات والدروس ديناميكيًا من data.js -->
+        <nav id="lessonNav" class="lesson-nav" aria-label="قائمة الدروس"></nav>
+      </aside>
+
+      <main class="main-panel">
+        <div class="toolbar no-print">
+          <div>
+            <p class="toolbar-label">العناوين مستخرجة من المصدر، أما المحتوى داخل الأقسام فهو صياغة تعليمية مقترحة للصف الأول.</p>
+          </div>
+          <div class="toolbar-actions">
+            <button id="overviewButton" class="button button-secondary" type="button">نظرة عامة</button>
+            <button id="printButton" class="button button-primary" type="button">طباعة الدرس الحالي</button>
+          </div>
+        </div>
+
+        <section id="overviewPanel" class="overview-panel"></section>
+
+        <!-- هذه المنطقة تُعرض فيها تفاصيل الدرس الحالي بالكامل -->
+        <section id="lessonView" class="sheet"></section>
+      </main>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

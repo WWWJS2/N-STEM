@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>درس | نوات ستيم</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../style.css" />
+  </head>
+  <body data-page="lesson" class="playful-body">
+    <div class="floating-shapes" aria-hidden="true">
+      <span class="shape-bubble bubble-blue"></span>
+      <span class="shape-bubble bubble-pink"></span>
+      <span class="shape-bubble bubble-yellow"></span>
+      <span class="shape-bubble bubble-green"></span>
+    </div>
+    <header class="topbar">
+      <div class="topbar-shell">
+        <div class="teacher-block">
+          <strong>أستاذة أميرة عبدالله الحكمي</strong>
+          <span>الفصل الدراسي الأول</span>
+        </div>
+        <a class="brand-lockup" href="../index.html">
+          <div class="brand-text">
+            <strong>نوات ستيم</strong>
+            <span>العلوم - STEM - الصف الأول الابتدائي</span>
+          </div>
+          <div class="brand-mark">ن</div>
+        </a>
+      </div>
+    </header>
+
+    <nav class="secondary-nav print-hidden">
+      <div class="secondary-nav-shell">
+        <a href="../index.html">الرئيسية</a>
+        <a href="../grade1.html" class="is-active">الصفوف ودروس STEM</a>
+        <a href="../games.html">ألعب مع ستيم</a>
+        <a href="../quizzes.html">اختبر معلوماتك</a>
+        <a href="../bot.html">الدردشة مع نوات</a>
+      </div>
+    </nav>
+
+    <main class="page-frame lesson-page">
+      <section class="lesson-hero">
+        <div>
+          <p id="lessonUnitLabel" class="small-label"></p>
+          <h1 id="lessonTitle"></h1>
+          <p id="lessonSummary" class="lesson-summary"></p>
+        </div>
+        <div class="hero-actions print-hidden">
+          <button id="printLessonButton" class="primary-button" type="button">طباعة الدرس</button>
+          <a href="../grade1.html" class="secondary-button">العودة للصف الأول</a>
+        </div>
+      </section>
+
+      <section class="lesson-detail-grid">
+        <article class="content-card">
+          <h2>الأهداف</h2>
+          <ul id="lessonObjectives" class="list-clean"></ul>
+        </article>
+        <article class="content-card">
+          <h2>المفاهيم</h2>
+          <div id="lessonConcepts" class="concept-tags"></div>
+        </article>
+      </section>
+
+      <section class="lesson-detail-grid">
+        <article class="content-card">
+          <h2>تمهيد الدرس</h2>
+          <p id="lessonHook" class="section-note"></p>
+        </article>
+        <article class="content-card">
+          <h2>الشرح المبسط</h2>
+          <div id="lessonExplanation" class="explanation-stack"></div>
+        </article>
+      </section>
+
+      <section class="content-card stem-bridge-card">
+        <div class="card-heading">
+          <h2>كيف يرتبط الدرس بـ STEM؟</h2>
+          <span>علوم + تقنية + هندسة + رياضيات</span>
+        </div>
+        <div class="stem-lens-grid">
+          <article class="lens-card">
+            <h3>العلوم</h3>
+            <p id="stemScience"></p>
+          </article>
+          <article class="lens-card">
+            <h3>التقنية</h3>
+            <p id="stemTechnology"></p>
+          </article>
+          <article class="lens-card">
+            <h3>الهندسة</h3>
+            <p id="stemEngineering"></p>
+          </article>
+          <article class="lens-card">
+            <h3>الرياضيات</h3>
+            <p id="stemMathematics"></p>
+          </article>
+        </div>
+      </section>
+
+      <section class="content-card stem-card">
+        <div class="card-heading">
+          <h2>نشاط STEM عملي</h2>
+          <span id="activityDuration"></span>
+        </div>
+        <h3 id="activityTitle"></h3>
+        <div class="stem-grid">
+          <div>
+            <h4>هدف النشاط</h4>
+            <p id="activityGoal"></p>
+          </div>
+          <div>
+            <h4>المواد</h4>
+            <ul id="activityMaterials" class="list-clean"></ul>
+          </div>
+          <div>
+            <h4>الخطوات</h4>
+            <ol id="activitySteps" class="list-clean numbered"></ol>
+          </div>
+          <div>
+            <h4>الناتج المتوقع</h4>
+            <p id="activityOutcome"></p>
+          </div>
+          <div>
+            <h4>احتياطات بسيطة</h4>
+            <p id="activitySafety"></p>
+          </div>
+          <div>
+            <h4>أسئلة تفكير</h4>
+            <ul id="activityQuestions" class="list-clean"></ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="lesson-detail-grid">
+        <article class="content-card">
+          <h2>إرشادات للمعلم</h2>
+          <ul id="teacherNotes" class="list-clean"></ul>
+        </article>
+        <article class="content-card">
+          <h2>مؤشرات النجاح</h2>
+          <ul id="successCriteria" class="list-clean"></ul>
+        </article>
+      </section>
+
+      <section class="content-card">
+        <h2>امتداد منزلي</h2>
+        <p id="homeExtension" class="section-note"></p>
+      </section>
+
+      <section class="content-card print-hidden">
+        <div class="card-heading">
+          <h2>اللعبة التفاعلية</h2>
+          <span id="gameTypeLabel"></span>
+        </div>
+        <p id="gameIntro" class="section-note"></p>
+        <div class="game-status-bar">
+          <div class="stat-box">
+            <span>النقاط</span>
+            <strong id="lessonGameScore">0</strong>
+          </div>
+          <div class="stat-box">
+            <span>أفضل نتيجة</span>
+            <strong id="lessonGameBest">0</strong>
+          </div>
+          <button id="resetLessonGame" class="secondary-button" type="button">إعادة اللعبة</button>
+        </div>
+        <div id="lessonGameArea" class="interactive-board"></div>
+        <p id="lessonGameFeedback" class="feedback-line"></p>
+      </section>
+
+      <section class="content-card print-hidden">
+        <div class="card-heading">
+          <h2>تقييم سريع</h2>
+          <span>3 أسئلة مع تغذية راجعة</span>
+        </div>
+        <div id="lessonAssessment" class="assessment-stack"></div>
+      </section>
+    </main>
+
+    <script src="../data.js"></script>
+    <script src="../script.js"></script>
+  </body>
+</html>

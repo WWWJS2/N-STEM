@@ -1019,3 +1019,32 @@ window.semester2Data = {
 
   ROOT.__fullPrintUpgrade = marker;
 })();
+
+;(() => {
+  const ROOT = window.semester2Data;
+  const MARK = "grade1-s2-worksheet-source-fix-v1";
+  if (!ROOT || ROOT.__worksheetSourceFix === MARK) return;
+  (ROOT.lessons || []).forEach((lesson) => {
+    lesson.semester = 2;
+    const ideas = lesson.mainIdeas || [];
+    const assess = lesson.assessmentQuestions || [];
+    const vocab = lesson.vocabulary || lesson.concepts || [];
+    if (Array.isArray(lesson.worksheets) && lesson.worksheets[1]) {
+      lesson.worksheets[1] = {
+        number:2,
+        title:'ورقة عمل (2) - أربط وأصف',
+        execution:'ثنائي',
+        workMinutes:15,
+        discussionMinutes:5,
+        objective:'ربط مفردات الدرس بأفكاره الرئيسة دون إضافة تعريفات غير واردة في محتوى الدرس.',
+        questions:[
+          {type:'fill',text:'اختر من مفردات الدرس واكتب كلمة مناسبة: __________.'},
+          {type:'short',text:ideas[0] || 'اكتب فكرة رئيسة تعلمتها في هذا الدرس.',lines:3},
+          {type:'short',text:assess[0] || 'اكتب مثالاً من حياتك يرتبط بموضوع الدرس.',lines:3},
+          {type:'explain',text:'اشرح بكلماتك معنى إحدى المفردات الآتية: ' + vocab.slice(0,4).join(' - '),lines:4}
+        ]
+      };
+    }
+  });
+  ROOT.__worksheetSourceFix = MARK;
+})();

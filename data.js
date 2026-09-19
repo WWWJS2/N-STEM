@@ -1445,3 +1445,223 @@ const nawatData = {
   ],
   chatbot: { name: 'نوات', greetings: [], responses: [], defaultResponse: '' }
 };
+
+  
+;(() => {
+  const ROOT = nawatData;
+  const CFG = {"label":"grade 1 semester 1","source":"كتاب العلوم - الصف الأول الابتدائي - الفصل الدراسي الأول","flatLessons":false};
+  const marker = "full-print-grade1-s1-v1";
+  if (!ROOT || ROOT.__fullPrintUpgrade === marker) return;
+
+  const normalizeQuiz = (lesson) => {
+    if (Array.isArray(lesson.quiz)) return lesson.quiz;
+    if (lesson.quiz && Array.isArray(lesson.quiz.questions)) return lesson.quiz.questions;
+    return [];
+  };
+  const conceptObjects = (lesson) => (lesson.concepts || []).map((c, i) => {
+    if (typeof c === 'string') return { term: c, definition: 'مفهوم من مفاهيم الدرس.' };
+    return { term: c.term || ('مفهوم ' + (i + 1)), definition: c.definition || '' };
+  });
+  const pick = (arr, i, fallback='') => Array.isArray(arr) && arr.length ? arr[Math.min(i, arr.length - 1)] : fallback;
+
+  const enhanceLesson = (lesson, unit, unitIndex, lessonIndex) => {
+    if (!lesson || lesson.printModel === 'magnet-full') return;
+
+    const concepts = conceptObjects(lesson);
+    const quiz = normalizeQuiz(lesson);
+    const mainIdeas = lesson.mainIdeas || [];
+    const assess = lesson.assessmentQuestions || [];
+    const activitySteps = (lesson.stemActivity && lesson.stemActivity.steps) || lesson.activitySteps || [];
+    const activityTitle = (lesson.stemActivity && lesson.stemActivity.title) || lesson.activityName || ('نشاط ' + lesson.title);
+    const sourceRef = lesson.resources || CFG.source;
+    const firstConcept = pick(concepts, 0, {term: lesson.title, definition: lesson.summary || ''});
+    const secondConcept = pick(concepts, 1, firstConcept);
+    const thirdConcept = pick(concepts, 2, secondConcept);
+    const q1 = quiz[0] || {question:'اختر العبارة التي ترتبط بموضوع الدرس.',options:[pick(mainIdeas,0,lesson.title),pick(mainIdeas,1,'مثال آخر'),pick(mainIdeas,2,'فكرة مختلفة')],correct:0};
+    const q2 = quiz[1] || q1;
+
+    lesson.printModel = 'magnet-full';
+
+    lesson.habitsOfMind = lesson.habitsOfMind || [
+      'الملاحظة الدقيقة قبل إصدار الحكم.',
+      'طرح الأسئلة والبحث عن دليل من النشاط.',
+      'المثابرة عند المحاولة وتصحيح الإجابة.',
+      'ربط ما أتعلمه بموقف من حياتي اليومية.'
+    ];
+
+    lesson.skills21 = lesson.skills21 || [
+      'التواصل وشرح الفكرة بلغة علمية بسيطة.',
+      'التعاون أثناء النشاط العملي.',
+      'التفكير الناقد عند المقارنة والتصنيف.',
+      'الإبداع في عرض النتيجة أو النموذج.'
+    ];
+
+    lesson.guidingQuestions = lesson.guidingQuestions || [
+      lesson.bookPrompt || ('ماذا أعرف عن «' + lesson.title + '»؟'),
+      'ما الدليل الذي أستطيع ملاحظته أو جمعه في هذا الدرس؟',
+      'كيف أستخدم ما تعلمته في موقف جديد؟',
+      'كيف أشرح الفكرة لشخص آخر بكلماتي؟'
+    ];
+
+    lesson.misconceptions = lesson.misconceptions || [
+      'قد يخلط بعض الطلاب بين «' + firstConcept.term + '» و«' + secondConcept.term + '»؛ يعاد توضيح الفرق باستخدام مثال وصورة من الدرس.',
+      'قد يختار الطالب إجابة اعتماداً على الشكل فقط؛ يطلب منه ذكر دليل يبرر اختياره.',
+      'تراجع المفردات العلمية في نهاية الدرس للتأكد من استخدامها في معناها الصحيح.'
+    ];
+
+    lesson.differentiation = lesson.differentiation || [
+      'دعم بصري: استخدام الصور والبطاقات والمجسمات عند شرح المفاهيم.',
+      'دعم لغوي: قراءة المفردات بصوت واضح وربط كل كلمة بصورة أو مثال.',
+      'تعلم تعاوني: تنفيذ مهمة قصيرة مع زميل ثم مشاركة النتيجة.',
+      'إثراء: يطلب من الطالب المتقدم ابتكار مثال جديد أو سؤال إضافي حول الفكرة.'
+    ];
+
+    lesson.priorLearning = lesson.priorLearning || [
+      'أذكر ما أعرفه مسبقاً عن موضوع الدرس.',
+      'أصنف أو أصف مثالاً بسيطاً قبل بدء الشرح.',
+      'أجيب عن سؤال تمهيدي مرتبط بخبرتي اليومية.'
+    ];
+
+    lesson.extension = lesson.extension || (
+      'يختار الطالب مثالاً من المنزل أو المدرسة يرتبط بموضوع «' + lesson.title +
+      '»، ثم يرسمه أو يصفه ويكتب جملة علمية قصيرة توضح علاقته بالدرس.'
+    );
+
+    lesson.accompanyingActivities = lesson.accompanyingActivities || [
+      {name: activityTitle, type:'نشاط عملي / استقصائي', source: sourceRef},
+      {name:'بطاقات المفاهيم', type:'مراجعة وتثبيت', source:'إعداد نوات ستيم اعتماداً على مفاهيم الدرس'},
+      {name:'تحدي دقيقة واحدة', type:'تقويم تكويني', source:'أسئلة الدرس والتقويم'},
+      {name:'تطبيق من الحياة', type:'إثراء', source:'موقف يومي مرتبط بموضوع الدرس'}
+    ];
+
+    lesson.lessonFlow = lesson.lessonFlow || [
+      {stage:'التهيئة', teacherRole:'يطرح سؤالاً أو يعرض صورة مرتبطة بالدرس ويستمع لتوقعات الطلاب.', studentRole:'يلاحظ ويصف ويشارك بما يعرفه.', time:'10 د'},
+      {stage:'بناء المفهوم', teacherRole:'يوضح المفردات والفكرة الرئيسة ويستخدم أمثلة من الدرس.', studentRole:'يقارن ويربط بين الأمثلة والمفاهيم.', time:'15 د'},
+      {stage:'نشاط STEM', teacherRole:'ينظم الأدوات ويوجه خطوات النشاط ويراقب السلامة.', studentRole:'ينفذ الخطوات ويسجل الملاحظات ويشارك النتيجة.', time:'25 د'},
+      {stage:'التطبيق', teacherRole:'يقدم موقفاً جديداً أو ورقة عمل قصيرة.', studentRole:'يطبق المفهوم ويبرر إجابته.', time:'15 د'},
+      {stage:'التقويم والإغلاق', teacherRole:'يناقش النتائج ويصحح الفهم ويعطي تغذية راجعة.', studentRole:'يجيب ويشرح ما تعلمه ويحدد فكرة رئيسة.', time:'10 د'}
+    ];
+
+    lesson.resultsAnalysis = lesson.resultsAnalysis || [
+      (lesson.stemActivity && lesson.stemActivity.expectedOutcome) || lesson.activityDescription || ('يظهر الطالب فهماً لفكرة «' + lesson.title + '» من خلال النشاط.'),
+      'تقارن الملاحظات أو الإجابات بالفكرة العلمية الواردة في الدرس.',
+      'يستخدم الطالب دليلاً أو مثالاً واحداً على الأقل لدعم استنتاجه.'
+    ];
+
+    lesson.realLifeApplications = lesson.realLifeApplications || [
+      'ألاحظ مثالاً على مفهوم الدرس في البيت أو المدرسة.',
+      'أشرح لأحد أفراد أسرتي فكرة علمية تعلمتها اليوم.',
+      'أستخدم مفردة علمية من الدرس في وصف موقف حقيقي.'
+    ];
+
+    const matchingPairs = concepts.slice(0,4).map(c => ({left:c.term,right:c.definition || ('تعريف ' + c.term)}));
+    const orderItems = activitySteps.slice(0,4);
+    const tfText = pick(mainIdeas,0, lesson.summary || lesson.title);
+
+    lesson.worksheets = [
+      {
+        number:1,
+        title:'ورقة عمل (1) - أكتشف المفهوم',
+        execution:'فردي',
+        workMinutes:12,
+        discussionMinutes:5,
+        objective:'التأكد من فهم المفاهيم الأساسية في درس «' + lesson.title + '».',
+        questions:[
+          {type:'mcq',text:q1.question,options:q1.options || []},
+          {type:'trueFalse',text:tfText},
+          {type:'fill',text:'أكمل: من مفردات الدرس المهمة: __________.'},
+          {type:'short',text:'اكتب مثالاً واحداً يرتبط بموضوع الدرس.',lines:2}
+        ]
+      },
+      {
+        number:2,
+        title:'ورقة عمل (2) - أربط وأقارن',
+        execution:'ثنائي',
+        workMinutes:15,
+        discussionMinutes:5,
+        objective:'ربط المفردات بمعانيها والمقارنة بين الأفكار.',
+        questions:[
+          {type:'match',text:'صل كل مفهوم بالمعنى المناسب.',pairs:matchingPairs},
+          {type:'short',text:'ما الفرق بين «' + firstConcept.term + '» و«' + secondConcept.term + '»؟',lines:3},
+          {type:'explain',text:'فسر إجابتك باستخدام دليل أو مثال من الدرس.',lines:3}
+        ]
+      },
+      {
+        number:3,
+        title:'ورقة عمل (3) - أطبق وأستقصي',
+        execution:'مجموعات صغيرة',
+        workMinutes:18,
+        discussionMinutes:7,
+        objective:'تطبيق مفهوم الدرس في نشاط أو موقف عملي.',
+        questions:[
+          ...(orderItems.length >= 3 ? [{type:'order',text:'رتب خطوات النشاط ترتيباً منطقياً.',items:orderItems}] : []),
+          {type:'short',text:'ماذا لاحظت أثناء النشاط؟',lines:3},
+          {type:'explain',text:'ماذا تعلمت من النتيجة؟ وكيف تدعم الفكرة الرئيسة للدرس؟',lines:4}
+        ]
+      },
+      {
+        number:4,
+        title:'ورقة عمل (4) - تقويم ختامي',
+        execution:'فردي',
+        workMinutes:12,
+        discussionMinutes:5,
+        objective:'قياس قدرة الطالب على استرجاع الفكرة وتطبيقها في موقف جديد.',
+        questions:[
+          {type:'mcq',text:q2.question,options:q2.options || []},
+          {type:'short',text:pick(assess,0,'اذكر الفكرة الرئيسة للدرس.'),lines:3},
+          {type:'short',text:pick(assess,1,'اكتب ما تعلمته من هذا الدرس.'),lines:3},
+          {type:'explain',text:'كيف تستفيد من هذا الدرس في حياتك اليومية؟',lines:3}
+        ]
+      }
+    ];
+
+    lesson.projectSheet = lesson.projectSheet || {
+      title:'مشروع تطبيقي مصغر - فكرة من درس «' + lesson.title + '»',
+      execution:'مجموعات صغيرة',
+      workMinutes:20,
+      discussionMinutes:10,
+      objective:'تحويل مفهوم من الدرس إلى منتج بصري أو نموذج بسيط يشرح الفكرة.',
+      prompt:'صمم ملصقاً أو نموذجاً بسيطاً يوضح فكرة رئيسة من الدرس، ثم اشرح كيف يمثل ما تعلمته.',
+      tools:(lesson.activityTools || (lesson.stemActivity && lesson.stemActivity.materials) || ['ورق مقوى','أقلام وألوان','بطاقات أو صور']).slice(0,6),
+      steps:[
+        'أحدد الفكرة التي سأعرضها من الدرس.',
+        'أرسم مخططاً بسيطاً للمنتج أو النموذج.',
+        'أختار الأدوات المناسبة وأبدأ التنفيذ.',
+        'أضيف الكلمات أو التسميات العلمية المهمة.',
+        'أراجع عملي وأصحح أي معلومة غير دقيقة.',
+        'أعرض المنتج وأشرح فكرته أمام زملائي.'
+      ]
+    };
+
+    lesson.evaluationPlan = lesson.evaluationPlan || {
+      strategy:'الملاحظة المنظمة + التقويم القائم على الأداء + أسئلة ختامية قصيرة.',
+      tool:'سلم تقدير وصحيفة ملاحظة وأوراق العمل الأربع.',
+      indicators:[
+        'يستخدم مفردتين علميتين على الأقل من الدرس في سياق صحيح.',
+        'يطبق الفكرة الرئيسة في مثال أو موقف جديد.',
+        'ينفذ خطوات النشاط ملتزماً بالتعليمات.',
+        'يشرح نتيجة أو استنتاجاً بلغة مناسبة لمرحلته العمرية.'
+      ]
+    };
+
+    lesson.references = lesson.references || [
+      CFG.source,
+      sourceRef,
+      'نوات ستيم - أوراق العمل والأنشطة الإثرائية المصممة لهذا الدرس.'
+    ];
+  };
+
+  const grades = ROOT.grades || [];
+  grades.forEach((grade) => {
+    (grade.units || []).forEach((unit, unitIndex) => {
+      const unitLessons = Array.isArray(unit.lessons) && unit.lessons.length && typeof unit.lessons[0] === 'object'
+        ? unit.lessons
+        : (CFG.flatLessons && Array.isArray(ROOT.lessons)
+            ? (unit.lessons || []).map(id => ROOT.lessons.find(l => l.id === id)).filter(Boolean)
+            : []);
+      unitLessons.forEach((lesson, lessonIndex) => enhanceLesson(lesson, unit, unitIndex, lessonIndex));
+    });
+  });
+
+  ROOT.__fullPrintUpgrade = marker;
+})();

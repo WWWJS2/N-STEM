@@ -1048,3 +1048,39 @@ window.semester2Data = {
   });
   ROOT.__worksheetSourceFix = MARK;
 })();
+
+;(() => {
+  const ROOT = window.semester2Data;
+  const MARK = "grade1-s2-curriculum-structure-v2";
+  if (!ROOT || ROOT.__curriculumStructure === MARK) return;
+  const grade = ROOT.grades && ROOT.grades[0];
+  if (!grade) return;
+  grade.name = 'الصف الأول الابتدائي';
+  grade.semesterName = 'الفصل الدراسي الثاني';
+  (grade.units || []).forEach((unit, idx) => {
+    unit.number = idx + 4;
+    if (unit.id === 'unit5-s2') unit.title = 'المادة';
+  });
+  const byId = Object.fromEntries((ROOT.lessons || []).map(l => [l.id, l]));
+  const chapters = {
+    's2-lesson-weather1':'الفصل السادس: الطقس والفصول',
+    's2-lesson-weather2':'الفصل السادس: الطقس والفصول',
+    's2-lesson-matter1':'الفصل السابع: المادة من حولنا',
+    's2-lesson-matter2':'الفصل السابع: المادة من حولنا',
+    's2-lesson-matter3':'الفصل السابع: المادة من حولنا',
+    's2-lesson7':'الفصل الثامن: تغيرات المادة',
+    's2-lesson8':'الفصل الثامن: تغيرات المادة',
+    's2-lesson1':'الفصل التاسع: الحركة',
+    's2-lesson2':'الفصل التاسع: الحركة',
+    's2-lesson3':'الفصل العاشر: الطاقة',
+    's2-lesson4':'الفصل العاشر: الطاقة'
+  };
+  Object.entries(chapters).forEach(([id, chapter]) => {
+    if (byId[id]) {
+      byId[id].chapter = chapter;
+      byId[id].semester = 2;
+      byId[id].sourcePart = 'الجزء الثاني';
+    }
+  });
+  ROOT.__curriculumStructure = MARK;
+})();

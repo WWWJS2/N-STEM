@@ -145,7 +145,8 @@ function getPrimaryGrade(gradeId) {
   const gradeSources = [
     window.nawatData,
     window.grade2Data,
-    window.grade3Data
+    window.grade3Data,
+    window.grade4Data
   ].filter(Boolean);
 
   for (const source of gradeSources) {
@@ -157,7 +158,7 @@ function getPrimaryGrade(gradeId) {
 }
 
 function getAvailableGrades() {
-  return ['grade1', 'grade2', 'grade3']
+  return ['grade1', 'grade2', 'grade3', 'grade4']
     .map(getPrimaryGrade)
     .filter(Boolean);
 }
@@ -169,6 +170,9 @@ function getAvailableSemestersForGrade(gradeId) {
   if (gradeId === 'grade3' && window.grade3Data) {
     return Array.isArray(grade3Data.availableSemesters) ? grade3Data.availableSemesters : [1];
   }
+  if (gradeId === 'grade4' && window.grade4Data) {
+    return Array.isArray(grade4Data.availableSemesters) ? grade4Data.availableSemesters : [1];
+  }
   const semesters = [1];
   if (gradeId === 'grade1' && window.semester2Data && semester2Data.grades && semester2Data.grades.length) semesters.push(2);
   return semesters;
@@ -177,8 +181,8 @@ function getAvailableSemestersForGrade(gradeId) {
 function getAllLessonsFlat(gradeId = state.selectedGradeId) {
   const result = [];
 
-  if ((gradeId === 'grade2' || gradeId === 'grade3')) {
-    const source = gradeId === 'grade2' ? window.grade2Data : window.grade3Data;
+  if (gradeId === 'grade2' || gradeId === 'grade3' || gradeId === 'grade4') {
+    const source = gradeId === 'grade2' ? window.grade2Data : (gradeId === 'grade3' ? window.grade3Data : window.grade4Data);
     if (source && source.grades) {
       const grade = source.grades.find(g => g.id === gradeId) || source.grades[0];
       if (grade) {
@@ -220,7 +224,40 @@ function getAllLessonsFlat(gradeId = state.selectedGradeId) {
 }
 
 function getCloudLessonPrintCss() {
-  return `:root{--navy:#183f64;--navy-deep:#122f4a;--blue:#0e79b7;--text:#17324a;--muted:#58728a;--line:#d8e0e7;--paper:#ffffff;--page-bg:#edf3f7}*{box-sizing:border-box}html,body{margin:0;padding:0}body{font-family:"IBM Plex Sans Arabic","Tajawal","Cairo",sans-serif;background:var(--page-bg);color:var(--text);direction:rtl}.toolbar{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 18px;background:rgba(237,243,247,.96);backdrop-filter:blur(10px);border-bottom:1px solid rgba(24,63,100,.08)}.toolbar-note{color:var(--muted);font-size:15px}.print-button{border:0;border-radius:14px;background:var(--navy);color:#fff;font:inherit;font-size:16px;font-weight:700;padding:10px 18px;cursor:pointer}.document{width:min(100%,920px);margin:0 auto;padding:24px 12px 42px}.sheet{position:relative;width:210mm;min-height:297mm;margin:0 auto 18px;background:var(--paper);box-shadow:0 20px 50px rgba(15,29,45,.12);overflow:hidden}.sheet::after{content:"";position:absolute;right:0;bottom:0;left:0;height:18mm;background:repeating-linear-gradient(to left,rgba(24,63,100,.12) 0 1mm,transparent 1mm 5mm);opacity:.45}.sheet-inner{position:relative;padding:14mm 12mm 18mm}.top-strip{display:grid;grid-template-columns:22mm 1fr 22mm;align-items:center;gap:6mm;margin-bottom:11mm}.top-strip .cap{height:13mm;border-radius:0 0 4mm 4mm;background:var(--blue)}.top-strip .title-bar{min-height:13mm;border-radius:0 0 4mm 4mm;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:flex-end;padding:0 7mm;font-size:20px;font-weight:700}.hero-block{border-radius:5mm;background:var(--navy);color:#fff;padding:8mm 9mm;margin-bottom:6mm}.hero-block h1{margin:0 0 3mm;font-size:24px;line-height:1.35;font-weight:700}.hero-block p{margin:0;font-size:17px;line-height:1.75}.inline-meta{display:grid;grid-template-columns:1fr 1fr;gap:6mm;margin-bottom:8mm}.info-box{border-radius:4mm;background:var(--navy);color:#fff;padding:5.5mm 6mm;min-height:26mm}.info-box p{margin:0;font-size:16px;line-height:1.85;font-weight:700}.two-col{display:grid;grid-template-columns:30mm 1fr;gap:6mm;margin-bottom:6mm;align-items:start}.label-box{border-radius:0 0 0 4mm;background:var(--blue);color:#fff;padding:4mm 3mm;min-height:20mm;display:flex;align-items:center;justify-content:center;text-align:center;font-size:17px;font-weight:700;line-height:1.35}.content-box{border-radius:4mm;background:var(--navy);color:#fff;padding:4.5mm 6mm;min-height:20mm}.content-box.light{background:#fff;color:var(--text);border:.4mm solid var(--line)}.content-box p,.content-box li,.content-box strong{margin:0;font-size:16px;line-height:1.9}.content-box ul,.content-box ol{margin:0;padding:0 5mm 0 0}.content-box li+li{margin-top:1.2mm}.stem-grid{display:grid;grid-template-columns:1fr 1fr;gap:5mm}.stem-panel{border:.4mm solid var(--line);border-radius:4mm;overflow:hidden;background:#fff}.stem-panel h3{margin:0;padding:3.5mm 5mm;background:var(--navy);color:#fff;font-size:16px;line-height:1.4}.stem-panel p{margin:0;padding:4.5mm 5mm 5mm;font-size:15px;line-height:1.85;min-height:29mm}.tools-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:4mm}.tool-item{text-align:center;padding:4mm;border:.4mm solid var(--line);border-radius:3mm;background:linear-gradient(180deg,#f8fbfd,#edf3f7);min-height:20mm;display:flex;align-items:center;justify-content:center}.tool-item span{font-size:15px;font-weight:700;color:var(--navy)}.worksheet-box{min-height:122mm;border:.5mm solid #6c7e8f;background:#fff;padding:8mm}.worksheet-box h3{margin:0 0 5mm;text-align:center;font-size:20px}.worksheet-box p{margin:0 0 3mm;font-size:15px;line-height:1.85}.rubric{width:100%;border-collapse:collapse}.rubric th,.rubric td{border:.4mm solid #8ea0b1;padding:3.2mm;text-align:right;vertical-align:top;font-size:14px;line-height:1.7}.rubric thead th{background:var(--navy);color:#fff}.page-number{position:absolute;right:12mm;bottom:6mm;width:8mm;height:8mm;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}.print-credit{margin-top:8mm;padding-top:4mm;border-top:.4mm solid #c9d4de;text-align:center;font-size:17px;font-weight:700;color:var(--navy)}.section-title{margin:0 0 5mm;padding:3.4mm 5mm;border-radius:3mm;background:var(--navy);color:#fff;font-size:18px;font-weight:800}.section-card{border:.4mm solid var(--line);border-radius:4mm;background:#fff;padding:5mm;margin-bottom:5mm}.section-card h3{margin:0 0 3mm;color:var(--navy);font-size:17px}.section-card p,.section-card li{font-size:14.5px;line-height:1.75;margin:0}.section-card ul,.section-card ol{margin:0;padding:0 5mm 0 0}.chips{display:flex;flex-wrap:wrap;gap:2.5mm}.chip{padding:2.5mm 4mm;border:.35mm solid var(--line);border-radius:99px;background:#f6fafc;font-size:13.5px;font-weight:700;color:var(--navy)}.compact-grid{display:grid;grid-template-columns:1fr 1fr;gap:4mm}.compact-table{width:100%;border-collapse:collapse;table-layout:fixed}.compact-table th,.compact-table td{border:.35mm solid #94a7b8;padding:2.7mm;vertical-align:top;text-align:right;font-size:12.5px;line-height:1.55}.compact-table th{background:var(--navy);color:#fff}.compact-table .time-col{width:18mm}.compact-table .stage-col{width:27mm}.worksheet-page .worksheet-box{min-height:190mm}.worksheet-meta{display:grid;grid-template-columns:repeat(4,1fr);gap:3mm;margin-bottom:5mm}.worksheet-meta div{border:.35mm solid var(--line);border-radius:3mm;padding:3mm;text-align:center;background:#f7fafc;font-size:13px;line-height:1.45}.worksheet-prompt{white-space:pre-line;font-size:15px;line-height:1.9}.answer-lines{margin-top:6mm;background:repeating-linear-gradient(to bottom,transparent 0 9mm,#cdd8e1 9mm 9.35mm);min-height:105mm}.note-box{border-right:2mm solid var(--blue);background:#f6fafc;padding:4mm 5mm;margin-bottom:4mm;border-radius:2mm;font-size:14px;line-height:1.75}.safety-box{border:.4mm solid #e0a33a;background:#fffaf0;padding:4mm 5mm;border-radius:3mm;font-size:14px;line-height:1.75}.project-box{border:.5mm solid var(--navy);border-radius:4mm;padding:6mm;background:#fbfdff}.small-text{font-size:13px!important;line-height:1.6!important}@page{size:A4;margin:0}@media print{body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}.toolbar{display:none}.document{width:auto;margin:0;padding:0}.sheet{width:210mm;min-height:297mm;margin:0;box-shadow:none;overflow:hidden;break-after:page;page-break-after:always}}`;
+  return `:root{--navy:#183f64;--navy-deep:#122f4a;--blue:#0e79b7;--text:#17324a;--muted:#58728a;--line:#d8e0e7;--paper:#ffffff;--page-bg:#edf3f7}*{box-sizing:border-box}html,body{margin:0;padding:0}body{font-family:"IBM Plex Sans Arabic","Tajawal","Cairo",sans-serif;background:var(--page-bg);color:var(--text);direction:rtl}.toolbar{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 18px;background:rgba(237,243,247,.96);backdrop-filter:blur(10px);border-bottom:1px solid rgba(24,63,100,.08)}.toolbar-note{color:var(--muted);font-size:15px}.print-button{border:0;border-radius:14px;background:var(--navy);color:#fff;font:inherit;font-size:16px;font-weight:700;padding:10px 18px;cursor:pointer}.document{width:min(100%,920px);margin:0 auto;padding:24px 12px 42px}.sheet{position:relative;width:210mm;min-height:297mm;margin:0 auto 18px;background:var(--paper);box-shadow:0 20px 50px rgba(15,29,45,.12);overflow:hidden}.sheet::after{content:"";position:absolute;right:0;bottom:0;left:0;height:18mm;background:repeating-linear-gradient(to left,rgba(24,63,100,.12) 0 1mm,transparent 1mm 5mm);opacity:.45}.sheet-inner{position:relative;padding:14mm 12mm 18mm}.top-strip{display:grid;grid-template-columns:22mm 1fr 22mm;align-items:center;gap:6mm;margin-bottom:11mm}.top-strip .cap{height:13mm;border-radius:0 0 4mm 4mm;background:var(--blue)}.top-strip .title-bar{min-height:13mm;border-radius:0 0 4mm 4mm;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:flex-end;padding:0 7mm;font-size:20px;font-weight:700}.hero-block{border-radius:5mm;background:var(--navy);color:#fff;padding:8mm 9mm;margin-bottom:6mm}.hero-block h1{margin:0 0 3mm;font-size:24px;line-height:1.35;font-weight:700}.hero-block p{margin:0;font-size:17px;line-height:1.75}.inline-meta{display:grid;grid-template-columns:1fr 1fr;gap:6mm;margin-bottom:8mm}.info-box{border-radius:4mm;background:var(--navy);color:#fff;padding:5.5mm 6mm;min-height:26mm}.info-box p{margin:0;font-size:16px;line-height:1.85;font-weight:700}.two-col{display:grid;grid-template-columns:30mm 1fr;gap:6mm;margin-bottom:6mm;align-items:start}.label-box{border-radius:0 0 0 4mm;background:var(--blue);color:#fff;padding:4mm 3mm;min-height:20mm;display:flex;align-items:center;justify-content:center;text-align:center;font-size:17px;font-weight:700;line-height:1.35}.content-box{border-radius:4mm;background:var(--navy);color:#fff;padding:4.5mm 6mm;min-height:20mm}.content-box.light{background:#fff;color:var(--text);border:.4mm solid var(--line)}.content-box p,.content-box li,.content-box strong{margin:0;font-size:16px;line-height:1.9}.content-box ul,.content-box ol{margin:0;padding:0 5mm 0 0}.content-box li+li{margin-top:1.2mm}.stem-grid{display:grid;grid-template-columns:1fr 1fr;gap:5mm}.stem-panel{border:.4mm solid var(--line);border-radius:4mm;overflow:hidden;background:#fff}.stem-panel h3{margin:0;padding:3.5mm 5mm;background:var(--navy);color:#fff;font-size:16px;line-height:1.4}.stem-panel p{margin:0;padding:4.5mm 5mm 5mm;font-size:15px;line-height:1.85;min-height:29mm}.tools-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:4mm}.tool-item{text-align:center;padding:4mm;border:.4mm solid var(--line);border-radius:3mm;background:linear-gradient(180deg,#f8fbfd,#edf3f7);min-height:20mm;display:flex;align-items:center;justify-content:center}.tool-item span{font-size:15px;font-weight:700;color:var(--navy)}.worksheet-box{min-height:122mm;border:.5mm solid #6c7e8f;background:#fff;padding:8mm}.worksheet-box h3{margin:0 0 5mm;text-align:center;font-size:20px}.worksheet-box p{margin:0 0 3mm;font-size:15px;line-height:1.85}.rubric{width:100%;border-collapse:collapse}.rubric th,.rubric td{border:.4mm solid #8ea0b1;padding:3.2mm;text-align:right;vertical-align:top;font-size:14px;line-height:1.7}.rubric thead th{background:var(--navy);color:#fff}.page-number{position:absolute;right:12mm;bottom:6mm;width:8mm;height:8mm;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}.print-credit{margin-top:8mm;padding-top:4mm;border-top:.4mm solid #c9d4de;text-align:center;font-size:17px;font-weight:700;color:var(--navy)}.section-title{margin:0 0 5mm;padding:3.4mm 5mm;border-radius:3mm;background:var(--navy);color:#fff;font-size:18px;font-weight:800}.section-card{border:.4mm solid var(--line);border-radius:4mm;background:#fff;padding:5mm;margin-bottom:5mm}.section-card h3{margin:0 0 3mm;color:var(--navy);font-size:17px}.section-card p,.section-card li{font-size:14.5px;line-height:1.75;margin:0}.section-card ul,.section-card ol{margin:0;padding:0 5mm 0 0}.chips{display:flex;flex-wrap:wrap;gap:2.5mm}.chip{padding:2.5mm 4mm;border:.35mm solid var(--line);border-radius:99px;background:#f6fafc;font-size:13.5px;font-weight:700;color:var(--navy)}.compact-grid{display:grid;grid-template-columns:1fr 1fr;gap:4mm}.compact-table{width:100%;border-collapse:collapse;table-layout:fixed}.compact-table th,.compact-table td{border:.35mm solid #94a7b8;padding:2.7mm;vertical-align:top;text-align:right;font-size:12.5px;line-height:1.55}.compact-table th{background:var(--navy);color:#fff}.compact-table .time-col{width:18mm}.compact-table .stage-col{width:27mm}.worksheet-page .worksheet-box{min-height:190mm}.worksheet-meta{display:grid;grid-template-columns:repeat(4,1fr);gap:3mm;margin-bottom:5mm}.worksheet-meta div{border:.35mm solid var(--line);border-radius:3mm;padding:3mm;text-align:center;background:#f7fafc;font-size:13px;line-height:1.45}.worksheet-prompt{white-space:pre-line;font-size:15px;line-height:1.9}.answer-lines{margin-top:6mm;background:repeating-linear-gradient(to bottom,transparent 0 9mm,#cdd8e1 9mm 9.35mm);min-height:105mm}.note-box{border-right:2mm solid var(--blue);background:#f6fafc;padding:4mm 5mm;margin-bottom:4mm;border-radius:2mm;font-size:14px;line-height:1.75}.safety-box{border:.4mm solid #e0a33a;background:#fffaf0;padding:4mm 5mm;border-radius:3mm;font-size:14px;line-height:1.75}.project-box{border:.5mm solid var(--navy);border-radius:4mm;padding:6mm;background:#fbfdff}.small-text{font-size:13px!important;line-height:1.6!important}.question-list{display:flex;flex-direction:column;gap:4mm}.question-card{border:.35mm solid #cbd7e1;border-radius:3mm;padding:4mm 5mm;background:#fff;break-inside:avoid}.question-card .q-head{font-size:15px;font-weight:800;color:var(--navy);line-height:1.7;margin-bottom:2.5mm}.question-card .q-type{display:inline-block;margin-left:2mm;padding:1mm 2.5mm;border-radius:99px;background:#edf4f8;color:var(--blue);font-size:11.5px;font-weight:800}.option-grid{display:grid;grid-template-columns:1fr 1fr;gap:2.5mm 5mm;font-size:13.5px;line-height:1.7}.option-item{display:flex;gap:2mm;align-items:flex-start}.bubble{width:5mm;height:5mm;border:.35mm solid #7f94a6;border-radius:50%;flex:0 0 auto;margin-top:.7mm}.tf-row{display:flex;gap:10mm;font-size:14px;font-weight:700}.blank-line{display:inline-block;min-width:45mm;border-bottom:.35mm solid #667b8e;height:5mm;vertical-align:bottom}.short-lines{margin-top:2mm;background:repeating-linear-gradient(to bottom,transparent 0 8mm,#d6e0e8 8mm 8.3mm);min-height:24mm}.order-list{margin:0;padding-right:6mm}.order-list li{margin-bottom:2mm;font-size:13.5px;line-height:1.65}.match-table{width:100%;border-collapse:collapse}.match-table td{border:.3mm solid #b7c5d1;padding:2.5mm;font-size:13px;line-height:1.55}.question-note{font-size:12px;color:var(--muted);margin-top:2mm}@page{size:A4;margin:0}@media print{body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}.toolbar{display:none}.document{width:auto;margin:0;padding:0}.sheet{width:210mm;min-height:297mm;margin:0;box-shadow:none;overflow:hidden;break-after:page;page-break-after:always}}`;
+}
+
+function renderWorksheetQuestion(q, idx) {
+  if (!q) return '';
+  const type = q.type || 'short';
+  const labels = {
+    mcq: 'اختيار من متعدد',
+    trueFalse: 'صح أم خطأ',
+    fill: 'أكمل',
+    short: 'إجابة قصيرة',
+    explain: 'فسر / علل',
+    order: 'رتب',
+    match: 'صل'
+  };
+  const head = `<div class="q-head"><span class="q-type">${labels[type] || 'سؤال'}</span>${idx + 1}) ${q.text || ''}</div>`;
+  if (type === 'mcq') {
+    return `<div class="question-card">${head}<div class="option-grid">${(q.options || []).map(o => `<div class="option-item"><span class="bubble"></span><span>${o}</span></div>`).join('')}</div></div>`;
+  }
+  if (type === 'trueFalse') {
+    return `<div class="question-card">${head}<div class="tf-row"><span>□ صح</span><span>□ خطأ</span></div></div>`;
+  }
+  if (type === 'fill') {
+    return `<div class="question-card">${head}<div><span class="blank-line"></span></div></div>`;
+  }
+  if (type === 'order') {
+    return `<div class="question-card">${head}<ol class="order-list">${(q.items || []).map(x => `<li>___ &nbsp; ${x}</li>`).join('')}</ol></div>`;
+  }
+  if (type === 'match') {
+    const letters = ['أ','ب','ج','د','هـ','و'];
+    const pairs = q.pairs || [];
+    return `<div class="question-card">${head}<table class="match-table"><tbody>${pairs.map((p,i) => `<tr><td>${i+1}. ${p.left}</td><td style="width:20mm;text-align:center">_____</td><td>${letters[i] || '-'} . ${p.right}</td></tr>`).join('')}</tbody></table></div>`;
+  }
+  return `<div class="question-card">${head}<div class="short-lines" style="min-height:${q.lines ? Math.max(16, q.lines * 8) : 24}mm"></div></div>`;
 }
 
 function buildMagnetStyleLessonSheets(lesson, unit, grade) {
@@ -254,8 +291,9 @@ function buildMagnetStyleLessonSheets(lesson, unit, grade) {
       </div>
       <div class="worksheet-box">
         <h3>${w.title || `ورقة عمل (${idx+1})`}</h3>
-        <p class="worksheet-prompt">${w.prompt || ''}</p>
-        <div class="answer-lines"></div>
+        ${Array.isArray(w.questions) && w.questions.length
+          ? `<div class="question-list">${w.questions.map((q,qIdx) => renderWorksheetQuestion(q,qIdx)).join('')}</div>`
+          : `<p class="worksheet-prompt">${w.prompt || ''}</p><div class="answer-lines"></div>`}
       </div>
       ${pageNum(8+idx)}
     </div></section>
@@ -635,7 +673,7 @@ function switchSemester(semesterNum, gradeId) {
 
 function _getGradeData(grade, semesterNum) {
   if (!grade) return null;
-  if (grade.id === 'grade2' || grade.id === 'grade3') return semesterNum === 1 ? grade : null;
+  if (grade.id === 'grade2' || grade.id === 'grade3' || grade.id === 'grade4') return semesterNum === 1 ? grade : null;
 
   if (semesterNum === 2 && window.semester2Data) {
     const sem2Grade = semester2Data.grades
@@ -2356,6 +2394,16 @@ function findLessonById(lessonId) {
 
   if (window.grade3Data && grade3Data.grades) {
     for (const grade of grade3Data.grades) {
+      for (const unit of (grade.units || [])) {
+        for (const lesson of (unit.lessons || [])) {
+          if (lesson.id === lessonId) return { lesson, unit, grade };
+        }
+      }
+    }
+  }
+
+  if (window.grade4Data && grade4Data.grades) {
+    for (const grade of grade4Data.grades) {
       for (const unit of (grade.units || [])) {
         for (const lesson of (unit.lessons || [])) {
           if (lesson.id === lessonId) return { lesson, unit, grade };

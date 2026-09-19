@@ -142,44 +142,50 @@ function setupKeyboardNav() {
 // ============================================================
 
 function getPrimaryGrade(gradeId) {
-  if (gradeId === 'grade2' && window.grade2Data && grade2Data.grades) {
-    return grade2Data.grades.find(g => g.id === 'grade2') || grade2Data.grades[0] || null;
-  }
-  if (window.nawatData && nawatData.grades) {
-    return nawatData.grades.find(g => g.id === gradeId) || null;
+  const gradeSources = [
+    window.nawatData,
+    window.grade2Data,
+    window.grade3Data
+  ].filter(Boolean);
+
+  for (const source of gradeSources) {
+    if (!source.grades) continue;
+    const grade = source.grades.find(g => g.id === gradeId);
+    if (grade) return grade;
   }
   return null;
 }
 
 function getAvailableGrades() {
-  const grades = [];
-  const grade1 = getPrimaryGrade('grade1');
-  const grade2 = getPrimaryGrade('grade2');
-  if (grade1) grades.push(grade1);
-  if (grade2) grades.push(grade2);
-  return grades;
+  return ['grade1', 'grade2', 'grade3']
+    .map(getPrimaryGrade)
+    .filter(Boolean);
 }
 
 function getAvailableSemestersForGrade(gradeId) {
-  if (gradeId === 'grade2') {
-    return (window.grade2Data && Array.isArray(grade2Data.availableSemesters))
-      ? grade2Data.availableSemesters
-      : [1];
+  if (gradeId === 'grade2' && window.grade2Data) {
+    return Array.isArray(grade2Data.availableSemesters) ? grade2Data.availableSemesters : [1];
+  }
+  if (gradeId === 'grade3' && window.grade3Data) {
+    return Array.isArray(grade3Data.availableSemesters) ? grade3Data.availableSemesters : [1];
   }
   const semesters = [1];
-  if (window.semester2Data && semester2Data.grades && semester2Data.grades.length) semesters.push(2);
+  if (gradeId === 'grade1' && window.semester2Data && semester2Data.grades && semester2Data.grades.length) semesters.push(2);
   return semesters;
 }
 
 function getAllLessonsFlat(gradeId = state.selectedGradeId) {
   const result = [];
 
-  if (gradeId === 'grade2' && window.grade2Data && grade2Data.grades) {
-    const grade = grade2Data.grades.find(g => g.id === 'grade2') || grade2Data.grades[0];
-    if (grade) {
-      (grade.units || []).forEach(unit => {
-        (unit.lessons || []).forEach(lesson => result.push({ lesson, unit, grade, semester: 1 }));
-      });
+  if ((gradeId === 'grade2' || gradeId === 'grade3')) {
+    const source = gradeId === 'grade2' ? window.grade2Data : window.grade3Data;
+    if (source && source.grades) {
+      const grade = source.grades.find(g => g.id === gradeId) || source.grades[0];
+      if (grade) {
+        (grade.units || []).forEach(unit => {
+          (unit.lessons || []).forEach(lesson => result.push({ lesson, unit, grade, semester: 1 }));
+        });
+      }
     }
     return result;
   }
@@ -218,10 +224,10 @@ function getCloudLessonPrintCss() {
 }
 
 function buildCloudLessonSheets(lesson, unit, grade) {
-  const unitNumber = unit.number || (unit.id || '').replace('g2-unit', '').replace('unit', '').replace('-s2', '');
+  const unitNumber = unit.number || (unit.id || '').replace('g3-unit', '').replace('g2-unit', '').replace('unit', '').replace('-s2', '');
   const unitTitle = unit.name || unit.title || '';
   const lessonTitle = lesson.title || '';
-  const gradeName = (grade && grade.name) || (state.selectedGradeId === 'grade2' ? 'الصف الثاني الابتدائي' : 'الصف الأول الابتدائي');
+  const gradeName = (grade && grade.name) || ({grade1:'الصف الأول الابتدائي',grade2:'الصف الثاني الابتدائي',grade3:'الصف الثالث الابتدائي'}[state.selectedGradeId] || 'المرحلة الابتدائية');
   const stemAct = lesson.stemActivity || {};
   const ws = lesson.worksheet || {};
   const li = (arr) => (arr || []).map(x => `<li>${x}</li>`).join('');
@@ -405,7 +411,7 @@ function switchSemester(semesterNum, gradeId) {
 
 function _getGradeData(grade, semesterNum) {
   if (!grade) return null;
-  if (grade.id === 'grade2') return semesterNum === 1 ? grade : null;
+  if (grade.id === 'grade2' || grade.id === 'grade3') return semesterNum === 1 ? grade : null;
 
   if (semesterNum === 2 && window.semester2Data) {
     const sem2Grade = semester2Data.grades
@@ -2066,6 +2072,16 @@ function findLessonById(lessonId) {
 
   if (window.grade2Data && grade2Data.grades) {
     for (const grade of grade2Data.grades) {
+      for (const unit of (grade.units || [])) {
+        for (const lesson of (unit.lessons || [])) {
+          if (lesson.id === lessonId) return { lesson, unit, grade };
+        }
+      }
+    }
+  }
+
+  if (window.grade3Data && grade3Data.grades) {
+    for (const grade of grade3Data.grades) {
       for (const unit of (grade.units || [])) {
         for (const lesson of (unit.lessons || [])) {
           if (lesson.id === lessonId) return { lesson, unit, grade };

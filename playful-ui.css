@@ -1,3 +1,68 @@
+/* ===== Edge-to-edge layout fix ===== */
+html,
+body {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  min-width: 100% !important;
+  max-width: none !important;
+  overflow-x: hidden !important;
+  background: #f5fbff;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+#landing-page,
+#main-app,
+#app-container,
+main,
+nav,
+footer,
+.play-header,
+.play-hero,
+.play-section,
+.play-footer {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+#landing-page,
+.play-header,
+.play-hero,
+.play-section,
+.play-footer {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+.play-header-inner,
+.play-hero-inner,
+.play-section-head,
+.play-grade-grid,
+.preview-card-row,
+.engagement-grid,
+.print-preview-inner,
+.play-footer-inner {
+  width: min(1200px, 100%);
+}
+
+@media (max-width: 760px) {
+  body {
+    width: 100vw !important;
+  }
+
+  .play-header,
+  .play-hero,
+  .play-section,
+  .play-footer {
+    width: 100vw !important;
+  }
+}
+
 /* playful-ui.css - واجهة نوات ستيم المرحة */
 /* ملف منفصل لتجنب كاش المتصفح عند تحديث الواجهة على GitHub Pages */
 

@@ -146,7 +146,8 @@ function getPrimaryGrade(gradeId) {
     window.nawatData,
     window.grade2Data,
     window.grade3Data,
-    window.grade4Data
+    window.grade4Data,
+    window.grade5Data
   ].filter(Boolean);
 
   for (const source of gradeSources) {
@@ -158,7 +159,7 @@ function getPrimaryGrade(gradeId) {
 }
 
 function getAvailableGrades() {
-  return ['grade1', 'grade2', 'grade3', 'grade4']
+  return ['grade1', 'grade2', 'grade3', 'grade4', 'grade5']
     .map(getPrimaryGrade)
     .filter(Boolean);
 }
@@ -173,6 +174,9 @@ function getAvailableSemestersForGrade(gradeId) {
   if (gradeId === 'grade4' && window.grade4Data) {
     return Array.isArray(grade4Data.availableSemesters) ? grade4Data.availableSemesters : [1];
   }
+  if (gradeId === 'grade5' && window.grade5Data) {
+    return Array.isArray(grade5Data.availableSemesters) ? grade5Data.availableSemesters : [1];
+  }
   const semesters = [1];
   if (gradeId === 'grade1' && window.semester2Data && semester2Data.grades && semester2Data.grades.length) semesters.push(2);
   return semesters;
@@ -181,8 +185,12 @@ function getAvailableSemestersForGrade(gradeId) {
 function getAllLessonsFlat(gradeId = state.selectedGradeId) {
   const result = [];
 
-  if (gradeId === 'grade2' || gradeId === 'grade3' || gradeId === 'grade4') {
-    const source = gradeId === 'grade2' ? window.grade2Data : (gradeId === 'grade3' ? window.grade3Data : window.grade4Data);
+  if (gradeId === 'grade2' || gradeId === 'grade3' || gradeId === 'grade4' || gradeId === 'grade5') {
+    const source = gradeId === 'grade2'
+      ? window.grade2Data
+      : (gradeId === 'grade3'
+        ? window.grade3Data
+        : (gradeId === 'grade4' ? window.grade4Data : window.grade5Data));
     if (source && source.grades) {
       const grade = source.grades.find(g => g.id === gradeId) || source.grades[0];
       if (grade) {
@@ -294,7 +302,7 @@ function buildMagnetStyleLessonSheets(lesson, unit, grade) {
       <div class="worksheet-box">
         <h3>${w.title || `ورقة عمل (${idx+1})`}</h3>
         ${Array.isArray(w.questions) && w.questions.length
-          ? `<div class="question-list">${w.questions.map((q,qIdx) => renderWorksheetQuestion(q,qIdx)).join('')}</div>`
+          ? `<div class="question-list">${w.questions.map((q,qIdx) => renderWorksheetQuestion(q,qIdx)).join('')}</div><div class="question-note">مساحة إضافية للإجابة / الملاحظات:</div><div class="answer-lines" style="min-height:18mm"></div>`
           : `<p class="worksheet-prompt">${w.prompt || ''}</p><div class="answer-lines"></div>`}
       </div>
       ${pageNum(8+idx)}
@@ -433,14 +441,14 @@ function buildMagnetStyleLessonSheets(lesson, unit, grade) {
       <h3>${(lesson.projectSheet||{}).title || ''}</h3>
       <p class="worksheet-prompt">${(lesson.projectSheet||{}).prompt || ''}</p>
       <div class="compact-grid" style="margin-top:5mm">
-        <div class="section-card"><h3>الأدوات والمواد المقترحة</h3><ul>${escList(act.materials || lesson.activityTools)}</ul></div>
-        <div class="section-card"><h3>خطوات المشروع</h3><ol>
-          <li>أحدد السؤال أو المشكلة.</li>
-          <li>أقترح حلاً أو تصميماً أولياً.</li>
-          <li>أنفذ النموذج أو المهمة وأسجل البيانات.</li>
-          <li>أختبر النتيجة وأقترح تحسيناً.</li>
-          <li>أعرض المنتج والنتائج وأناقشها.</li>
-        </ol></div>
+        <div class="section-card"><h3>الأدوات والمواد المقترحة</h3><ul>${escList((lesson.projectSheet||{}).tools || act.materials || lesson.activityTools)}</ul></div>
+        <div class="section-card"><h3>خطوات المشروع</h3><ol>${escList((lesson.projectSheet||{}).steps || [
+          'أحدد السؤال أو المشكلة.',
+          'أقترح حلاً أو تصميماً أولياً.',
+          'أنفذ النموذج أو المهمة وأسجل البيانات.',
+          'أختبر النتيجة وأقترح تحسيناً.',
+          'أعرض المنتج والنتائج وأناقشها.'
+        ])}</ol></div>
       </div>
       <div class="answer-lines" style="min-height:55mm"></div>
     </div>
@@ -675,7 +683,7 @@ function switchSemester(semesterNum, gradeId) {
 
 function _getGradeData(grade, semesterNum) {
   if (!grade) return null;
-  if (grade.id === 'grade2' || grade.id === 'grade3' || grade.id === 'grade4') return semesterNum === 1 ? grade : null;
+  if (grade.id === 'grade2' || grade.id === 'grade3' || grade.id === 'grade4' || grade.id === 'grade5') return semesterNum === 1 ? grade : null;
 
   if (semesterNum === 2 && window.semester2Data) {
     const sem2Grade = semester2Data.grades
@@ -2480,6 +2488,16 @@ function findLessonById(lessonId) {
 
   if (window.grade4Data && grade4Data.grades) {
     for (const grade of grade4Data.grades) {
+      for (const unit of (grade.units || [])) {
+        for (const lesson of (unit.lessons || [])) {
+          if (lesson.id === lessonId) return { lesson, unit, grade };
+        }
+      }
+    }
+  }
+
+  if (window.grade5Data && grade5Data.grades) {
+    for (const grade of grade5Data.grades) {
       for (const unit of (grade.units || [])) {
         for (const lesson of (unit.lessons || [])) {
           if (lesson.id === lessonId) return { lesson, unit, grade };

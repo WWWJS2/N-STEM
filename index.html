@@ -6,7 +6,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="نوات ستيم - موقع تعليمي لمادة العلوم STEM للصفوف الأول والثاني والثالث الابتدائي">
+  <meta name="description" content="نوات ستيم - منصة تعليمية عربية لمادة العلوم STEM للصفوف من الأول إلى السادس الابتدائي، تضم دروساً تفاعلية وألعاباً واختبارات وملفات طباعة موسعة.">
   <title>نوات ستيم | علوم الصفوف الأول والثاني والثالث والرابع والخامس والسادس</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -15,19 +15,94 @@
 <!-- ===== صفحة الهبوط (Landing) ===== -->
 <div id="landing-page">
 
+  <!-- شريط العلامة -->
+  <div class="landing-topbar" aria-label="نوات ستيم">
+    <div class="landing-topbar-inner">
+      <a class="brand-lockup" href="#landing-page" aria-label="نوات ستيم - الصفحة الرئيسية">
+        <span class="brand-mark" aria-hidden="true">N</span>
+        <span class="brand-copy">
+          <strong>نوات ستيم</strong>
+          <small>علوم • اكتشاف • ابتكار</small>
+        </span>
+      </a>
+      <div class="landing-topbar-actions">
+        <span class="teacher-chip">إعداد أ. أميرة عبدالله الحكمي</span>
+        <button class="topbar-cta" onclick="scrollToGrades()">اختر صفك</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Hero Section -->
   <section class="hero-section" aria-label="قسم الترحيب">
     <div class="hero-inner">
-      <div class="hero-rocket" aria-hidden="true">🚀</div>
-      <h2 class="hero-title">مرحباً في نوات ستيم 🌱</h2>
-      <p class="hero-subtitle">اكتشف عالم العلوم مع أستاذة أميرة</p>
-      <p class="hero-desc">
-        رحلة علمية ممتعة مليئة بالدروس التفاعلية والألعاب والاختبارات المثيرة
-        في مادة العلوم STEM للصفوف الأول والثاني والثالث الابتدائي
-      </p>
-      <button class="hero-cta-btn" onclick="scrollToGrades()" aria-label="ابدأ التعلم الآن">
-        ابدأ التعلم الآن ←
-      </button>
+      <div class="hero-copy">
+        <div class="hero-eyebrow"><span class="eyebrow-dot"></span> منصة علوم STEM للمرحلة الابتدائية</div>
+        <h1 class="hero-title">نتعلّم العلوم<br><span>بالتجربة والفضول.</span></h1>
+        <p class="hero-subtitle">رحلة تعليمية منظمة من الصف الأول إلى السادس الابتدائي</p>
+        <p class="hero-desc">
+          دروس تفاعلية، ألعاب تعليمية، اختبارات فورية، وأنشطة STEM مع ملفات طباعة موسعة
+          تساعد الطالب على الفهم والتطبيق والتفكير العلمي.
+        </p>
+        <div class="hero-actions">
+          <button class="hero-cta-btn" onclick="scrollToGrades()" aria-label="ابدأ التعلم الآن">
+            ابدأ رحلتك التعليمية
+            <span aria-hidden="true">←</span>
+          </button>
+          <a class="hero-secondary-btn" href="#platform-features">ماذا يقدم الموقع؟</a>
+        </div>
+        <div class="hero-proof" aria-label="مزايا المنصة">
+          <span><b>6</b> صفوف دراسية</span>
+          <span><b>STEM</b> تعلم تطبيقي</span>
+          <span><b>RTL</b> تجربة عربية كاملة</span>
+        </div>
+      </div>
+
+      <div class="hero-showcase" aria-hidden="true">
+        <div class="showcase-glow"></div>
+        <div class="science-orbit orbit-one"></div>
+        <div class="science-orbit orbit-two"></div>
+        <div class="showcase-card">
+          <div class="showcase-head">
+            <span class="showcase-kicker">نوات ستيم</span>
+            <span class="showcase-status"><i></i> جاهز للتعلّم</span>
+          </div>
+          <div class="showcase-core">
+            <div class="core-icon">⚛️</div>
+            <strong>استكشف • جرّب • صمّم</strong>
+            <span>من الفكرة إلى التطبيق</span>
+          </div>
+          <div class="showcase-grid">
+            <div><span>📚</span><b>دروس</b><small>منظمة وواضحة</small></div>
+            <div><span>🎮</span><b>ألعاب</b><small>تفاعلية وممتعة</small></div>
+            <div><span>📝</span><b>اختبارات</b><small>تغذية راجعة فورية</small></div>
+            <div><span>🖨️</span><b>طباعة</b><small>ملفات STEM موسعة</small></div>
+          </div>
+        </div>
+        <span class="floating-chip chip-a">🔬 استقصاء</span>
+        <span class="floating-chip chip-b">🧠 تفكير</span>
+        <span class="floating-chip chip-c">⚙️ تصميم</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="platform-features" id="platform-features" aria-label="مزايا نوات ستيم">
+    <div class="platform-features-inner">
+      <article class="feature-item">
+        <span class="feature-icon">01</span>
+        <div><h3>تعلّم منظم</h3><p>وحدات ودروس مرتبة حسب المنهج لكل صف.</p></div>
+      </article>
+      <article class="feature-item">
+        <span class="feature-icon">02</span>
+        <div><h3>تفاعل حقيقي</h3><p>ألعاب واختبارات تحوّل المفاهيم إلى ممارسة.</p></div>
+      </article>
+      <article class="feature-item">
+        <span class="feature-icon">03</span>
+        <div><h3>STEM تطبيقي</h3><p>أنشطة تجمع العلوم والتقنية والهندسة والرياضيات.</p></div>
+      </article>
+      <article class="feature-item">
+        <span class="feature-icon">04</span>
+        <div><h3>جاهز للطباعة</h3><p>ملفات دروس موسعة وأوراق عمل وتقويمات.</p></div>
+      </article>
     </div>
   </section>
 
@@ -35,8 +110,9 @@
   <section class="grades-section" id="grades-section" aria-label="اختر صفك الدراسي">
     <div class="grades-inner">
       <div class="grades-header">
-        <h2 class="grades-title">📚 اختر صفك الدراسي</h2>
-        <p class="grades-subtitle">اختر الصف المناسب لبدء رحلتك التعليمية</p>
+        <span class="section-kicker">المرحلة الابتدائية</span>
+        <h2 class="grades-title">اختر صفك وابدأ التعلّم</h2>
+        <p class="grades-subtitle">ستجد داخل كل صف الوحدات والدروس والألعاب والاختبارات في تجربة واحدة مترابطة.</p>
       </div>
 
       <div class="grades-grid">
@@ -50,6 +126,7 @@
              onkeydown="if(event.key==='Enter') enterApp('grade1')">
           <span class="grade-badge grade-badge--open">مفتوح الآن</span>
           <div class="grade-icon" aria-hidden="true">🏫</div>
+          <span class="grade-number" aria-hidden="true">01</span>
           <h3 class="grade-name">الصف الأول</h3>
           <p class="grade-desc">الابتدائي</p>
           <div class="grade-arrow" aria-hidden="true">←</div>
@@ -64,6 +141,7 @@
              onkeydown="if(event.key==='Enter') enterApp('grade2')">
           <span class="grade-badge grade-badge--open">مفتوح الآن</span>
           <div class="grade-icon" aria-hidden="true">📖</div>
+          <span class="grade-number" aria-hidden="true">02</span>
           <h3 class="grade-name">الصف الثاني</h3>
           <p class="grade-desc">الابتدائي</p>
           <div class="grade-arrow" aria-hidden="true">←</div>
@@ -78,6 +156,7 @@
              onkeydown="if(event.key==='Enter') enterApp('grade3')">
           <span class="grade-badge grade-badge--open">مفتوح الآن</span>
           <div class="grade-icon" aria-hidden="true">🔬</div>
+          <span class="grade-number" aria-hidden="true">03</span>
           <h3 class="grade-name">الصف الثالث</h3>
           <p class="grade-desc">الابتدائي</p>
           <div class="grade-arrow" aria-hidden="true">←</div>
@@ -92,6 +171,7 @@
              onkeydown="if(event.key==='Enter') enterApp('grade4')">
           <span class="grade-badge grade-badge--open">مفتوح الآن</span>
           <div class="grade-icon" aria-hidden="true">🧪</div>
+          <span class="grade-number" aria-hidden="true">04</span>
           <h3 class="grade-name">الصف الرابع</h3>
           <p class="grade-desc">الابتدائي</p>
           <div class="grade-arrow" aria-hidden="true">←</div>
@@ -106,6 +186,7 @@
              onkeydown="if(event.key==='Enter') enterApp('grade5')">
           <span class="grade-badge grade-badge--open">مفتوح الآن</span>
           <div class="grade-icon" aria-hidden="true">🔬</div>
+          <span class="grade-number" aria-hidden="true">05</span>
           <h3 class="grade-name">الصف الخامس</h3>
           <p class="grade-desc">الابتدائي</p>
           <div class="grade-arrow" aria-hidden="true">←</div>
@@ -120,6 +201,7 @@
              onkeydown="if(event.key==='Enter') enterApp('grade6')">
           <span class="grade-badge grade-badge--open">مفتوح الآن</span>
           <div class="grade-icon" aria-hidden="true">⚗️</div>
+          <span class="grade-number" aria-hidden="true">06</span>
           <h3 class="grade-name">الصف السادس</h3>
           <p class="grade-desc">الابتدائي</p>
           <div class="grade-arrow" aria-hidden="true">←</div>
@@ -137,8 +219,12 @@
   <!-- ===== التنقل الرئيسي ===== -->
   <nav class="main-nav" role="navigation" aria-label="التنقل الرئيسي">
     <div class="nav-inner">
+      <div class="app-brand" aria-label="نوات ستيم">
+        <span class="app-brand-mark">N</span>
+        <span class="app-brand-name">نوات ستيم</span>
+      </div>
       <button class="nav-back-home" onclick="goToLanding()" aria-label="العودة للصفحة الرئيسية">
-        🏠 الرئيسية
+        <span aria-hidden="true">⌂</span><span class="home-label">الرئيسية</span>
       </button>
       <button class="nav-btn active" onclick="showSection('lessons')" aria-selected="true" role="tab">
         <span class="nav-icon" aria-hidden="true">📚</span>
@@ -156,6 +242,7 @@
         <span class="nav-icon" aria-hidden="true">🤖</span>
         الدردشة مع نوات
       </button>
+      <div class="current-grade-chip" id="currentGradeChip" aria-live="polite">الصف الأول</div>
     </div>
   </nav>
 
@@ -180,9 +267,10 @@
 
     <!-- ===== قسم الشات بوت ===== -->
     <div id="section-chatbot" class="section-panel" role="tabpanel">
-      <div class="section-header">
-        <h2>🤖 الدردشة مع نوات</h2>
-        <p>اسألني عن أي درس وسأساعدك في الفهم والتعلم!</p>
+      <div class="section-header section-header--assistant">
+        <span class="section-kicker">مساعدك العلمي</span>
+        <h2>الدردشة مع نوات 🤖</h2>
+        <p>اسأل عن مفهوم أو درس، واحصل على شرح مبسط يساعدك على الفهم والمراجعة.</p>
       </div>
       <div class="chatbot-wrapper">
         <div class="chat-window" role="log" aria-label="نافذة المحادثة">
@@ -219,7 +307,10 @@
 
 <!-- ===== ذيل الصفحة ===== -->
 <footer role="contentinfo">
-  <p><strong>إعداد أ. أميرة عبدالله الحكمي</strong></p>
+  <div class="footer-inner">
+    <div class="footer-brand"><span class="brand-mark brand-mark--small">N</span><strong>نوات ستيم</strong></div>
+    <p>منصة تعليمية لمادة العلوم STEM • <strong>إعداد أ. أميرة عبدالله الحكمي</strong></p>
+  </div>
 </footer>
 
 <!-- ===== البيانات والسكريبت ===== -->

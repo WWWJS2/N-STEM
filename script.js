@@ -262,6 +262,21 @@ function buildMagnetStyleLessonSheets(lesson, unit, grade) {
   `).join('');
 
   return `
+  <section class="sheet"><div class="sheet-inner" style="min-height:297mm;display:flex;flex-direction:column;justify-content:center">
+    <div style="text-align:center;margin-bottom:18mm">
+      <div style="font-size:18px;font-weight:800;color:var(--muted);margin-bottom:7mm">سلسلة الدروس النموذجية التعليمية STEM</div>
+      <div style="font-size:42px;font-weight:900;color:var(--navy);line-height:1.35;margin-bottom:9mm">${lesson.title || ''}</div>
+      <div style="width:44mm;height:2.5mm;background:var(--blue);margin:0 auto 10mm;border-radius:99px"></div>
+      <div style="font-size:23px;font-weight:800;color:var(--navy)">العلوم - ${gradeName}</div>
+      <div style="font-size:19px;color:var(--muted);margin-top:3mm">الفصل الدراسي الأول</div>
+    </div>
+    <div class="hero-block" style="margin:0 auto;width:82%;text-align:center">
+      <p>الوحدة ${unitNumber}: ${unitTitle}</p>
+      <p>${lesson.chapter || ''}</p>
+      <p style="margin-top:4mm">إعداد أ. أميرة عبدالله الحكمي | نوات ستيم</p>
+    </div>
+  </div></section>
+
   <section class="sheet"><div class="sheet-inner">
     ${pageHead(lesson.title || '')}
     <div class="hero-block">
@@ -377,7 +392,17 @@ function buildMagnetStyleLessonSheets(lesson, unit, grade) {
       </div>
       <h3>${(lesson.projectSheet||{}).title || ''}</h3>
       <p class="worksheet-prompt">${(lesson.projectSheet||{}).prompt || ''}</p>
-      <div class="answer-lines" style="min-height:90mm"></div>
+      <div class="compact-grid" style="margin-top:5mm">
+        <div class="section-card"><h3>الأدوات والمواد المقترحة</h3><ul>${escList(act.materials || lesson.activityTools)}</ul></div>
+        <div class="section-card"><h3>خطوات المشروع</h3><ol>
+          <li>أحدد السؤال أو المشكلة.</li>
+          <li>أقترح حلاً أو تصميماً أولياً.</li>
+          <li>أنفذ النموذج أو المهمة وأسجل البيانات.</li>
+          <li>أختبر النتيجة وأقترح تحسيناً.</li>
+          <li>أعرض المنتج والنتائج وأناقشها.</li>
+        </ol></div>
+      </div>
+      <div class="answer-lines" style="min-height:55mm"></div>
     </div>
     <div class="section-card" style="margin-top:6mm"><h3>ملاحظات المعلم</h3><p>${lesson.teacherNotes || ''}</p></div>
     ${pageNum(12)}
@@ -393,6 +418,29 @@ function buildMagnetStyleLessonSheets(lesson, unit, grade) {
     <div class="section-card"><h3>توثيق تعلم الطالب</h3><p>اسم الطالب: ____________________ &nbsp;&nbsp; الصف: __________ &nbsp;&nbsp; التاريخ: __________</p><div class="answer-lines" style="min-height:65mm"></div></div>
     <div class="print-credit">إعداد أ. أميرة عبدالله الحكمي | نوات ستيم</div>
     ${pageNum(13)}
+  </div></section>
+
+  <section class="sheet"><div class="sheet-inner">
+    ${pageHead('التقويم والمراجع')}
+    <div class="section-card">
+      <h3>استراتيجية التقويم</h3>
+      <p>${(lesson.evaluationPlan || {}).strategy || 'التقويم المعتمد على الأداء والتقويم التكويني.'}</p>
+    </div>
+    <div class="section-card">
+      <h3>أداة التقويم</h3>
+      <p>${(lesson.evaluationPlan || {}).tool || 'سلم تقدير رقمي.'}</p>
+    </div>
+    <div class="section-title">مؤشرات الأداء</div>
+    <table class="compact-table">
+      <thead><tr><th style="width:15mm">الرقم</th><th>مؤشر الأداء</th></tr></thead>
+      <tbody>${((lesson.evaluationPlan || {}).indicators || []).map((x,i)=>`<tr><td>${i+1}</td><td>${x}</td></tr>`).join('')}</tbody>
+    </table>
+    <div class="section-card" style="margin-top:6mm">
+      <h3>المراجع</h3>
+      <ul>${escList(lesson.references)}</ul>
+    </div>
+    <div class="print-credit">إعداد أ. أميرة عبدالله الحكمي | نوات ستيم</div>
+    ${pageNum(14)}
   </div></section>`;
 }
 

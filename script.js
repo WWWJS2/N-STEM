@@ -622,8 +622,9 @@ function renderLessonsSection() {
       ${grades.map((grade, idx) => {
         const isSelected = grade.id === state.selectedGradeId;
         const unitsCount = (grade.units || []).length;
-        const lessonsCount = (grade.units || []).reduce((a,u) => a + (u.lessons || []).length, 0);
-        const completed = getAllLessonsFlat(grade.id).filter(({lesson}) => scores[lesson.id] !== undefined).length;
+        const gradeLessons = getAllLessonsFlat(grade.id);
+        const lessonsCount = gradeLessons.length;
+        const completed = gradeLessons.filter(({lesson}) => scores[lesson.id] !== undefined).length;
         const progress = lessonsCount ? Math.round((completed / lessonsCount) * 100) : 0;
         const color = ['#0e79b7','#183f64','#2784ad','#315a78','#167e97','#205b84'][idx % 6];
         return `

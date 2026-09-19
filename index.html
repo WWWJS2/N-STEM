@@ -43,11 +43,11 @@
 
         <!-- الصف الأول - مفتوح -->
         <div class="grade-card grade-card--open"
-             onclick="enterApp()"
+             onclick="enterApp('grade1')"
              role="button"
              tabindex="0"
              aria-label="الصف الأول الابتدائي - مفتوح الآن"
-             onkeydown="if(event.key==='Enter') enterApp()">
+             onkeydown="if(event.key==='Enter') enterApp('grade1')">
           <span class="grade-badge grade-badge--open">مفتوح الآن</span>
           <div class="grade-icon" aria-hidden="true">🏫</div>
           <h3 class="grade-name">الصف الأول</h3>
@@ -55,16 +55,18 @@
           <div class="grade-arrow" aria-hidden="true">←</div>
         </div>
 
-        <!-- الصف الثاني - قريباً -->
-        <div class="grade-card grade-card--soon"
+        <!-- الصف الثاني - مفتوح -->
+        <div class="grade-card grade-card--open"
+             onclick="enterApp('grade2')"
              role="button"
              tabindex="0"
-             aria-label="الصف الثاني الابتدائي - قريباً"
-             aria-disabled="true">
-          <span class="grade-badge grade-badge--soon">قريباً</span>
+             aria-label="الصف الثاني الابتدائي - مفتوح الآن"
+             onkeydown="if(event.key==='Enter') enterApp('grade2')">
+          <span class="grade-badge grade-badge--open">مفتوح الآن</span>
           <div class="grade-icon" aria-hidden="true">📖</div>
           <h3 class="grade-name">الصف الثاني</h3>
           <p class="grade-desc">الابتدائي</p>
+          <div class="grade-arrow" aria-hidden="true">←</div>
         </div>
 
         <!-- الصف الثالث - قريباً -->
@@ -215,6 +217,7 @@
 <!-- ===== البيانات والسكريبت ===== -->
 <script src="data.js"></script>
 <script src="semester2-data.js"></script>
+<script src="data-grade2.js"></script>
 <script src="script.js"></script>
 
 </body>

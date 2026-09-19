@@ -88,6 +88,7 @@ function enterApp(gradeId = state.selectedGradeId || 'grade1') {
   renderQuizSection();
   initChatbot();
   showUnits(state.selectedGradeId);
+  updateAppGradeChip();
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -125,6 +126,14 @@ function showSection(name) {
 
   state.currentSection = name;
   window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateAppGradeChip() {
+  const chip = document.getElementById('currentGradeChip');
+  if (!chip) return;
+  const grade = state.currentGradeData || state.currentGrade || getPrimaryGrade(state.selectedGradeId);
+  chip.textContent = grade ? grade.name.replace(' الابتدائي','') : 'نوات ستيم';
+  chip.title = grade ? grade.name : 'نوات ستيم';
 }
 
 function setupKeyboardNav() {
@@ -604,31 +613,40 @@ function renderLessonsSection() {
   const grades = getAvailableGrades();
 
   view.innerHTML = `
-    <div class="section-header">
-      <h2>📚 الصفوف ودروس STEM</h2>
-      <p>اختر الصف الدراسي للبدء في استكشاف الوحدات والدروس</p>
+    <div class="section-header section-header--rich">
+      <span class="section-kicker">مسارك الدراسي</span>
+      <h2>الصفوف ودروس STEM</h2>
+      <p>اختر الصف الدراسي للانتقال إلى وحداته ودروسه وأنشطته التفاعلية.</p>
     </div>
-    <div class="cards-grid">
+    <div class="cards-grid grade-selection-grid">
       ${grades.map((grade, idx) => {
         const isSelected = grade.id === state.selectedGradeId;
         const unitsCount = (grade.units || []).length;
         const lessonsCount = (grade.units || []).reduce((a,u) => a + (u.lessons || []).length, 0);
-        const color = idx === 0 ? '#1565C0' : '#455A64';
+        const completed = getAllLessonsFlat(grade.id).filter(({lesson}) => scores[lesson.id] !== undefined).length;
+        const progress = lessonsCount ? Math.round((completed / lessonsCount) * 100) : 0;
+        const color = ['#0e79b7','#183f64','#2784ad','#315a78','#167e97','#205b84'][idx % 6];
         return `
-          <div class="card" style="--card-color:${color}"
+          <div class="card grade-select-card ${isSelected ? 'is-selected' : ''}" style="--card-color:${color}"
                onclick="showUnits('${grade.id}')"
                role="button" tabindex="0" aria-label="${grade.name}">
-            <span class="card-icon">${grade.icon || '📚'}</span>
-            <div class="card-badge" style="background:${color}">${isSelected ? 'الصف المختار' : 'مفتوح الآن'}</div>
+            <div class="card-topline">
+              <span class="card-icon">${grade.icon || '📚'}</span>
+              <div class="card-badge" style="background:${color}">${isSelected ? 'الصف الحالي' : 'مفتوح الآن'}</div>
+            </div>
             <h3>${grade.name}</h3>
             <p>${unitsCount} وحدات دراسية &bull; ${lessonsCount} درساً</p>
+            <div class="card-progress" aria-label="نسبة الاختبارات المكتملة ${progress}%">
+              <div class="card-progress-head"><span>تقدم الاختبارات</span><b>${progress}%</b></div>
+              <div class="card-progress-track"><i style="width:${progress}%"></i></div>
+            </div>
+            <div class="card-action">استكشف الصف <span aria-hidden="true">←</span></div>
           </div>
         `;
       }).join('')}
     </div>
   `;
 }
-
 function showUnits(gradeId) {
   const grade = getPrimaryGrade(gradeId);
   if (!grade) return;
@@ -722,29 +740,56 @@ function _renderUnitsForSemester(grade, semesterNum) {
   const view = document.getElementById('lessons-view');
   if (!view || !gradeData) return;
 
-  const semLabel = semesterNum === 2 ? 'الفصل الثاني' : 'الفصل الأول';
-  const unitColors = ['#4CAF50', '#FF9800', '#2196F3', '#9C27B0', '#00BCD4', '#FF5722'];
+  const semLabel = semesterNum === 2 ? 'الفصل الدراسي الثاني' : 'الفصل الدراسي الأول';
+  const unitColors = ['#0e79b7', '#183f64', '#2784ad', '#315a78', '#167e97', '#205b84'];
+  const units = gradeData.units || [];
+  const lessonCount = units.reduce((sum,u) => sum + (u.lessons || []).length, 0);
+  const completed = units.reduce((sum,u) => sum + (u.lessons || []).filter(l => scores[l.id] !== undefined).length, 0);
+  const progress = lessonCount ? Math.round((completed / lessonCount) * 100) : 0;
 
   view.innerHTML = `
     <button class="btn-back" onclick="renderLessonsSection()" aria-label="العودة للصفوف">
-      ← العودة للصفوف
+      <span aria-hidden="true">→</span> جميع الصفوف
     </button>
-    <div class="section-header">
-      <h2>${gradeData.icon || '📗'} ${gradeData.name}</h2>
-      <p>اختر الوحدة الدراسية &mdash; ${semLabel}</p>
-    </div>
-    <div class="cards-grid">
-      ${(gradeData.units || []).map((unit, idx) => {
+
+    <section class="grade-overview" aria-label="ملخص الصف">
+      <div class="grade-overview-main">
+        <span class="overview-icon">${gradeData.icon || '📗'}</span>
+        <div>
+          <span class="section-kicker section-kicker--light">${semLabel}</span>
+          <h2>${gradeData.name}</h2>
+          <p>اختر وحدة لتبدأ رحلة التعلم، ثم انتقل بين الدرس والنشاط واللعبة والاختبار.</p>
+        </div>
+      </div>
+      <div class="overview-stats">
+        <div><b>${units.length}</b><span>وحدات</span></div>
+        <div><b>${lessonCount}</b><span>دروس</span></div>
+        <div><b>${completed}</b><span>اختبارات مكتملة</span></div>
+        <div class="overview-progress"><b>${progress}%</b><span>التقدم</span></div>
+      </div>
+    </section>
+
+    <div class="cards-grid unit-grid">
+      ${units.map((unit, idx) => {
         const color = unit.color || unitColors[idx % unitColors.length];
         const unitLabel = `الوحدة ${unit.number || idx + 1}`;
+        const unitLessons = unit.lessons || [];
+        const unitCompleted = unitLessons.filter(l => scores[l.id] !== undefined).length;
         return `
-          <div class="card" style="--card-color:${color}"
+          <div class="card unit-card" style="--card-color:${color}"
                onclick="showLessons('${unit.id}')"
                role="button" tabindex="0" aria-label="وحدة: ${unit.name}">
-            <span class="card-icon">${unit.icon || '📚'}</span>
-            <div class="card-badge" style="background:${color}">${unitLabel}</div>
+            <div class="card-topline">
+              <span class="card-icon">${unit.icon || '📚'}</span>
+              <div class="card-badge" style="background:${color}">${unitLabel}</div>
+            </div>
             <h3>${unit.name}</h3>
-            <p>${(unit.lessons || []).length} دروس تفاعلية مع أنشطة STEM</p>
+            <p>${unitLessons.length} دروس تفاعلية مع أنشطة STEM وأوراق عمل واختبارات.</p>
+            <div class="card-meta-line">
+              <span>✓ ${unitCompleted} مكتمل</span>
+              <span>${unitLessons.length - unitCompleted} متبقٍ</span>
+            </div>
+            <div class="card-action">عرض الدروس <span aria-hidden="true">←</span></div>
           </div>
         `;
       }).join('')}
@@ -753,8 +798,8 @@ function _renderUnitsForSemester(grade, semesterNum) {
 
   state.currentGrade = gradeData;
   state.currentGradeData = gradeData;
+  updateAppGradeChip();
 }
-
 function showLessons(unitId) {
   const grade = state.currentGradeData || state.currentGrade;
   if (!grade) return;
@@ -762,35 +807,51 @@ function showLessons(unitId) {
   if (!unit) return;
   state.currentUnit = unit;
 
-  const color = unit.color || '#4CAF50';
+  const color = unit.color || '#0e79b7';
+  const lessons = unit.lessons || [];
+  const completed = lessons.filter(l => scores[l.id] !== undefined).length;
   const view = document.getElementById('lessons-view');
+
   view.innerHTML = `
     <button class="btn-back" onclick="showUnits('${state.selectedGradeId}')" aria-label="العودة للوحدات">
-      ← العودة للوحدات
+      <span aria-hidden="true">→</span> الوحدات
     </button>
-    <div class="section-header">
-      <h2>${unit.icon || '📚'} ${unit.name}</h2>
-      <p>اختر الدرس لعرض المحتوى الكامل</p>
-    </div>
-    <div class="cards-grid-3 cards-grid">
-      ${(unit.lessons || []).map((lesson, idx) => {
+
+    <section class="unit-overview" style="--unit-color:${color}" aria-label="ملخص الوحدة">
+      <div class="unit-overview-copy">
+        <span class="overview-icon overview-icon--small">${unit.icon || '📚'}</span>
+        <div>
+          <span class="section-kicker">الوحدة ${unit.number || ''}</span>
+          <h2>${unit.name}</h2>
+          <p>${lessons.length} دروس • ${completed} اختبارات مكتملة • اختر درساً لعرض ملفه التعليمي الكامل.</p>
+        </div>
+      </div>
+      <div class="unit-progress-pill"><b>${lessons.length ? Math.round(completed / lessons.length * 100) : 0}%</b><span>تقدم الوحدة</span></div>
+    </section>
+
+    <div class="cards-grid-3 cards-grid lesson-grid">
+      ${lessons.map((lesson, idx) => {
         const sc = scores[lesson.id];
         return `
-          <div class="card" style="--card-color:${color}"
+          <div class="card lesson-card" style="--card-color:${color}"
                onclick="showLesson('${lesson.id}')"
                role="button" tabindex="0" aria-label="درس: ${lesson.title}">
-            <span class="card-icon">📖</span>
-            <div class="card-badge" style="background:${color}">الدرس ${idx+1}</div>
+            <div class="card-topline">
+              <span class="lesson-index">${String(idx+1).padStart(2,'0')}</span>
+              <div class="card-badge" style="background:${color}">الدرس ${idx+1}</div>
+            </div>
             <h3>${lesson.title}</h3>
-            <p>${(lesson.summary || '').substring(0, 100)}${(lesson.summary || '').length > 100 ? '...' : ''}</p>
-            ${sc !== undefined ? `<div class="badge badge-success mt-1">✓ أكملت الاختبار: ${sc}%</div>` : ''}
+            <p>${(lesson.summary || '').substring(0, 125)}${(lesson.summary || '').length > 125 ? '...' : ''}</p>
+            <div class="lesson-card-footer">
+              ${sc !== undefined ? `<div class="badge badge-success">✓ اختبار ${sc}%</div>` : `<div class="badge badge-primary">جاهز للبدء</div>`}
+              <span class="card-action card-action--inline">افتح الدرس ←</span>
+            </div>
           </div>
         `;
       }).join('')}
     </div>
   `;
 }
-
 function showLesson(lessonId) {
   const grade = state.currentGrade;
   const unit = state.currentUnit;
@@ -875,33 +936,42 @@ function renderGamesSection() {
   if (!view) return;
 
   const allLessons = getAllLessonsFlat();
+  const playedCount = allLessons.filter(({lesson}) => scores[`game_${lesson.id}`] !== undefined).length;
 
   view.innerHTML = `
-    <div class="section-header">
-      <h2>🎮 ألعب مع ستيم</h2>
-      <p>اختر درساً للعب لعبته التفاعلية وجمع النقاط!</p>
+    <div class="section-header section-header--rich">
+      <span class="section-kicker">تعلّم باللعب</span>
+      <h2>ألعب مع ستيم 🎮</h2>
+      <p>اختر لعبة مرتبطة بأحد الدروس، واجمع النقاط وأعد المحاولة لتحسين نتيجتك.</p>
+      <div class="section-summary-pills">
+        <span><b>${allLessons.length}</b> لعبة</span>
+        <span><b>${playedCount}</b> تم لعبها</span>
+      </div>
     </div>
     <div id="gameScoreBoard" class="highlight mb-3" style="display:none"></div>
     <div id="gameContent">
-      <div class="cards-grid">
+      <div class="cards-grid content-cards-grid">
         ${allLessons.map(({lesson, unit, semester}) => {
           const sc = scores[`game_${lesson.id}`];
           const game = lesson.game || {};
           const gameType = game.type || '';
           const gameTypeIcon = getGameTypeIcon(gameType);
           const gameTypeName = getGameTypeName(gameType);
-          const color = unit.color || '#4CAF50';
+          const color = unit.color || '#0e79b7';
           const gameTitle = game.title || lesson.title;
-          const semBadge = semester === 2 ? ' 📗' : ' 📘';
+          const semBadge = semester === 2 ? 'الفصل الثاني' : 'الفصل الأول';
           return `
-            <div class="card" style="--card-color:${color}"
+            <div class="card activity-card" style="--card-color:${color}"
                  onclick="startGame('${lesson.id}')"
                  role="button" tabindex="0" aria-label="لعبة: ${gameTitle}">
-              <span class="card-icon">${gameTypeIcon}</span>
-              <div class="card-badge" style="background:${color}">${gameTypeName}${semBadge}</div>
+              <div class="card-topline">
+                <span class="card-icon activity-icon">${gameTypeIcon}</span>
+                <div class="card-badge" style="background:${color}">${gameTypeName}</div>
+              </div>
               <h3>${gameTitle}</h3>
               <p>${lesson.title} &bull; ${unit.name || unit.title}</p>
-              ${sc !== undefined ? `<div class="badge badge-success mt-1">🏆 أفضل: ${sc} نقطة</div>` : ''}
+              <div class="card-meta-line"><span>${semBadge}</span><span>${sc !== undefined ? `🏆 ${sc} نقطة` : 'لم تلعب بعد'}</span></div>
+              <div class="card-action">ابدأ اللعبة <span aria-hidden="true">←</span></div>
             </div>
           `;
         }).join('')}
@@ -909,7 +979,6 @@ function renderGamesSection() {
     </div>
   `;
 }
-
 function getGameTypeIcon(type) {
   const icons = {
     sorting: '🗂️',
@@ -1644,33 +1713,40 @@ function renderQuizSection() {
   if (!view) return;
 
   const allLessons = getAllLessonsFlat();
+  const completedCount = allLessons.filter(({lesson}) => scores[lesson.id] !== undefined).length;
 
   view.innerHTML = `
-    <div class="section-header">
-      <h2>📝 اختبر معلوماتك مع نوات ستيم</h2>
-      <p>اختر درساً لتبدأ الاختبار وتجمع الشارات!</p>
+    <div class="section-header section-header--rich">
+      <span class="section-kicker">قياس التعلّم</span>
+      <h2>اختبر معلوماتك 📝</h2>
+      <p>اختبارات قصيرة لكل درس مع نتيجة فورية وشارات تشجيعية تساعدك على متابعة تقدمك.</p>
+      <div class="section-summary-pills">
+        <span><b>${allLessons.length}</b> اختبار</span>
+        <span><b>${completedCount}</b> مكتمل</span>
+      </div>
     </div>
     <div id="quizContent">
-      <div class="cards-grid">
+      <div class="cards-grid content-cards-grid">
         ${allLessons.map(({lesson, unit, semester}) => {
           const sc = scores[lesson.id];
           const badge = sc !== undefined ? getBadgeForScore(sc) : null;
-          const color = unit.color || '#4CAF50';
-
-          // استخراج الأسئلة من كلا البنيتين
+          const color = unit.color || '#0e79b7';
           const quizQuestions = _getLessonQuizQuestions(lesson);
           const qCount = quizQuestions.length;
-          const semBadge = semester === 2 ? ' 📗' : ' 📘';
+          const semBadge = semester === 2 ? 'الفصل الثاني' : 'الفصل الأول';
 
           return `
-            <div class="card" style="--card-color:${color}"
+            <div class="card activity-card quiz-list-card" style="--card-color:${color}"
                  onclick="startQuiz('${lesson.id}')"
                  role="button" tabindex="0" aria-label="اختبار: ${lesson.title}">
-              <span class="card-icon">📝</span>
-              <div class="card-badge" style="background:${color}">${qCount} أسئلة${semBadge}</div>
+              <div class="card-topline">
+                <span class="card-icon activity-icon">📝</span>
+                <div class="card-badge" style="background:${color}">${qCount} أسئلة</div>
+              </div>
               <h3>${lesson.title}</h3>
               <p>${unit.name || unit.title}</p>
-              ${badge ? `<div class="badge badge-success mt-1">${badge.icon} ${badge.label}: ${sc}%</div>` : `<div class="badge badge-primary mt-1">🔒 لم تُختبر بعد</div>`}
+              <div class="card-meta-line"><span>${semBadge}</span><span>${badge ? `${badge.icon} ${badge.label} • ${sc}%` : 'جاهز للاختبار'}</span></div>
+              <div class="card-action">${sc !== undefined ? 'أعد الاختبار' : 'ابدأ الاختبار'} <span aria-hidden="true">←</span></div>
             </div>
           `;
         }).join('')}
@@ -1678,7 +1754,6 @@ function renderQuizSection() {
     </div>
   `;
 }
-
 function _getLessonQuizQuestions(lesson) {
   if (!lesson.quiz) return [];
   // الفصل الأول: lesson.quiz = مصفوفة أسئلة مباشرة

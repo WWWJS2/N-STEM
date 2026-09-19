@@ -224,6 +224,10 @@ function buildCloudLessonSheets(lesson, unit, grade) {
   const gradeName = (grade && grade.name) || (state.selectedGradeId === 'grade2' ? 'الصف الثاني الابتدائي' : 'الصف الأول الابتدائي');
   const stemAct = lesson.stemActivity || {};
   const ws = lesson.worksheet || {};
+  const li = (arr) => (arr || []).map(x => `<li>${x}</li>`).join('');
+  const joinArr = (arr, sep) => (arr || []).join(sep || ' | ');
+  const conceptsHtml = (lesson.concepts || []).map(c => `<li><strong>${c.term || c}:</strong> ${c.definition || ''}</li>`).join('');
+  const stemMaterials = (stemAct.materials || []).map(x => `<li>${x}</li>`).join('');
   const toolsHtml = (lesson.activityTools || []).map(t => `<div class="tool-item"><span>${t}</span></div>`).join('');
   const rubricRows = (lesson.rubric || []).map(r => `
     <tr>
@@ -233,30 +237,32 @@ function buildCloudLessonSheets(lesson, unit, grade) {
       <td>${r.needsSupport}</td>
     </tr>
   `).join('');
-  const li = (arr) => (arr || []).map(x => `<li>${x}</li>`).join('');
-  const joinArr = (arr, sep) => (arr || []).join(sep || ' | ');
-  const conceptsHtml = (lesson.concepts || []).map(c => `<li><strong>${c.term || c}:</strong> ${c.definition || ''}</li>`).join('');
-  const stemMaterials = (stemAct.materials || []).map(x => `<li>${x}</li>`).join('');
 
   return `
   <section class="sheet"><div class="sheet-inner">
     <div class="top-strip"><div class="cap"></div><div class="title-bar">${lessonTitle}</div><div class="cap"></div></div>
     <div class="hero-block">
       <h1>عنوان الدرس: ${lessonTitle}</h1>
-      <p>المبحث: العلوم | رقم الوحدة وعنوانها: ${unitNumber} - ${unitTitle}</p>
+      <p>المبحث: العلوم | الصف: ${gradeName}</p>
+      <p>الوحدة ${unitNumber}: ${unitTitle}${lesson.chapter ? ` | ${lesson.chapter}` : ''}</p>
     </div>
     <div class="inline-meta">
       <div class="info-box"><p>عدد الجلسات: ${lesson.sessions || '2'}</p><p>مصادر التعلم: ${lesson.resources || ''}</p></div>
-      <div class="info-box"><p>مدة الدرس: ${lesson.duration || '45 دقيقة'}</p><p>الصف: ${gradeName}</p></div>
+      <div class="info-box"><p>مدة الدرس: ${lesson.duration || '90 دقيقة'}</p><p>مرجع الكتاب: ${lesson.bookPages || ''}</p></div>
     </div>
-    ${lesson.bookPrompt ? `<div class="two-col"><div class="label-box">من صفحة الدرس</div><div class="content-box light"><p>${lesson.bookPrompt}</p></div></div>` : ''}
-    ${lesson.bookPages ? `<div class="two-col"><div class="label-box">المرجع</div><div class="content-box light"><p>${lesson.bookPages}</p></div></div>` : ''}
-    <div class="two-col"><div class="label-box">الوسائل التعليمية</div><div class="content-box"><p>${lesson.teachingAids || ''}</p></div></div>
+    ${lesson.bookPrompt ? `<div class="two-col"><div class="label-box">سؤال الدرس</div><div class="content-box light"><p>${lesson.bookPrompt}</p></div></div>` : ''}
+    <div class="two-col"><div class="label-box">ملخص الدرس</div><div class="content-box light"><p>${lesson.summary || ''}</p></div></div>
     <div class="two-col"><div class="label-box">الأهداف التعليمية</div><div class="content-box"><ul>${li(lesson.objectives)}</ul></div></div>
     <div class="two-col"><div class="label-box">المفردات</div><div class="content-box light"><p>${joinArr(lesson.vocabulary, ' | ')}</p></div></div>
-    <div class="two-col"><div class="label-box">الأفكار الرئيسة</div><div class="content-box light"><p>${joinArr(lesson.mainIdeas, ' • ')}</p></div></div>
+    <div class="two-col"><div class="label-box">الأفكار الرئيسة</div><div class="content-box light"><ul>${li(lesson.mainIdeas)}</ul></div></div>
+    <div class="page-number">1</div>
+  </div></section>
+
+  <section class="sheet"><div class="sheet-inner">
+    <div class="top-strip"><div class="cap"></div><div class="title-bar">المحتوى وتكامل STEM</div><div class="cap"></div></div>
     <div class="two-col"><div class="label-box">المحتوى العلمي</div><div class="content-box light"><p>${lesson.content || lesson.summary || ''}</p></div></div>
     <div class="two-col"><div class="label-box">المفاهيم</div><div class="content-box light"><ul>${conceptsHtml}</ul></div></div>
+    <div class="two-col"><div class="label-box">الوسائل التعليمية</div><div class="content-box"><p>${lesson.teachingAids || ''}</p></div></div>
     <div class="two-col"><div class="label-box">تكامل STEM</div><div class="content-box light"><div class="stem-grid">
       <div class="stem-panel"><h3>Science: العلوم</h3><p>${(lesson.stem || {}).science || ''}</p></div>
       <div class="stem-panel"><h3>Technology: التقنية</h3><p>${(lesson.stem || {}).technology || ''}</p></div>
@@ -264,43 +270,40 @@ function buildCloudLessonSheets(lesson, unit, grade) {
       <div class="stem-panel"><h3>Mathematics: الرياضيات</h3><p>${(lesson.stem || {}).mathematics || ''}</p></div>
     </div></div></div>
     <div class="two-col"><div class="label-box">التمهيد</div><div class="content-box light"><p>${lesson.introduction || ''}</p></div></div>
-    <div class="page-number">1</div>
-  </div></section>
-  <section class="sheet"><div class="sheet-inner">
-    <div class="top-strip"><div class="cap"></div><div class="title-bar">${lesson.activityName || 'النشاط العملي'}</div><div class="cap"></div></div>
-    <div class="two-col"><div class="label-box">خطوات شرح الدرس</div><div class="content-box light"><ol>${li(lesson.teachingSteps)}</ol></div></div>
-    <div class="two-col"><div class="label-box">النشاط العملي</div><div class="content-box light">
-      <p><strong>اسم النشاط:</strong> ${lesson.activityName || ''}</p>
-      <p><strong>وصف النشاط:</strong> ${lesson.activityDescription || ''}</p>
-    </div></div>
-    <div class="two-col"><div class="label-box">الأدوات</div><div class="content-box light"><div class="tools-grid">${toolsHtml}</div></div></div>
-    <div class="two-col"><div class="label-box">خطوات النشاط</div><div class="content-box light"><ul>${li(lesson.activitySteps)}</ul></div></div>
-    <div class="two-col"><div class="label-box">أسئلة التقويم</div><div class="content-box light"><ul>${li(lesson.assessmentQuestions)}</ul></div></div>
-    <div class="two-col"><div class="label-box">نشاط STEM</div><div class="content-box light">
-      <p><strong>العنوان:</strong> ${stemAct.title || ''}</p>
-      <p><strong>المدة:</strong> ${stemAct.time || stemAct.duration || ''}</p>
-      <p><strong>الناتج المتوقع:</strong> ${stemAct.expectedOutcome || ''}</p>
-    </div></div>
-    <div class="two-col"><div class="label-box">مواد STEM</div><div class="content-box light"><ul>${stemMaterials}</ul></div></div>
-    <div class="two-col"><div class="label-box">خطوات STEM</div><div class="content-box light"><ol>${li(stemAct.steps)}</ol></div></div>
-    <div class="two-col"><div class="label-box">أسئلة للتفكير</div><div class="content-box light"><ul>${li(stemAct.thinkingQuestions)}</ul></div></div>
+    <div class="two-col"><div class="label-box">خطوات التدريس</div><div class="content-box light"><ol>${li(lesson.teachingSteps)}</ol></div></div>
     <div class="page-number">2</div>
   </div></section>
+
   <section class="sheet"><div class="sheet-inner">
-    <div class="top-strip"><div class="cap"></div><div class="title-bar">ورقة العمل والتقدير</div><div class="cap"></div></div>
+    <div class="top-strip"><div class="cap"></div><div class="title-bar">${lesson.activityName || stemAct.title || 'النشاط العملي STEM'}</div><div class="cap"></div></div>
+    <div class="two-col"><div class="label-box">وصف النشاط</div><div class="content-box light">
+      <p><strong>اسم النشاط:</strong> ${lesson.activityName || stemAct.title || ''}</p>
+      <p><strong>الوصف:</strong> ${lesson.activityDescription || stemAct.expectedOutcome || ''}</p>
+      <p><strong>الزمن:</strong> ${stemAct.time || stemAct.duration || ''}</p>
+    </div></div>
+    <div class="two-col"><div class="label-box">أدوات النشاط</div><div class="content-box light"><div class="tools-grid">${toolsHtml}</div></div></div>
+    <div class="two-col"><div class="label-box">مواد STEM</div><div class="content-box light"><ul>${stemMaterials}</ul></div></div>
+    <div class="two-col"><div class="label-box">خطوات النشاط</div><div class="content-box light"><ol>${li(lesson.activitySteps || stemAct.steps)}</ol></div></div>
+    <div class="two-col"><div class="label-box">الناتج المتوقع</div><div class="content-box"><p>${stemAct.expectedOutcome || lesson.activityDescription || ''}</p></div></div>
+    <div class="two-col"><div class="label-box">أسئلة التفكير</div><div class="content-box light"><ul>${li(stemAct.thinkingQuestions)}</ul></div></div>
+    <div class="two-col"><div class="label-box">التقويم</div><div class="content-box light"><ul>${li(lesson.assessmentQuestions)}</ul></div></div>
+    <div class="page-number">3</div>
+  </div></section>
+
+  <section class="sheet"><div class="sheet-inner">
+    <div class="top-strip"><div class="cap"></div><div class="title-bar">ورقة العمل والتقويم الأدائي</div><div class="cap"></div></div>
     <div class="two-col"><div class="label-box">ورقة عمل قابلة للطباعة</div><div class="content-box light"><div class="worksheet-box">
-      <h3>ورقة عمل</h3>
-      <p>عنوان النشاط: ${ws.title || ''}</p>
-      <p>التعليمات: ${ws.instructions || ''}</p>
-      <p>${ws.content || ''}</p>
+      <h3>${ws.title || 'ورقة عمل'}</h3>
+      <p><strong>التعليمات:</strong> ${ws.instructions || ''}</p>
+      <p style="white-space:pre-line">${ws.content || ''}</p>
     </div></div></div>
     <div class="two-col"><div class="label-box">سلم التقدير</div><div class="content-box light"><table class="rubric">
       <thead><tr><th>المعيار</th><th>متميز</th><th>جيد</th><th>بحاجة إلى دعم</th></tr></thead>
       <tbody>${rubricRows}</tbody>
     </table></div></div>
     <div class="two-col"><div class="label-box">ملاحظات للمعلم</div><div class="content-box light"><p>${lesson.teacherNotes || ''}</p></div></div>
-    <div class="print-credit">إعداد أ. أميرة عبدالله الحكمي</div>
-    <div class="page-number">3</div>
+    <div class="print-credit">إعداد أ. أميرة عبدالله الحكمي | نوات ستيم</div>
+    <div class="page-number">4</div>
   </div></section>`;
 }
 

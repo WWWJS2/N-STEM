@@ -4649,3 +4649,62 @@ footer {
     display: none !important;
   }
 }
+
+
+/* ---------- Final interface hardening ---------- */
+.semester-tabs {
+  margin: 0 auto 26px;
+  padding: 5px;
+  border: 1px solid #dce7ee;
+  border-radius: 14px;
+  background: rgba(255,255,255,.86);
+  box-shadow: 0 8px 24px rgba(24,63,100,.055);
+}
+
+.semester-tab-btn {
+  min-height: 43px;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: .8rem;
+}
+
+.semester-tab-btn.active {
+  background: linear-gradient(135deg, var(--navy-800), var(--blue-700));
+  box-shadow: 0 7px 18px rgba(24,63,100,.16);
+}
+
+.quiz-option,
+.mcq-option,
+.chat-input,
+.quick-q,
+.btn,
+.btn-print,
+.btn-back,
+.nav-btn,
+.nav-back-home,
+.semester-tab-btn {
+  font-family: inherit;
+}
+
+.card:hover {
+  border-color: rgba(14, 121, 183, .3);
+}
+
+@media (hover: none) {
+  .card:hover,
+  .grade-card--open:hover,
+  .hero-cta-btn:hover,
+  .topbar-cta:hover {
+    transform: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .semester-tabs {
+    margin-bottom: 18px;
+  }
+
+  .semester-tab-btn {
+    min-height: 40px;
+  }
+}

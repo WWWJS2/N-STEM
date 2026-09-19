@@ -5820,3 +5820,26 @@ window.grade2Data = {
 
   ROOT.__fullPrintUpgrade = marker;
 })();
+
+;(() => {
+  const ROOT = window.grade2Data;
+  const MARK = "semester-split-1448-الصف الثاني الابتدائي";
+  if (!ROOT || ROOT.__semesterSplit1448 === MARK) return;
+  ROOT.availableSemesters = [1, 2];
+  ROOT.source = "كتاب العلوم - الصف الثاني الابتدائي - الجزآن الأول والثاني من المقرر";
+  const grade = ROOT.grades && ROOT.grades[0];
+  if (!grade) return;
+  grade.semesterName = 'الفصلان الدراسيان الأول والثاني';
+  (grade.units || []).forEach((unit, idx) => {
+    unit.number = unit.number || idx + 1;
+    unit.semester = idx < 3 ? 1 : 2;
+    (unit.lessons || []).forEach(lesson => {
+      lesson.semester = unit.semester;
+      lesson.sourcePart = unit.semester === 1 ? 'الجزء الأول' : 'الجزء الثاني';
+    });
+  });
+  const allLessons = (grade.units || []).flatMap(u => u.lessons || []);
+
+
+  ROOT.__semesterSplit1448 = MARK;
+})();

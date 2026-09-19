@@ -1093,3 +1093,314 @@ main{background:
     display:block!important;
   }
 }
+
+
+/* ==========================================================
+   FINAL HEADER + HERO CORRECTION 2026-09-19
+   Fixes the oversized/cropped hero shown on deployed site.
+   ========================================================== */
+
+.play-header{
+  position:sticky!important;
+  top:0!important;
+  z-index:1000!important;
+  background:rgba(255,255,255,.96)!important;
+  border-bottom:1px solid #dceef5!important;
+  box-shadow:0 8px 28px rgba(13,86,127,.08)!important;
+  backdrop-filter:blur(14px);
+}
+.play-header-inner{
+  width:min(1240px,100%)!important;
+  max-width:1240px!important;
+  min-height:76px!important;
+  margin:0 auto!important;
+  padding:8px 24px!important;
+  display:grid!important;
+  grid-template-columns:230px minmax(0,1fr) 210px!important;
+  align-items:center!important;
+  gap:18px!important;
+}
+.play-brand{
+  min-width:0!important;
+  justify-self:start!important;
+  padding:0!important;
+  background:transparent!important;
+}
+.play-brand .play-brand-logo{
+  display:block!important;
+  visibility:visible!important;
+  opacity:1!important;
+  width:205px!important;
+  max-width:205px!important;
+  height:60px!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  padding:0!important;
+  margin:0!important;
+  background:transparent!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  filter:none!important;
+}
+.play-nav a{
+  color:#244f79!important;
+}
+.play-nav a:hover,
+.play-nav a.active{
+  color:#0b6ea9!important;
+  background:#eaf7fc!important;
+}
+.play-header-tools{
+  color:#1b5b86!important;
+}
+.play-greeting{
+  color:#246187!important;
+  background:#f0f9fc!important;
+  border:1px solid #dceef4!important;
+}
+.play-search{
+  color:#0c6ea7!important;
+  background:#eef8fc!important;
+  border:1px solid #dceef4!important;
+}
+
+/* remove the accidental floating logo card from hero */
+.hero-brand-mini{
+  display:none!important;
+}
+
+/* Hero must stay inside viewport and never create the giant clipped title */
+.play-hero{
+  min-height:560px!important;
+  overflow:hidden!important;
+  background:
+    radial-gradient(circle at 84% 7%,rgba(255,255,255,.82) 0 115px,transparent 118px),
+    radial-gradient(circle at 12% 18%,rgba(255,255,255,.7) 0 78px,transparent 80px),
+    linear-gradient(145deg,#eefbff 0%,#dff7ff 48%,#eafff7 100%)!important;
+}
+.play-hero-inner{
+  width:min(1240px,100%)!important;
+  max-width:1240px!important;
+  min-height:560px!important;
+  margin:0 auto!important;
+  padding:58px 28px 74px!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1.02fr) minmax(380px,.98fr)!important;
+  gap:46px!important;
+  align-items:center!important;
+}
+.play-hero-copy{
+  min-width:0!important;
+  max-width:650px!important;
+  justify-self:end!important;
+  text-align:right!important;
+  direction:rtl!important;
+}
+.play-hero-pill{
+  width:max-content!important;
+  max-width:100%!important;
+  margin:0!important;
+  font-size:.76rem!important;
+  padding:9px 14px!important;
+  white-space:normal!important;
+}
+.play-hero h1{
+  max-width:650px!important;
+  margin:22px 0 16px!important;
+  font-size:clamp(2.7rem,4.6vw,4.3rem)!important;
+  line-height:1.13!important;
+  letter-spacing:-1.4px!important;
+  white-space:normal!important;
+  overflow-wrap:normal!important;
+  word-break:normal!important;
+  text-wrap:balance!important;
+}
+.play-hero h1 span{
+  display:inline!important;
+}
+.play-hero h1 span::after{
+  bottom:-8px!important;
+  height:6px!important;
+}
+.hero-lead{
+  max-width:620px!important;
+  margin:0!important;
+  font-size:1rem!important;
+  line-height:1.95!important;
+}
+.play-hero-actions{
+  justify-content:flex-start!important;
+  flex-wrap:wrap!important;
+}
+.hero-trust-row{
+  width:100%!important;
+  max-width:620px!important;
+}
+
+/* Keep the visual card proportional */
+.hero-lab-card{
+  width:100%!important;
+  max-width:520px!important;
+  height:455px!important;
+  justify-self:start!important;
+  margin:0!important;
+}
+.lab-scene{
+  height:280px!important;
+}
+.lab-core{
+  width:180px!important;
+  height:180px!important;
+}
+.lab-core-logo{
+  width:72px!important;
+  height:72px!important;
+}
+.lab-core-logo .nawat-logo-mark{
+  width:72px!important;
+  height:72px!important;
+}
+
+/* Real logo in footer */
+.play-footer-brand{
+  display:block!important;
+}
+.play-footer-brand .play-footer-logo{
+  display:block!important;
+  width:205px!important;
+  height:auto!important;
+  max-height:70px!important;
+  object-fit:contain!important;
+  filter:none!important;
+  background:rgba(255,255,255,.96)!important;
+  padding:7px 10px!important;
+  border-radius:16px!important;
+}
+
+/* Tablet: stack cleanly instead of forcing two columns into a narrow viewport */
+@media(max-width:1100px){
+  .play-header-inner{
+    grid-template-columns:210px 1fr auto!important;
+  }
+  .play-brand .play-brand-logo{
+    width:188px!important;
+    max-width:188px!important;
+    height:56px!important;
+  }
+  .play-nav{
+    gap:2px!important;
+  }
+  .play-nav a{
+    padding-inline:9px!important;
+    font-size:.72rem!important;
+  }
+  .play-greeting{
+    display:none!important;
+  }
+
+  .play-hero-inner{
+    display:flex!important;
+    flex-direction:column!important;
+    gap:30px!important;
+    min-height:auto!important;
+    padding:50px 22px 72px!important;
+    text-align:center!important;
+  }
+  .play-hero-copy{
+    order:1!important;
+    width:min(720px,100%)!important;
+    max-width:720px!important;
+    justify-self:auto!important;
+    text-align:center!important;
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+  }
+  .play-hero h1{
+    max-width:720px!important;
+    font-size:clamp(2.55rem,7.2vw,3.7rem)!important;
+  }
+  .hero-lead{
+    max-width:680px!important;
+  }
+  .play-hero-actions{
+    justify-content:center!important;
+  }
+  .hero-trust-row{
+    max-width:650px!important;
+  }
+  .hero-lab-card{
+    order:2!important;
+    width:min(520px,100%)!important;
+    justify-self:auto!important;
+  }
+}
+
+@media(max-width:760px){
+  .play-header{
+    position:relative!important;
+  }
+  .play-header-inner{
+    min-height:66px!important;
+    grid-template-columns:1fr auto!important;
+    padding:6px 14px!important;
+  }
+  .play-brand .play-brand-logo{
+    width:170px!important;
+    max-width:170px!important;
+    height:52px!important;
+  }
+  .play-nav{
+    display:none!important;
+  }
+  .play-hero-inner{
+    padding:38px 16px 62px!important;
+  }
+  .play-hero-pill{
+    font-size:.67rem!important;
+  }
+  .play-hero h1{
+    margin-top:18px!important;
+    font-size:clamp(2.35rem,10.5vw,3.2rem)!important;
+    line-height:1.16!important;
+  }
+  .hero-lead{
+    font-size:.88rem!important;
+    line-height:1.85!important;
+  }
+  .hero-trust-row{
+    grid-template-columns:1fr 1fr!important;
+  }
+  .hero-lab-card{
+    height:420px!important;
+  }
+}
+
+@media(max-width:430px){
+  .play-brand .play-brand-logo{
+    width:150px!important;
+    max-width:150px!important;
+    height:48px!important;
+  }
+  .play-search{
+    width:36px!important;
+    height:36px!important;
+  }
+  .play-hero h1{
+    font-size:clamp(2.08rem,11vw,2.65rem)!important;
+    letter-spacing:-.7px!important;
+  }
+  .hero-lab-card{
+    height:390px!important;
+  }
+  .lab-scene{
+    height:255px!important;
+  }
+  .lab-core{
+    width:160px!important;
+    height:160px!important;
+  }
+  .fc-one,.fc-two,.fc-three,.fc-four{
+    transform:none!important;
+  }
+}

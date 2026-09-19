@@ -51,6 +51,11 @@ function showLanding() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+function enterAppSection(gradeId, section) {
+  enterApp(gradeId);
+  window.setTimeout(() => showSection(section), 360);
+}
+
 function enterApp(gradeId = state.selectedGradeId || 'grade1') {
   state.selectedGradeId = gradeId;
   state.currentSemester = 1;

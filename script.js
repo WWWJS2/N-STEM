@@ -10,6 +10,8 @@ const state = {
   currentUnit: null,
   currentLesson: null,
   currentSemester: 1,
+  selectedGradeId: 'grade1',
+  currentGradeData: null,
   quiz: {
     lessonId: null,
     questions: [],
@@ -49,7 +51,14 @@ function showLanding() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function enterApp() {
+function enterApp(gradeId = state.selectedGradeId || 'grade1') {
+  state.selectedGradeId = gradeId;
+  state.currentSemester = 1;
+  state.currentGrade = null;
+  state.currentGradeData = null;
+  state.currentUnit = null;
+  state.currentLesson = null;
+
   const landingEl = document.getElementById('landing-page');
   const appEl = document.getElementById('app-content');
 
@@ -78,6 +87,7 @@ function enterApp() {
   renderGamesSection();
   renderQuizSection();
   initChatbot();
+  showUnits(state.selectedGradeId);
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -128,33 +138,78 @@ function setupKeyboardNav() {
 }
 
 // ============================================================
-// ===== مساعد: جلب كل دروس الفصلين =====
+// ===== مساعد: بيانات الصفوف والفصول =====
 // ============================================================
 
-function getAllLessonsFlat() {
-  const result = [];
-  // الفصل الأول
-  if (window.nawatData && nawatData.grades) {
-    nawatData.grades.forEach(grade => {
-      grade.units.forEach(unit => {
-        unit.lessons.forEach(lesson => {
-          result.push({ lesson, unit, grade, semester: 1 });
-        });
-      });
-    });
+function getPrimaryGrade(gradeId) {
+  if (gradeId === 'grade2' && window.grade2Data && grade2Data.grades) {
+    return grade2Data.grades.find(g => g.id === 'grade2') || grade2Data.grades[0] || null;
   }
-  // الفصل الثاني
-  if (window.semester2Data && semester2Data.grades) {
-    const sem2Grade = semester2Data.grades[0];
-    if (sem2Grade && semester2Data.lessons) {
-      sem2Grade.units.forEach(unit => {
-        unit.lessons.forEach(lessonId => {
-          const lesson = semester2Data.lessons.find(l => l.id === lessonId);
-          if (lesson) result.push({ lesson, unit, grade: sem2Grade, semester: 2 });
-        });
+  if (window.nawatData && nawatData.grades) {
+    return nawatData.grades.find(g => g.id === gradeId) || null;
+  }
+  return null;
+}
+
+function getAvailableGrades() {
+  const grades = [];
+  const grade1 = getPrimaryGrade('grade1');
+  const grade2 = getPrimaryGrade('grade2');
+  if (grade1) grades.push(grade1);
+  if (grade2) grades.push(grade2);
+  return grades;
+}
+
+function getAvailableSemestersForGrade(gradeId) {
+  if (gradeId === 'grade2') {
+    return (window.grade2Data && Array.isArray(grade2Data.availableSemesters))
+      ? grade2Data.availableSemesters
+      : [1];
+  }
+  const semesters = [1];
+  if (window.semester2Data && semester2Data.grades && semester2Data.grades.length) semesters.push(2);
+  return semesters;
+}
+
+function getAllLessonsFlat(gradeId = state.selectedGradeId) {
+  const result = [];
+
+  if (gradeId === 'grade2' && window.grade2Data && grade2Data.grades) {
+    const grade = grade2Data.grades.find(g => g.id === 'grade2') || grade2Data.grades[0];
+    if (grade) {
+      (grade.units || []).forEach(unit => {
+        (unit.lessons || []).forEach(lesson => result.push({ lesson, unit, grade, semester: 1 }));
+      });
+    }
+    return result;
+  }
+
+  if (window.nawatData && nawatData.grades) {
+    const grade = nawatData.grades.find(g => g.id === gradeId);
+    if (grade) {
+      (grade.units || []).forEach(unit => {
+        (unit.lessons || []).forEach(lesson => result.push({ lesson, unit, grade, semester: 1 }));
       });
     }
   }
+
+  if (gradeId === 'grade1' && window.semester2Data && semester2Data.grades) {
+    const sem2Grade = semester2Data.grades.find(g => g.id === 'grade1-s2' || g.id === 'grade1') || semester2Data.grades[0];
+    if (sem2Grade && semester2Data.lessons) {
+      (sem2Grade.units || []).forEach((unit, idx) => {
+        const normalizedUnit = {
+          id: unit.id,
+          number: unit.number || idx + 1,
+          name: unit.title || unit.name,
+          icon: unit.icon || '📗',
+          color: unit.color || '#4CAF50',
+          lessons: (unit.lessons || []).map(id => semester2Data.lessons.find(l => l.id === id)).filter(Boolean)
+        };
+        normalizedUnit.lessons.forEach(lesson => result.push({ lesson, unit: normalizedUnit, grade: sem2Grade, semester: 2 }));
+      });
+    }
+  }
+
   return result;
 }
 
@@ -162,10 +217,11 @@ function getCloudLessonPrintCss() {
   return `:root{--navy:#183f64;--navy-deep:#122f4a;--blue:#0e79b7;--text:#17324a;--muted:#58728a;--line:#d8e0e7;--paper:#ffffff;--page-bg:#edf3f7}*{box-sizing:border-box}html,body{margin:0;padding:0}body{font-family:"IBM Plex Sans Arabic","Tajawal","Cairo",sans-serif;background:var(--page-bg);color:var(--text);direction:rtl}.toolbar{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 18px;background:rgba(237,243,247,.96);backdrop-filter:blur(10px);border-bottom:1px solid rgba(24,63,100,.08)}.toolbar-note{color:var(--muted);font-size:15px}.print-button{border:0;border-radius:14px;background:var(--navy);color:#fff;font:inherit;font-size:16px;font-weight:700;padding:10px 18px;cursor:pointer}.document{width:min(100%,920px);margin:0 auto;padding:24px 12px 42px}.sheet{position:relative;width:210mm;min-height:297mm;margin:0 auto 18px;background:var(--paper);box-shadow:0 20px 50px rgba(15,29,45,.12);overflow:hidden}.sheet::after{content:"";position:absolute;right:0;bottom:0;left:0;height:18mm;background:repeating-linear-gradient(to left,rgba(24,63,100,.12) 0 1mm,transparent 1mm 5mm);opacity:.45}.sheet-inner{position:relative;padding:14mm 12mm 18mm}.top-strip{display:grid;grid-template-columns:22mm 1fr 22mm;align-items:center;gap:6mm;margin-bottom:11mm}.top-strip .cap{height:13mm;border-radius:0 0 4mm 4mm;background:var(--blue)}.top-strip .title-bar{min-height:13mm;border-radius:0 0 4mm 4mm;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:flex-end;padding:0 7mm;font-size:20px;font-weight:700}.hero-block{border-radius:5mm;background:var(--navy);color:#fff;padding:8mm 9mm;margin-bottom:6mm}.hero-block h1{margin:0 0 3mm;font-size:24px;line-height:1.35;font-weight:700}.hero-block p{margin:0;font-size:17px;line-height:1.75}.inline-meta{display:grid;grid-template-columns:1fr 1fr;gap:6mm;margin-bottom:8mm}.info-box{border-radius:4mm;background:var(--navy);color:#fff;padding:5.5mm 6mm;min-height:26mm}.info-box p{margin:0;font-size:16px;line-height:1.85;font-weight:700}.two-col{display:grid;grid-template-columns:30mm 1fr;gap:6mm;margin-bottom:6mm;align-items:start}.label-box{border-radius:0 0 0 4mm;background:var(--blue);color:#fff;padding:4mm 3mm;min-height:20mm;display:flex;align-items:center;justify-content:center;text-align:center;font-size:17px;font-weight:700;line-height:1.35}.content-box{border-radius:4mm;background:var(--navy);color:#fff;padding:4.5mm 6mm;min-height:20mm}.content-box.light{background:#fff;color:var(--text);border:.4mm solid var(--line)}.content-box p,.content-box li,.content-box strong{margin:0;font-size:16px;line-height:1.9}.content-box ul,.content-box ol{margin:0;padding:0 5mm 0 0}.content-box li+li{margin-top:1.2mm}.stem-grid{display:grid;grid-template-columns:1fr 1fr;gap:5mm}.stem-panel{border:.4mm solid var(--line);border-radius:4mm;overflow:hidden;background:#fff}.stem-panel h3{margin:0;padding:3.5mm 5mm;background:var(--navy);color:#fff;font-size:16px;line-height:1.4}.stem-panel p{margin:0;padding:4.5mm 5mm 5mm;font-size:15px;line-height:1.85;min-height:29mm}.tools-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:4mm}.tool-item{text-align:center;padding:4mm;border:.4mm solid var(--line);border-radius:3mm;background:linear-gradient(180deg,#f8fbfd,#edf3f7);min-height:20mm;display:flex;align-items:center;justify-content:center}.tool-item span{font-size:15px;font-weight:700;color:var(--navy)}.worksheet-box{min-height:122mm;border:.5mm solid #6c7e8f;background:#fff;padding:8mm}.worksheet-box h3{margin:0 0 5mm;text-align:center;font-size:20px}.worksheet-box p{margin:0 0 3mm;font-size:15px;line-height:1.85}.rubric{width:100%;border-collapse:collapse}.rubric th,.rubric td{border:.4mm solid #8ea0b1;padding:3.2mm;text-align:right;vertical-align:top;font-size:14px;line-height:1.7}.rubric thead th{background:var(--navy);color:#fff}.page-number{position:absolute;right:12mm;bottom:6mm;width:8mm;height:8mm;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}.print-credit{margin-top:8mm;padding-top:4mm;border-top:.4mm solid #c9d4de;text-align:center;font-size:17px;font-weight:700;color:var(--navy)}@page{size:A4;margin:0}@media print{body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}.toolbar{display:none}.document{width:auto;margin:0;padding:0}.sheet{width:210mm;min-height:297mm;margin:0;box-shadow:none;overflow:hidden;break-after:page;page-break-after:always}}`;
 }
 
-function buildCloudLessonSheets(lesson, unit) {
-  const unitNumber = (unit.id || '').replace('unit', '').replace('-s2', '');
+function buildCloudLessonSheets(lesson, unit, grade) {
+  const unitNumber = unit.number || (unit.id || '').replace('g2-unit', '').replace('unit', '').replace('-s2', '');
   const unitTitle = unit.name || unit.title || '';
   const lessonTitle = lesson.title || '';
+  const gradeName = (grade && grade.name) || (state.selectedGradeId === 'grade2' ? 'الصف الثاني الابتدائي' : 'الصف الأول الابتدائي');
   const stemAct = lesson.stemActivity || {};
   const ws = lesson.worksheet || {};
   const toolsHtml = (lesson.activityTools || []).map(t => `<div class="tool-item"><span>${t}</span></div>`).join('');
@@ -179,6 +235,8 @@ function buildCloudLessonSheets(lesson, unit) {
   `).join('');
   const li = (arr) => (arr || []).map(x => `<li>${x}</li>`).join('');
   const joinArr = (arr, sep) => (arr || []).join(sep || ' | ');
+  const conceptsHtml = (lesson.concepts || []).map(c => `<li><strong>${c.term || c}:</strong> ${c.definition || ''}</li>`).join('');
+  const stemMaterials = (stemAct.materials || []).map(x => `<li>${x}</li>`).join('');
 
   return `
   <section class="sheet"><div class="sheet-inner">
@@ -189,7 +247,7 @@ function buildCloudLessonSheets(lesson, unit) {
     </div>
     <div class="inline-meta">
       <div class="info-box"><p>عدد الجلسات: ${lesson.sessions || '2'}</p><p>مصادر التعلم: ${lesson.resources || ''}</p></div>
-      <div class="info-box"><p>مدة الدرس: ${lesson.duration || '45 دقيقة'}</p><p>الصف: الأول الابتدائي</p></div>
+      <div class="info-box"><p>مدة الدرس: ${lesson.duration || '45 دقيقة'}</p><p>الصف: ${gradeName}</p></div>
     </div>
     ${lesson.bookPrompt ? `<div class="two-col"><div class="label-box">من صفحة الدرس</div><div class="content-box light"><p>${lesson.bookPrompt}</p></div></div>` : ''}
     ${lesson.bookPages ? `<div class="two-col"><div class="label-box">المرجع</div><div class="content-box light"><p>${lesson.bookPages}</p></div></div>` : ''}
@@ -197,6 +255,8 @@ function buildCloudLessonSheets(lesson, unit) {
     <div class="two-col"><div class="label-box">الأهداف التعليمية</div><div class="content-box"><ul>${li(lesson.objectives)}</ul></div></div>
     <div class="two-col"><div class="label-box">المفردات</div><div class="content-box light"><p>${joinArr(lesson.vocabulary, ' | ')}</p></div></div>
     <div class="two-col"><div class="label-box">الأفكار الرئيسة</div><div class="content-box light"><p>${joinArr(lesson.mainIdeas, ' • ')}</p></div></div>
+    <div class="two-col"><div class="label-box">المحتوى العلمي</div><div class="content-box light"><p>${lesson.content || lesson.summary || ''}</p></div></div>
+    <div class="two-col"><div class="label-box">المفاهيم</div><div class="content-box light"><ul>${conceptsHtml}</ul></div></div>
     <div class="two-col"><div class="label-box">تكامل STEM</div><div class="content-box light"><div class="stem-grid">
       <div class="stem-panel"><h3>Science: العلوم</h3><p>${(lesson.stem || {}).science || ''}</p></div>
       <div class="stem-panel"><h3>Technology: التقنية</h3><p>${(lesson.stem || {}).technology || ''}</p></div>
@@ -221,6 +281,7 @@ function buildCloudLessonSheets(lesson, unit) {
       <p><strong>المدة:</strong> ${stemAct.time || stemAct.duration || ''}</p>
       <p><strong>الناتج المتوقع:</strong> ${stemAct.expectedOutcome || ''}</p>
     </div></div>
+    <div class="two-col"><div class="label-box">مواد STEM</div><div class="content-box light"><ul>${stemMaterials}</ul></div></div>
     <div class="two-col"><div class="label-box">خطوات STEM</div><div class="content-box light"><ol>${li(stemAct.steps)}</ol></div></div>
     <div class="two-col"><div class="label-box">أسئلة للتفكير</div><div class="content-box light"><ul>${li(stemAct.thinkingQuestions)}</ul></div></div>
     <div class="page-number">2</div>
@@ -251,11 +312,9 @@ function renderLessonsSection() {
   const tabsEl = document.getElementById('semester-tabs');
   if (tabsEl) tabsEl.style.display = 'none';
 
-  state.currentSemester = 1;
-
   const view = document.getElementById('lessons-view');
   if (!view) return;
-  const grade = nawatData.grades[0];
+  const grades = getAvailableGrades();
 
   view.innerHTML = `
     <div class="section-header">
@@ -263,71 +322,91 @@ function renderLessonsSection() {
       <p>اختر الصف الدراسي للبدء في استكشاف الوحدات والدروس</p>
     </div>
     <div class="cards-grid">
-      <div class="card" style="--card-color:#1565C0"
-           onclick="showUnits('${grade.id}')"
-           role="button" tabindex="0" aria-label="الصف الأول الابتدائي">
-        <span class="card-icon">${grade.icon}</span>
-        <div class="card-badge" style="background:#1565C0">${grade.name}</div>
-        <h3>${grade.name}</h3>
-        <p>${grade.units.length} وحدات دراسية &bull; ${grade.units.reduce((a,u) => a + u.lessons.length, 0)} درساً</p>
-      </div>
+      ${grades.map((grade, idx) => {
+        const isSelected = grade.id === state.selectedGradeId;
+        const unitsCount = (grade.units || []).length;
+        const lessonsCount = (grade.units || []).reduce((a,u) => a + (u.lessons || []).length, 0);
+        const color = idx === 0 ? '#1565C0' : '#455A64';
+        return `
+          <div class="card" style="--card-color:${color}"
+               onclick="showUnits('${grade.id}')"
+               role="button" tabindex="0" aria-label="${grade.name}">
+            <span class="card-icon">${grade.icon || '📚'}</span>
+            <div class="card-badge" style="background:${color}">${isSelected ? 'الصف المختار' : 'مفتوح الآن'}</div>
+            <h3>${grade.name}</h3>
+            <p>${unitsCount} وحدات دراسية &bull; ${lessonsCount} درساً</p>
+          </div>
+        `;
+      }).join('')}
     </div>
   `;
 }
 
 function showUnits(gradeId) {
-  const grade = nawatData.grades.find(g => g.id === gradeId);
+  const grade = getPrimaryGrade(gradeId);
   if (!grade) return;
+
+  state.selectedGradeId = gradeId;
+  const semesters = getAvailableSemestersForGrade(gradeId);
+  if (!semesters.includes(state.currentSemester)) state.currentSemester = semesters[0] || 1;
   state.currentGrade = grade;
+  state.currentGradeData = grade;
+  state.currentUnit = null;
+  state.currentLesson = null;
 
   showSemesterTabs(gradeId);
   _renderUnitsForSemester(grade, state.currentSemester);
+  renderGamesSection();
+  renderQuizSection();
 }
 
 function showSemesterTabs(gradeId) {
   const tabsEl = document.getElementById('semester-tabs');
   if (!tabsEl) return;
 
+  const semesters = getAvailableSemestersForGrade(gradeId);
+  if (!semesters.length) {
+    tabsEl.style.display = 'none';
+    return;
+  }
+
   tabsEl.style.display = 'flex';
-  tabsEl.innerHTML = `
-    <button
-      class="semester-tab-btn${state.currentSemester === 1 ? ' active' : ''}"
-      onclick="switchSemester(1, '${gradeId}')"
-      role="tab"
-      aria-selected="${state.currentSemester === 1}"
-      aria-label="الفصل الدراسي الأول">
-      📘 الفصل الدراسي الأول
-    </button>
-    <button
-      class="semester-tab-btn${state.currentSemester === 2 ? ' active' : ''}"
-      onclick="switchSemester(2, '${gradeId}')"
-      role="tab"
-      aria-selected="${state.currentSemester === 2}"
-      aria-label="الفصل الدراسي الثاني">
-      📗 الفصل الدراسي الثاني
-    </button>
-  `;
+  tabsEl.innerHTML = semesters.map(semesterNum => {
+    const label = semesterNum === 2 ? '📗 الفصل الدراسي الثاني' : '📘 الفصل الدراسي الأول';
+    return `
+      <button
+        class="semester-tab-btn${state.currentSemester === semesterNum ? ' active' : ''}"
+        onclick="switchSemester(${semesterNum}, '${gradeId}')"
+        role="tab"
+        aria-selected="${state.currentSemester === semesterNum}">
+        ${label}
+      </button>
+    `;
+  }).join('');
 }
 
 function switchSemester(semesterNum, gradeId) {
+  const id = gradeId || state.selectedGradeId;
+  const semesters = getAvailableSemestersForGrade(id);
+  if (!semesters.includes(semesterNum)) return;
+
   state.currentSemester = semesterNum;
   state.currentUnit = null;
   state.currentLesson = null;
 
-  const id = gradeId || (state.currentGrade && state.currentGrade.id);
-  if (!id) return;
-
-  showSemesterTabs(id);
-
-  const grade = nawatData.grades.find(g => g.id === id);
+  const grade = getPrimaryGrade(id);
   if (!grade) return;
+  showSemesterTabs(id);
   _renderUnitsForSemester(grade, semesterNum);
 }
 
 function _getGradeData(grade, semesterNum) {
+  if (!grade) return null;
+  if (grade.id === 'grade2') return semesterNum === 1 ? grade : null;
+
   if (semesterNum === 2 && window.semester2Data) {
-    const sem2Grade = window.semester2Data.grades
-      ? window.semester2Data.grades.find(g => g.id === grade.id || g.id === grade.id + '-s2')
+    const sem2Grade = semester2Data.grades
+      ? semester2Data.grades.find(g => g.id === grade.id || g.id === grade.id + '-s2')
       : null;
     if (sem2Grade) return _normalizeSem2Grade(sem2Grade);
   }
@@ -335,19 +414,14 @@ function _getGradeData(grade, semesterNum) {
 }
 
 function _normalizeSem2Grade(sem2Grade) {
-  // تحويل بنية الفصل الثاني لتتوافق مع الفصل الأول
-  const normalizedUnits = sem2Grade.units.map(unit => {
-    const lessons = (unit.lessons || []).map(lessonId => {
-      return semester2Data.lessons.find(l => l.id === lessonId) || null;
-    }).filter(Boolean);
-    return {
-      id: unit.id,
-      name: unit.title || unit.name,
-      icon: unit.icon || '📗',
-      color: unit.color || '#4CAF50',
-      lessons
-    };
-  });
+  const normalizedUnits = (sem2Grade.units || []).map((unit, idx) => ({
+    id: unit.id,
+    number: unit.number || idx + 1,
+    name: unit.title || unit.name,
+    icon: unit.icon || '📗',
+    color: unit.color || '#4CAF50',
+    lessons: (unit.lessons || []).map(lessonId => semester2Data.lessons.find(l => l.id === lessonId)).filter(Boolean)
+  }));
   return {
     id: sem2Grade.id,
     name: sem2Grade.name,
@@ -359,8 +433,9 @@ function _normalizeSem2Grade(sem2Grade) {
 function _renderUnitsForSemester(grade, semesterNum) {
   const gradeData = _getGradeData(grade, semesterNum);
   const view = document.getElementById('lessons-view');
-  const semLabel = semesterNum === 2 ? 'الفصل الثاني' : 'الفصل الأول';
+  if (!view || !gradeData) return;
 
+  const semLabel = semesterNum === 2 ? 'الفصل الثاني' : 'الفصل الأول';
   const unitColors = ['#4CAF50', '#FF9800', '#2196F3', '#9C27B0', '#00BCD4', '#FF5722'];
 
   view.innerHTML = `
@@ -372,9 +447,9 @@ function _renderUnitsForSemester(grade, semesterNum) {
       <p>اختر الوحدة الدراسية &mdash; ${semLabel}</p>
     </div>
     <div class="cards-grid">
-      ${gradeData.units.map((unit, idx) => {
+      ${(gradeData.units || []).map((unit, idx) => {
         const color = unit.color || unitColors[idx % unitColors.length];
-        const unitLabel = unit.id.replace('unit', 'الوحدة ').replace('-s2', '');
+        const unitLabel = `الوحدة ${unit.number || idx + 1}`;
         return `
           <div class="card" style="--card-color:${color}"
                onclick="showLessons('${unit.id}')"
@@ -382,7 +457,7 @@ function _renderUnitsForSemester(grade, semesterNum) {
             <span class="card-icon">${unit.icon || '📚'}</span>
             <div class="card-badge" style="background:${color}">${unitLabel}</div>
             <h3>${unit.name}</h3>
-            <p>${unit.lessons.length} دروس تفاعلية مع أنشطة STEM</p>
+            <p>${(unit.lessons || []).length} دروس تفاعلية مع أنشطة STEM</p>
           </div>
         `;
       }).join('')}
@@ -390,18 +465,20 @@ function _renderUnitsForSemester(grade, semesterNum) {
   `;
 
   state.currentGrade = gradeData;
+  state.currentGradeData = gradeData;
 }
 
 function showLessons(unitId) {
-  const grade = state.currentGrade;
-  const unit = grade.units.find(u => u.id === unitId);
+  const grade = state.currentGradeData || state.currentGrade;
+  if (!grade) return;
+  const unit = (grade.units || []).find(u => u.id === unitId);
   if (!unit) return;
   state.currentUnit = unit;
 
   const color = unit.color || '#4CAF50';
   const view = document.getElementById('lessons-view');
   view.innerHTML = `
-    <button class="btn-back" onclick="showUnits('grade1')" aria-label="العودة للوحدات">
+    <button class="btn-back" onclick="showUnits('${state.selectedGradeId}')" aria-label="العودة للوحدات">
       ← العودة للوحدات
     </button>
     <div class="section-header">
@@ -409,7 +486,7 @@ function showLessons(unitId) {
       <p>اختر الدرس لعرض المحتوى الكامل</p>
     </div>
     <div class="cards-grid-3 cards-grid">
-      ${unit.lessons.map((lesson, idx) => {
+      ${(unit.lessons || []).map((lesson, idx) => {
         const sc = scores[lesson.id];
         return `
           <div class="card" style="--card-color:${color}"
@@ -418,8 +495,8 @@ function showLessons(unitId) {
             <span class="card-icon">📖</span>
             <div class="card-badge" style="background:${color}">الدرس ${idx+1}</div>
             <h3>${lesson.title}</h3>
-            <p>${(lesson.summary || '').substring(0, 80)}...</p>
-            ${sc ? `<div class="badge badge-success mt-1">✓ أكملت الاختبار: ${sc}%</div>` : ''}
+            <p>${(lesson.summary || '').substring(0, 100)}${(lesson.summary || '').length > 100 ? '...' : ''}</p>
+            ${sc !== undefined ? `<div class="badge badge-success mt-1">✓ أكملت الاختبار: ${sc}%</div>` : ''}
           </div>
         `;
       }).join('')}
@@ -450,7 +527,7 @@ function showLesson(lessonId) {
           <button class="btn-print" onclick="printLesson('${lessonId}')">🖨️ طباعة الدرس</button>
         </div>
       </div>
-      <div class="document cloud-document" id="lessonPrintArea">${buildCloudLessonSheets(lesson, unit)}</div>
+      <div class="document cloud-document" id="lessonPrintArea">${buildCloudLessonSheets(lesson, unit, findLessonById(lessonId).grade || grade)}</div>
     </div>
   `;
 }
@@ -464,7 +541,7 @@ function printLesson(lessonId) {
 
   const lessonTitle = lesson.title;
   const css = getCloudLessonPrintCss();
-  const sheets = buildCloudLessonSheets(lesson, unit);
+  const sheets = buildCloudLessonSheets(lesson, unit, grade);
   const html = `<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -1619,6 +1696,59 @@ function sendMessage() {
 function getBotResponse(text) {
   const lower = text.toLowerCase().trim();
 
+  // ===== مفاهيم الصف الثاني الابتدائي =====
+  if (matchKeywords(lower, ['حاجات المخلوقات', 'حاجات المخلوقات الحية', 'ماذا تحتاج المخلوقات'])) {
+    return 'المخلوقات الحية تحتاج إلى الماء والهواء ومكان مناسب للعيش. الحيوانات تحتاج إلى الغذاء، والنباتات تحتاج إلى ضوء الشمس لتصنع غذاءها.';
+  }
+  if (matchKeywords(lower, ['حبوب اللقاح', 'التلقيح', 'تنتج نباتات جديدة'])) {
+    return 'تساعد الزهرة على إنتاج البذور. تنتقل حبوب اللقاح بين الأزهار بوسائل منها الحشرات والرياح، ثم يمكن أن تتكون بذور تنمو إلى نباتات جديدة.';
+  }
+  if (matchKeywords(lower, ['فقاريات', 'لافقاريات', 'مجموعات الحيوانات'])) {
+    return 'الفقاريات حيوانات لها عمود فقري، مثل الأسماك والطيور والثدييات. اللافقاريات لا تملك عموداً فقرياً، مثل الحشرات والديدان.';
+  }
+  if (matchKeywords(lower, ['دورة حياة الحيوان', 'الحيوانات تنمو وتتغير', 'أبو ذنيبة', 'عذراء'])) {
+    return 'تمر الحيوانات بمراحل تسمى دورة الحياة. الفراشة: بيضة ثم يرقة ثم عذراء ثم فراشة بالغة. والضفدع يبدأ من البيض ثم أبو ذنيبة ثم ضفدع صغير فبالغ.';
+  }
+  if (matchKeywords(lower, ['سلسلة غذائية', 'سلاسل الغذاء', 'منتج', 'مستهلك'])) {
+    return 'السلسلة الغذائية تبين انتقال الغذاء والطاقة. تبدأ كثير من السلاسل بالشمس، ثم نبات منتج يصنع غذاءه، ثم حيوان مستهلك يحصل على غذائه بأكل نبات أو حيوان.';
+  }
+  if (matchKeywords(lower, ['صحراء باردة', 'الصحاري الحارة والباردة'])) {
+    return 'الصحاري قليلة الأمطار، وليست كلها حارة؛ توجد صحاري باردة أيضاً. تساعد تكيفات المخلوقات على تحمل قلة الماء والحرارة أو البرودة.';
+  }
+  if (matchKeywords(lower, ['اليابسة', 'جبل', 'تل', 'سهل', 'وادي'])) {
+    return 'من أشكال اليابسة: الجبل وهو مرتفع جداً، والتل أقل ارتفاعاً، والسهل واسع ومستوي تقريباً، والوادي أرض منخفضة بين مناطق مرتفعة.';
+  }
+  if (matchKeywords(lower, ['الماء على الأرض', 'محيط', 'نهر', 'بحيرة', 'ماء عذب', 'ماء مالح'])) {
+    return 'يوجد الماء في المحيطات والبحار والأنهار والبحيرات وغيرها. معظم ماء الأرض في المحيطات والبحار وهو مالح، أما كثير من الأنهار والبحيرات ففيها ماء عذب.';
+  }
+  if (matchKeywords(lower, ['صخور ومعادن', 'الصخور والمعادن', 'معدن', 'لمعان', 'صلابة'])) {
+    return 'الصخر مادة طبيعية صلبة قد تتكون من معدن واحد أو أكثر، والمعدن مادة طبيعية غير حية لها خصائص محددة. نستخدم اللون واللمعان والصلابة والملمس للمقارنة.';
+  }
+  if (matchKeywords(lower, ['تربة', 'الدبال', 'رملية', 'طينية'])) {
+    return 'التربة خليط من فتات الصخور وبقايا المخلوقات الحية والماء والهواء. الدبال بقايا متحللة، والتربة الطينية تحتفظ بالماء أكثر عادة من التربة الرملية.';
+  }
+  if (matchKeywords(lower, ['الليل والنهار', 'الحركة الدورانية', 'محور الأرض'])) {
+    return 'تدور الأرض حول محورها باستمرار. الجهة المواجهة للشمس يكون فيها النهار، والجهة الأخرى يكون فيها الليل. تستغرق دورة كاملة نحو 24 ساعة.';
+  }
+  if (matchKeywords(lower, ['سبب حدوث الفصول', 'مدار الأرض', 'ميل المحور'])) {
+    return 'تدور الأرض حول الشمس في مدار خلال سنة تقريباً، ويبقى محورها مائلاً. يرتبط هذا الميل مع دوران الأرض حول الشمس بتغير كمية الضوء وحدوث الفصول.';
+  }
+  if (matchKeywords(lower, ['طور القمر', 'أطوار القمر', 'القمر والنجوم'])) {
+    return 'القمر لا يصدر ضوءه الخاص؛ نحن نراه لأنه يعكس ضوء الشمس. أثناء دورانه حول الأرض نرى أجزاء مضيئة مختلفة تسمى أطوار القمر.';
+  }
+  if (matchKeywords(lower, ['النظام الشمسي', 'كواكب', 'الكواكب'])) {
+    return 'النظام الشمسي يضم الشمس والكواكب الثمانية وأقمارها وأجساماً أخرى. الشمس نجم في المركز، والكواكب تدور حولها في مدارات.';
+  }
+  if (matchKeywords(lower, ['تغير حالة المادة', 'انصهار', 'تجمد', 'تبخر', 'تكاثف'])) {
+    return 'الانصهار: صلب إلى سائل. التجمد: سائل إلى صلب. التبخر: سائل إلى غاز. التكاثف: غاز إلى سائل. التسخين والتبريد يساعدان على حدوث هذه التغيرات.';
+  }
+  if (matchKeywords(lower, ['المغناطيسات', 'مغناطيس', 'قطب شمالي', 'قطب جنوبي', 'تجاذب', 'تنافر'])) {
+    return 'للمغناطيس قطبان شمالي وجنوبي. الأقطاب المختلفة تتجاذب والمتشابهة تتنافر. يجذب المغناطيس بعض المواد مثل الحديد، لكنه لا يجذب الخشب والبلاستيك عادة.';
+  }
+  if (matchKeywords(lower, ['استكشاف الكهرباء', 'دائرة كهربائية', 'موصل', 'عازل', 'بطارية', 'مفتاح كهربائي'])) {
+    return 'تعمل الدائرة الكهربائية البسيطة عندما يكون المسار مغلقاً من البطارية عبر الأسلاك والمصباح. الفلزات موصلة غالباً والبلاستيك والمطاط عازلان. لا نجرب أبداً بمقابس كهرباء المنزل.';
+  }
+
   // ===== ردود الفصل الأول =====
 
   // المخلوقات الحية
@@ -1921,29 +2051,35 @@ function escapeHtml(str) {
 // ============================================================
 
 function findLessonById(lessonId) {
-  // البحث في الفصل الأول
   if (window.nawatData && nawatData.grades) {
     for (const grade of nawatData.grades) {
-      for (const unit of grade.units) {
-        for (const lesson of unit.lessons) {
-          if (lesson.id === lessonId) {
-            return { lesson, unit, grade };
-          }
+      for (const unit of (grade.units || [])) {
+        for (const lesson of (unit.lessons || [])) {
+          if (lesson.id === lessonId) return { lesson, unit, grade };
         }
       }
     }
   }
 
-  // البحث في الفصل الثاني
+  if (window.grade2Data && grade2Data.grades) {
+    for (const grade of grade2Data.grades) {
+      for (const unit of (grade.units || [])) {
+        for (const lesson of (unit.lessons || [])) {
+          if (lesson.id === lessonId) return { lesson, unit, grade };
+        }
+      }
+    }
+  }
+
   if (window.semester2Data && semester2Data.grades && semester2Data.lessons) {
-    const sem2Grade = semester2Data.grades[0];
+    const sem2Grade = semester2Data.grades.find(g => g.id === 'grade1-s2' || g.id === 'grade1') || semester2Data.grades[0];
     for (const unit of (sem2Grade.units || [])) {
       for (const lid of (unit.lessons || [])) {
         const lesson = semester2Data.lessons.find(l => l.id === lid);
         if (lesson && lesson.id === lessonId) {
-          // بناء وحدة متوافقة مع الفصل الأول
           const normalizedUnit = {
             id: unit.id,
+            number: unit.number || null,
             name: unit.title || unit.name,
             icon: unit.icon || '📗',
             color: unit.color || '#4CAF50',
@@ -1954,7 +2090,6 @@ function findLessonById(lessonId) {
       }
     }
   }
-
   return { lesson: null, unit: null, grade: null };
 }
 

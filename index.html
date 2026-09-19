@@ -9,7 +9,7 @@
   <meta name="description" content="نوات ستيم - منصة تعليمية عربية لمادة العلوم STEM للصفوف من الأول إلى السادس الابتدائي، تضم دروساً تفاعلية وألعاباً واختبارات وملفات طباعة موسعة.">
   <title>نوات ستيم | علوم الصفوف الأول والثاني والثالث والرابع والخامس والسادس</title>
   <link rel="stylesheet" href="style.css?v=20260919-base">
-  <link rel="stylesheet" href="playful-ui.css?v=20260919-8">
+  <link rel="stylesheet" href="playful-ui.css?v=20260919-9">
 </head>
 <body>
 
@@ -69,7 +69,7 @@
 
         <div class="hero-trust-row" aria-label="مزايا المنصة">
           <span><b>6</b><small>صفوف دراسية</small></span>
-          <span><b>5</b><small>أنواع ألعاب</small></span>
+          <span><b>6</b><small>أنواع ألعاب</small></span>
           <span><b>STEM</b><small>تعلّم تطبيقي</small></span>
           <span><b>PDF</b><small>ملفات مطبوعة</small></span>
         </div>
@@ -143,36 +143,42 @@
         <span class="play-grade-icon">⭐</span>
         <h3>الصف الأول</h3>
         <p>اكتشف العالم من حولك</p>
+        <small class="grade-availability">الفصلان الأول والثاني متاحان</small>
         <button type="button">ابدأ الآن</button>
       </article>
       <article class="play-grade-card grade-yellow" onclick="enterApp('grade2')" role="button" tabindex="0" onkeydown="if(event.key==='Enter') enterApp('grade2')">
         <span class="play-grade-icon">🌱</span>
         <h3>الصف الثاني</h3>
         <p>أسئلة أكبر وتجارب أمتع</p>
+        <small class="grade-availability">الفصل الأول متاح</small>
         <button type="button">ابدأ الآن</button>
       </article>
       <article class="play-grade-card grade-green" onclick="enterApp('grade3')" role="button" tabindex="0" onkeydown="if(event.key==='Enter') enterApp('grade3')">
         <span class="play-grade-icon">🌍</span>
         <h3>الصف الثالث</h3>
         <p>مزيد من المعرفة والاكتشاف</p>
+        <small class="grade-availability">الفصل الأول متاح</small>
         <button type="button">ابدأ الآن</button>
       </article>
       <article class="play-grade-card grade-purple" onclick="enterApp('grade4')" role="button" tabindex="0" onkeydown="if(event.key==='Enter') enterApp('grade4')">
         <span class="play-grade-icon">🧲</span>
         <h3>الصف الرابع</h3>
         <p>تجارب وحقائق مذهلة</p>
+        <small class="grade-availability">الفصل الأول متاح</small>
         <button type="button">ابدأ الآن</button>
       </article>
       <article class="play-grade-card grade-blue" onclick="enterApp('grade5')" role="button" tabindex="0" onkeydown="if(event.key==='Enter') enterApp('grade5')">
         <span class="play-grade-icon">🔭</span>
         <h3>الصف الخامس</h3>
         <p>نفكر.. نبحث.. نبتكر</p>
+        <small class="grade-availability">الفصل الأول متاح</small>
         <button type="button">ابدأ الآن</button>
       </article>
       <article class="play-grade-card grade-teal" onclick="enterApp('grade6')" role="button" tabindex="0" onkeydown="if(event.key==='Enter') enterApp('grade6')">
         <span class="play-grade-icon">🚀</span>
         <h3>الصف السادس</h3>
         <p>نستعد لمستقبل أكثر إشراقاً</p>
+        <small class="grade-availability">الفصل الأول متاح</small>
         <button type="button">ابدأ الآن</button>
       </article>
     </div>
@@ -213,6 +219,7 @@
       <article class="preview-game game-green" onclick="enterAppSection('grade1','games')"><span>🔢</span><h3>التسلسل المنطقي</h3><p>رتب الأحداث والخطوات بالترتيب</p><i>←</i></article>
       <article class="preview-game game-yellow" onclick="enterAppSection('grade1','games')"><span>❓</span><h3>اختيار من متعدد</h3><p>اختر الإجابة الصحيحة واجمع النقاط</p><i>←</i></article>
       <article class="preview-game game-purple" onclick="enterAppSection('grade1','games')"><span>✅</span><h3>صح أم خطأ</h3><p>اختبر معلوماتك بسرعة وبمتعة</p><i>←</i></article>
+      <article class="preview-game game-teal" onclick="enterAppSection('grade1','games')"><span>🗂️</span><h3>فرز وتصنيف</h3><p>صنّف العناصر بحسب خصائصها</p><i>←</i></article>
     </div>
   </section>
 
@@ -222,9 +229,9 @@
         <div class="engagement-title"><span>📊</span><div><h2>اختبارات قصيرة</h2><p>اختبر معلوماتك واحصل على شارات مميزة</p></div></div>
         <div class="quiz-preview-body">
           <div class="quiz-progress-card">
-            <div class="quiz-progress-head"><strong>اختبار وحدة الكائنات الحية</strong><span>8/10</span></div>
-            <div class="quiz-progress-line"><i></i></div>
-            <small>أحسنت! أنت على الطريق الصحيح 🌟</small>
+            <div class="quiz-progress-head"><strong>اختبارات قصيرة لكل درس</strong><span>4+ أسئلة</span></div>
+            <div class="quiz-progress-line"><i style="width:45%"></i></div>
+            <small>ابدأ الاختبار لتحصل على نتيجتك وشارتك 🌟</small>
             <button onclick="enterAppSection('grade1','quiz')">ابدأ الاختبار الآن ←</button>
           </div>
           <div class="badges-preview">
@@ -238,7 +245,7 @@
         <div class="engagement-title"><span>💬</span><div><h2>اسأل نوات</h2><p>مساعدك الذكي في عالم العلوم</p></div></div>
         <div class="chat-preview-bot">
           <div class="mini-bot"><span>•</span><b>⌣</b></div>
-          <p><strong>مرحباً! 👋</strong><br>أنا نوات، اسألني أي سؤال في العلوم وسأساعدك بطريقة سهلة وممتعة!</p>
+          <p><strong>مرحباً! 👋</strong><br>أنا نوات، اسألني عن دروس العلوم ومفاهيمها وسأساعدك بشرح مبسط وممتع!</p>
         </div>
         <div class="chat-suggestions">
           <button onclick="enterAppSection('grade1','chatbot')">ما هي أجزاء النبات؟</button>
@@ -264,7 +271,7 @@
       </div>
 
       <div class="print-preview-copy">
-        <div class="engagement-title print-title"><span>🖨️</span><div><h2>ملف الدرس المطبوع</h2><p>ملفات STEM جاهزة للطباعة وغنية بالأنشطة والتجارب</p></div></div>
+        <div class="engagement-title print-title"><span>🖨️</span><div><h2>ملف الدرس المطبوع</h2><p>ملفات STEM جاهزة للطباعة والحفظ بصيغة PDF وغنية بالأنشطة والتجارب</p></div></div>
         <div class="print-feature-chips">
           <span>📝 أوراق عمل وأنشطة</span>
           <span>🧪 تجارب بسيطة وآمنة</span>
@@ -275,8 +282,8 @@
 
       <div class="print-preview-action">
         <span>العلم في كل مكان ✈️</span>
-        <button onclick="scrollToGrades()">اختر صفك واطبع الدرس ←</button>
-        <small>جميع ملفات الدروس جاهزة للطباعة والاستخدام في الفصل أو المنزل.</small>
+        <button onclick="scrollToGrades()">اختر صفك وافتح ملف الدرس ←</button>
+        <small>يمكن طباعة ملفات الدروس أو حفظها PDF من نافذة الطباعة واستخدامها في الفصل أو المنزل.</small>
       </div>
     </div>
   </section>
@@ -290,8 +297,7 @@
   <nav class="main-nav" role="navigation" aria-label="التنقل الرئيسي">
     <div class="nav-inner">
       <div class="app-brand" aria-label="نوات ستيم">
-        <span class="app-brand-mark">N</span>
-        <span class="app-brand-name">نوات ستيم</span>
+        <img class="app-brand-logo" src="assets/nawat-logo.svg?v=20260919-4" alt="نوات ستيم">
       </div>
       <button class="nav-back-home" onclick="goToLanding()" aria-label="العودة للصفحة الرئيسية">
         <span aria-hidden="true">⌂</span><span class="home-label">الرئيسية</span>
@@ -399,7 +405,7 @@
 <script src="data-grade4.js"></script>
 <script src="data-grade5.js"></script>
 <script src="data-grade6.js"></script>
-<script src="script.js?v=20260919-2"></script>
+<script src="script.js?v=20260919-3"></script>
 
 </body>
 </html>

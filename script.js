@@ -147,7 +147,8 @@ function getPrimaryGrade(gradeId) {
     window.grade2Data,
     window.grade3Data,
     window.grade4Data,
-    window.grade5Data
+    window.grade5Data,
+    window.grade6Data
   ].filter(Boolean);
 
   for (const source of gradeSources) {
@@ -159,7 +160,7 @@ function getPrimaryGrade(gradeId) {
 }
 
 function getAvailableGrades() {
-  return ['grade1', 'grade2', 'grade3', 'grade4', 'grade5']
+  return ['grade1', 'grade2', 'grade3', 'grade4', 'grade5', 'grade6']
     .map(getPrimaryGrade)
     .filter(Boolean);
 }
@@ -177,6 +178,9 @@ function getAvailableSemestersForGrade(gradeId) {
   if (gradeId === 'grade5' && window.grade5Data) {
     return Array.isArray(grade5Data.availableSemesters) ? grade5Data.availableSemesters : [1];
   }
+  if (gradeId === 'grade6' && window.grade6Data) {
+    return Array.isArray(grade6Data.availableSemesters) ? grade6Data.availableSemesters : [1];
+  }
   const semesters = [1];
   if (gradeId === 'grade1' && window.semester2Data && semester2Data.grades && semester2Data.grades.length) semesters.push(2);
   return semesters;
@@ -185,12 +189,14 @@ function getAvailableSemestersForGrade(gradeId) {
 function getAllLessonsFlat(gradeId = state.selectedGradeId) {
   const result = [];
 
-  if (gradeId === 'grade2' || gradeId === 'grade3' || gradeId === 'grade4' || gradeId === 'grade5') {
+  if (gradeId === 'grade2' || gradeId === 'grade3' || gradeId === 'grade4' || gradeId === 'grade5' || gradeId === 'grade6') {
     const source = gradeId === 'grade2'
       ? window.grade2Data
       : (gradeId === 'grade3'
         ? window.grade3Data
-        : (gradeId === 'grade4' ? window.grade4Data : window.grade5Data));
+        : (gradeId === 'grade4'
+          ? window.grade4Data
+          : (gradeId === 'grade5' ? window.grade5Data : window.grade6Data)));
     if (source && source.grades) {
       const grade = source.grades.find(g => g.id === gradeId) || source.grades[0];
       if (grade) {
@@ -683,7 +689,7 @@ function switchSemester(semesterNum, gradeId) {
 
 function _getGradeData(grade, semesterNum) {
   if (!grade) return null;
-  if (grade.id === 'grade2' || grade.id === 'grade3' || grade.id === 'grade4' || grade.id === 'grade5') return semesterNum === 1 ? grade : null;
+  if (grade.id === 'grade2' || grade.id === 'grade3' || grade.id === 'grade4' || grade.id === 'grade5' || grade.id === 'grade6') return semesterNum === 1 ? grade : null;
 
   if (semesterNum === 2 && window.semester2Data) {
     const sem2Grade = semester2Data.grades
@@ -2574,6 +2580,16 @@ function findLessonById(lessonId) {
 
   if (window.grade5Data && grade5Data.grades) {
     for (const grade of grade5Data.grades) {
+      for (const unit of (grade.units || [])) {
+        for (const lesson of (unit.lessons || [])) {
+          if (lesson.id === lessonId) return { lesson, unit, grade };
+        }
+      }
+    }
+  }
+
+  if (window.grade6Data && grade6Data.grades) {
+    for (const grade of grade6Data.grades) {
       for (const unit of (grade.units || [])) {
         for (const lesson of (unit.lessons || [])) {
           if (lesson.id === lessonId) return { lesson, unit, grade };

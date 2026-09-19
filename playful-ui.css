@@ -1447,3 +1447,61 @@ main{background:
     width:210px!important;
   }
 }
+
+
+/* ===== Content audit corrections ===== */
+.grade-availability{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  align-self:center;
+  margin-top:2px;
+  padding:5px 9px;
+  border-radius:999px;
+  background:rgba(255,255,255,.72);
+  border:1px solid rgba(14,98,143,.08);
+  color:#66869e;
+  font-size:.56rem;
+  font-weight:800;
+  line-height:1.2;
+}
+.game-teal{
+  background:linear-gradient(180deg,#e9fffb,#dff8f3)!important;
+}
+.game-teal>span{
+  background:#d3f5ed!important;
+}
+.app-brand{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  min-width:170px;
+}
+.app-brand-logo{
+  display:block!important;
+  width:155px!important;
+  max-width:155px!important;
+  height:52px!important;
+  object-fit:contain!important;
+  background:#fff!important;
+  padding:4px 7px!important;
+  border-radius:14px!important;
+  box-shadow:0 6px 16px rgba(14,77,115,.10)!important;
+}
+.quiz-progress-line i{
+  transition:width .3s ease;
+}
+@media(max-width:760px){
+  .app-brand{
+    min-width:0;
+  }
+  .app-brand-logo{
+    width:130px!important;
+    max-width:130px!important;
+    height:46px!important;
+  }
+  .grade-availability{
+    font-size:.52rem;
+    padding:4px 7px;
+  }
+}

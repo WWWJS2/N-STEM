@@ -15,198 +15,224 @@
 <!-- ===== صفحة الهبوط (Landing) ===== -->
 <div id="landing-page">
 
-  <!-- شريط العلامة -->
-  <div class="landing-topbar" aria-label="نوات ستيم">
-    <div class="landing-topbar-inner">
-      <a class="brand-lockup" href="#landing-page" aria-label="نوات ستيم - الصفحة الرئيسية">
-        <span class="brand-mark" aria-hidden="true">N</span>
-        <span class="brand-copy">
+  <header class="play-header" aria-label="رأس موقع نوات ستيم">
+    <div class="play-header-inner">
+      <a class="play-brand" href="#landing-page" aria-label="نوات ستيم">
+        <span class="play-brand-orbit" aria-hidden="true">⚛️</span>
+        <span class="play-brand-copy">
           <strong>نوات ستيم</strong>
-          <small>علوم • اكتشاف • ابتكار</small>
+          <small>صغار اليوم.. علماء المستقبل</small>
         </span>
       </a>
-      <div class="landing-topbar-actions">
-        <span class="teacher-chip">إعداد أ. أميرة عبدالله الحكمي</span>
-        <button class="topbar-cta" onclick="scrollToGrades()">اختر صفك</button>
+
+      <nav class="play-nav" aria-label="روابط الصفحة الرئيسية">
+        <a class="active" href="#landing-page">الرئيسية</a>
+        <a href="#grades-section">الدروس</a>
+        <a href="#landing-games">الألعاب</a>
+        <a href="#landing-quiz">الاختبارات</a>
+        <a href="#landing-chat">الدردشة</a>
+      </nav>
+
+      <div class="play-header-tools">
+        <span class="play-greeting">مرحباً يا بطل! 👦🏻</span>
+        <button class="play-search" type="button" onclick="scrollToGrades()" aria-label="البحث عن صف">⌕</button>
       </div>
     </div>
-  </div>
+  </header>
 
-  <!-- Hero Section -->
-  <section class="hero-section" aria-label="قسم الترحيب">
-    <div class="hero-inner">
-      <div class="hero-copy">
-        <div class="hero-eyebrow"><span class="eyebrow-dot"></span> منصة علوم STEM للمرحلة الابتدائية</div>
-        <h1 class="hero-title">نتعلّم العلوم<br><span>بالتجربة والفضول.</span></h1>
-        <p class="hero-subtitle">رحلة تعليمية منظمة من الصف الأول إلى السادس الابتدائي</p>
-        <p class="hero-desc">
-          دروس تفاعلية، ألعاب تعليمية، اختبارات فورية، وأنشطة STEM مع ملفات طباعة موسعة
-          تساعد الطالب على الفهم والتطبيق والتفكير العلمي.
-        </p>
-        <div class="hero-actions">
-          <button class="hero-cta-btn" onclick="scrollToGrades()" aria-label="ابدأ التعلم الآن">
-            ابدأ رحلتك التعليمية
-            <span aria-hidden="true">←</span>
-          </button>
-          <a class="hero-secondary-btn" href="#platform-features">ماذا يقدم الموقع؟</a>
+  <section class="play-hero" aria-label="لنتعلم العلوم بالمرح والتجربة">
+    <div class="play-sky-decor decor-atom">⚛️</div>
+    <div class="play-sky-decor decor-star">⭐</div>
+    <div class="play-sky-decor decor-rocket">🚀</div>
+    <div class="play-hero-inner">
+      <div class="play-hero-copy">
+        <span class="play-hero-pill">علوم • ابتكار • مستقبل أفضل</span>
+        <h1>لنتعلّم العلوم<br><span>بالمرح والتجربة!</span></h1>
+        <p>دروس تفاعلية، ألعاب تعليمية، اختبارات ممتعة، وأنشطة STEM وملفات دروس مطبوعة باحترافية للصفوف من الأول إلى السادس.</p>
+        <div class="play-hero-actions">
+          <button class="play-primary" onclick="scrollToGrades()">ابدأ رحلتك الآن <span>←</span></button>
+          <button class="play-secondary" onclick="document.getElementById('landing-games').scrollIntoView({behavior:'smooth'})">شاهد الألعاب 🎮</button>
         </div>
-        <div class="hero-proof" aria-label="مزايا المنصة">
-          <span><b>6</b> صفوف دراسية</span>
-          <span><b>STEM</b> تعلم تطبيقي</span>
-          <span><b>RTL</b> تجربة عربية كاملة</span>
+        <div class="play-hero-mini">
+          <span>✓ منهج منظم</span>
+          <span>✓ تعلم باللعب</span>
+          <span>✓ ملفات STEM مطبوعة</span>
         </div>
       </div>
 
-      <div class="hero-showcase" aria-hidden="true">
-        <div class="showcase-glow"></div>
-        <div class="science-orbit orbit-one"></div>
-        <div class="science-orbit orbit-two"></div>
-        <div class="showcase-card">
-          <div class="showcase-head">
-            <span class="showcase-kicker">نوات ستيم</span>
-            <span class="showcase-status"><i></i> جاهز للتعلّم</span>
-          </div>
-          <div class="showcase-core">
-            <div class="core-icon">⚛️</div>
-            <strong>استكشف • جرّب • صمّم</strong>
-            <span>من الفكرة إلى التطبيق</span>
-          </div>
-          <div class="showcase-grid">
-            <div><span>📚</span><b>دروس</b><small>منظمة وواضحة</small></div>
-            <div><span>🎮</span><b>ألعاب</b><small>تفاعلية وممتعة</small></div>
-            <div><span>📝</span><b>اختبارات</b><small>تغذية راجعة فورية</small></div>
-            <div><span>🖨️</span><b>طباعة</b><small>ملفات STEM موسعة</small></div>
-          </div>
+      <div class="play-hero-art" aria-hidden="true">
+        <div class="hero-cloud cloud-a"></div>
+        <div class="hero-cloud cloud-b"></div>
+        <div class="hero-hill hill-a"></div>
+        <div class="hero-hill hill-b"></div>
+        <div class="hero-city">
+          <i></i><i></i><i></i><i></i><i></i>
         </div>
-        <span class="floating-chip chip-a">🔬 استقصاء</span>
-        <span class="floating-chip chip-b">🧠 تفكير</span>
-        <span class="floating-chip chip-c">⚙️ تصميم</span>
+        <div class="hero-palm">🌴</div>
+        <div class="hero-kid hero-kid-boy">🧑🏻‍🔬<span class="kid-tool">🧪</span></div>
+        <div class="hero-kid hero-kid-girl">👩🏻‍🔬<span class="kid-tool">📱</span></div>
+        <div class="hero-bot">
+          <span class="bot-antenna">•</span>
+          <div class="bot-face">⌣</div>
+          <small>نوات</small>
+        </div>
+        <span class="hero-float float-one">⭐</span>
+        <span class="hero-float float-two">🧬</span>
+        <span class="hero-float float-three">🔭</span>
+        <span class="hero-note">بالاستكشاف<br>نصنع مستقبلاً أجمل</span>
       </div>
+    </div>
+    <div class="hero-wave" aria-hidden="true"></div>
+  </section>
+
+  <section class="play-section grades-play-section" id="grades-section" aria-label="اختر صفك الدراسي">
+    <div class="play-section-head">
+      <span class="play-section-icon">🎓</span>
+      <div>
+        <h2>اختر صفك الدراسي</h2>
+        <p>رحلة ممتعة في عالم العلوم بانتظارك!</p>
+      </div>
+    </div>
+
+    <div class="play-grade-grid">
+      <article class="play-grade-card grade-pink" onclick="enterApp('grade1')" role="button" tabindex="0" onkeydown="if(event.key==='Enter') enterApp('grade1')">
+        <span class="play-grade-icon">⭐</span>
+        <h3>الصف الأول</h3>
+        <p>اكتشف العالم من حولك</p>
+        <button type="button">ابدأ الآن</button>
+      </article>
+      <article class="play-grade-card grade-yellow" onclick="enterApp('grade2')" role="button" tabindex="0" onkeydown="if(event.key==='Enter') enterApp('grade2')">
+        <span class="play-grade-icon">🌱</span>
+        <h3>الصف الثاني</h3>
+        <p>أسئلة أكبر وتجارب أمتع</p>
+        <button type="button">ابدأ الآن</button>
+      </article>
+      <article class="play-grade-card grade-green" onclick="enterApp('grade3')" role="button" tabindex="0" onkeydown="if(event.key==='Enter') enterApp('grade3')">
+        <span class="play-grade-icon">🌍</span>
+        <h3>الصف الثالث</h3>
+        <p>مزيد من المعرفة والاكتشاف</p>
+        <button type="button">ابدأ الآن</button>
+      </article>
+      <article class="play-grade-card grade-purple" onclick="enterApp('grade4')" role="button" tabindex="0" onkeydown="if(event.key==='Enter') enterApp('grade4')">
+        <span class="play-grade-icon">🧲</span>
+        <h3>الصف الرابع</h3>
+        <p>تجارب وحقائق مذهلة</p>
+        <button type="button">ابدأ الآن</button>
+      </article>
+      <article class="play-grade-card grade-blue" onclick="enterApp('grade5')" role="button" tabindex="0" onkeydown="if(event.key==='Enter') enterApp('grade5')">
+        <span class="play-grade-icon">🔭</span>
+        <h3>الصف الخامس</h3>
+        <p>نفكر.. نبحث.. نبتكر</p>
+        <button type="button">ابدأ الآن</button>
+      </article>
+      <article class="play-grade-card grade-teal" onclick="enterApp('grade6')" role="button" tabindex="0" onkeydown="if(event.key==='Enter') enterApp('grade6')">
+        <span class="play-grade-icon">🚀</span>
+        <h3>الصف السادس</h3>
+        <p>نستعد لمستقبل أكثر إشراقاً</p>
+        <button type="button">ابدأ الآن</button>
+      </article>
     </div>
   </section>
 
-  <section class="platform-features" id="platform-features" aria-label="مزايا نوات ستيم">
-    <div class="platform-features-inner">
-      <article class="feature-item">
-        <span class="feature-icon">01</span>
-        <div><h3>تعلّم منظم</h3><p>وحدات ودروس مرتبة حسب المنهج لكل صف.</p></div>
+  <section class="play-section play-units" aria-label="الوحدات والدروس">
+    <div class="play-section-head split-head">
+      <div class="title-group">
+        <span class="play-section-icon">📖</span>
+        <div><h2>الوحدات والدروس</h2><p>دروس تفاعلية مصممة بطريقة ممتعة وبسيطة</p></div>
+      </div>
+      <button class="section-link-btn" onclick="scrollToGrades()">عرض جميع الوحدات ←</button>
+    </div>
+
+    <div class="preview-card-row">
+      <article class="preview-unit unit-green" onclick="scrollToGrades()"><span>🌱</span><h3>الكائنات الحية</h3><b>5 دروس</b><p>تعرف على النباتات والحيوانات والبيئات المختلفة</p><i>←</i></article>
+      <article class="preview-unit unit-coral" onclick="scrollToGrades()"><span>🧪</span><h3>المادة وخصائصها</h3><b>6 دروس</b><p>استكشف حالات المادة وتغيراتها وخصائصها</p><i>←</i></article>
+      <article class="preview-unit unit-sky" onclick="scrollToGrades()"><span>🚙</span><h3>القوى والحركة</h3><b>5 دروس</b><p>كيف تتحرك الأشياء من حولنا؟</p><i>←</i></article>
+      <article class="preview-unit unit-lilac" onclick="scrollToGrades()"><span>💡</span><h3>الطاقة</h3><b>4 دروس</b><p>مصادر الطاقة واستخداماتها في حياتنا</p><i>←</i></article>
+      <article class="preview-unit unit-gold" onclick="scrollToGrades()"><span>🪐</span><h3>الأرض والفضاء</h3><b>6 دروس</b><p>رحلة إلى كوكبنا والنظام الشمسي</p><i>←</i></article>
+    </div>
+  </section>
+
+  <section class="play-section landing-games-section" id="landing-games" aria-label="ألعاب تعليمية ممتعة">
+    <div class="play-game-decor left">🏆</div>
+    <div class="play-game-decor right">🎮</div>
+    <div class="play-section-head split-head">
+      <div class="title-group">
+        <span class="play-section-icon">🎮</span>
+        <div><h2>ألعاب تعليمية ممتعة</h2><p>تعلّم من خلال اللعب والاكتشاف</p></div>
+      </div>
+      <button class="section-link-btn" onclick="enterAppSection('grade1','games')">عرض جميع الألعاب ←</button>
+    </div>
+
+    <div class="preview-card-row games-row">
+      <article class="preview-game game-blue" onclick="enterAppSection('grade1','games')"><span>🧩</span><h3>اسحب وأفلت</h3><p>رتب العناصر في مكانها الصحيح</p><i>←</i></article>
+      <article class="preview-game game-pink" onclick="enterAppSection('grade1','games')"><span>🃏</span><h3>المطابقة</h3><p>طابق الصور مع الكلمات والمفاهيم</p><i>←</i></article>
+      <article class="preview-game game-green" onclick="enterAppSection('grade1','games')"><span>🔢</span><h3>التسلسل المنطقي</h3><p>رتب الأحداث والخطوات بالترتيب</p><i>←</i></article>
+      <article class="preview-game game-yellow" onclick="enterAppSection('grade1','games')"><span>❓</span><h3>اختيار من متعدد</h3><p>اختر الإجابة الصحيحة واجمع النقاط</p><i>←</i></article>
+      <article class="preview-game game-purple" onclick="enterAppSection('grade1','games')"><span>✅</span><h3>صح أم خطأ</h3><p>اختبر معلوماتك بسرعة وبمتعة</p><i>←</i></article>
+    </div>
+  </section>
+
+  <section class="play-section engagement-section" aria-label="الاختبارات ومساعد نوات">
+    <div class="engagement-grid">
+      <article class="quiz-preview" id="landing-quiz">
+        <div class="engagement-title"><span>📊</span><div><h2>اختبارات قصيرة</h2><p>اختبر معلوماتك واحصل على شارات مميزة</p></div></div>
+        <div class="quiz-preview-body">
+          <div class="quiz-progress-card">
+            <div class="quiz-progress-head"><strong>اختبار وحدة الكائنات الحية</strong><span>8/10</span></div>
+            <div class="quiz-progress-line"><i></i></div>
+            <small>أحسنت! أنت على الطريق الصحيح 🌟</small>
+            <button onclick="enterAppSection('grade1','quiz')">ابدأ الاختبار الآن ←</button>
+          </div>
+          <div class="badges-preview">
+            <h3>شاراتك</h3>
+            <div><span>🥉<small>مستكشف</small></span><span>⭐<small>ممتاز</small></span><span>👑<small>مبدع</small></span><span>💎<small>بطل العلوم</small></span></div>
+          </div>
+        </div>
       </article>
-      <article class="feature-item">
-        <span class="feature-icon">02</span>
-        <div><h3>تفاعل حقيقي</h3><p>ألعاب واختبارات تحوّل المفاهيم إلى ممارسة.</p></div>
-      </article>
-      <article class="feature-item">
-        <span class="feature-icon">03</span>
-        <div><h3>STEM تطبيقي</h3><p>أنشطة تجمع العلوم والتقنية والهندسة والرياضيات.</p></div>
-      </article>
-      <article class="feature-item">
-        <span class="feature-icon">04</span>
-        <div><h3>جاهز للطباعة</h3><p>ملفات دروس موسعة وأوراق عمل وتقويمات.</p></div>
+
+      <article class="chat-preview" id="landing-chat">
+        <div class="engagement-title"><span>💬</span><div><h2>اسأل نوات</h2><p>مساعدك الذكي في عالم العلوم</p></div></div>
+        <div class="chat-preview-bot">
+          <div class="mini-bot"><span>•</span><b>⌣</b></div>
+          <p><strong>مرحباً! 👋</strong><br>أنا نوات، اسألني أي سؤال في العلوم وسأساعدك بطريقة سهلة وممتعة!</p>
+        </div>
+        <div class="chat-suggestions">
+          <button onclick="enterAppSection('grade1','chatbot')">ما هي أجزاء النبات؟</button>
+          <button onclick="enterAppSection('grade2','chatbot')">كيف تحدث ظاهرة المطر؟</button>
+          <button onclick="enterAppSection('grade3','chatbot')">ما الفرق بين السائل والصلب؟</button>
+        </div>
+        <div class="fake-chat-input"><span>اكتب سؤالك هنا...</span><button onclick="enterAppSection('grade1','chatbot')">➤</button></div>
       </article>
     </div>
   </section>
 
-  <!-- قسم اختر صفك -->
-  <section class="grades-section" id="grades-section" aria-label="اختر صفك الدراسي">
-    <div class="grades-inner">
-      <div class="grades-header">
-        <span class="section-kicker">المرحلة الابتدائية</span>
-        <h2 class="grades-title">اختر صفك وابدأ التعلّم</h2>
-        <p class="grades-subtitle">ستجد داخل كل صف الوحدات والدروس والألعاب والاختبارات في تجربة واحدة مترابطة.</p>
+  <section class="print-preview-section" aria-label="ملف الدرس المطبوع">
+    <div class="print-preview-inner">
+      <div class="print-stack" aria-hidden="true">
+        <div class="paper paper-back"></div>
+        <div class="paper paper-mid"></div>
+        <div class="paper paper-front">
+          <span class="pdf-tag">PDF</span>
+          <h4>الكائنات الحية</h4>
+          <div class="plant-illustration">🌿</div>
+          <div class="paper-lines"><i></i><i></i><i></i><i></i></div>
+        </div>
       </div>
 
-      <div class="grades-grid">
-
-        <!-- الصف الأول - مفتوح -->
-        <div class="grade-card grade-card--open"
-             onclick="enterApp('grade1')"
-             role="button"
-             tabindex="0"
-             aria-label="الصف الأول الابتدائي - مفتوح الآن"
-             onkeydown="if(event.key==='Enter') enterApp('grade1')">
-          <span class="grade-badge grade-badge--open">مفتوح الآن</span>
-          <div class="grade-icon" aria-hidden="true">🏫</div>
-          <span class="grade-number" aria-hidden="true">01</span>
-          <h3 class="grade-name">الصف الأول</h3>
-          <p class="grade-desc">الابتدائي</p>
-          <div class="grade-arrow" aria-hidden="true">←</div>
+      <div class="print-preview-copy">
+        <div class="engagement-title print-title"><span>🖨️</span><div><h2>ملف الدرس المطبوع</h2><p>ملفات STEM جاهزة للطباعة وغنية بالأنشطة والتجارب</p></div></div>
+        <div class="print-feature-chips">
+          <span>📝 أوراق عمل وأنشطة</span>
+          <span>🧪 تجارب بسيطة وآمنة</span>
+          <span>🏅 تصميم جذاب للأطفال</span>
+          <span>📚 متوافق مع المنهج</span>
         </div>
+      </div>
 
-        <!-- الصف الثاني - مفتوح -->
-        <div class="grade-card grade-card--open"
-             onclick="enterApp('grade2')"
-             role="button"
-             tabindex="0"
-             aria-label="الصف الثاني الابتدائي - مفتوح الآن"
-             onkeydown="if(event.key==='Enter') enterApp('grade2')">
-          <span class="grade-badge grade-badge--open">مفتوح الآن</span>
-          <div class="grade-icon" aria-hidden="true">📖</div>
-          <span class="grade-number" aria-hidden="true">02</span>
-          <h3 class="grade-name">الصف الثاني</h3>
-          <p class="grade-desc">الابتدائي</p>
-          <div class="grade-arrow" aria-hidden="true">←</div>
-        </div>
-
-        <!-- الصف الثالث - مفتوح -->
-        <div class="grade-card grade-card--open"
-             onclick="enterApp('grade3')"
-             role="button"
-             tabindex="0"
-             aria-label="الصف الثالث الابتدائي - مفتوح الآن"
-             onkeydown="if(event.key==='Enter') enterApp('grade3')">
-          <span class="grade-badge grade-badge--open">مفتوح الآن</span>
-          <div class="grade-icon" aria-hidden="true">🔬</div>
-          <span class="grade-number" aria-hidden="true">03</span>
-          <h3 class="grade-name">الصف الثالث</h3>
-          <p class="grade-desc">الابتدائي</p>
-          <div class="grade-arrow" aria-hidden="true">←</div>
-        </div>
-
-        <!-- الصف الرابع - مفتوح -->
-        <div class="grade-card grade-card--open"
-             onclick="enterApp('grade4')"
-             role="button"
-             tabindex="0"
-             aria-label="الصف الرابع الابتدائي - مفتوح الآن"
-             onkeydown="if(event.key==='Enter') enterApp('grade4')">
-          <span class="grade-badge grade-badge--open">مفتوح الآن</span>
-          <div class="grade-icon" aria-hidden="true">🧪</div>
-          <span class="grade-number" aria-hidden="true">04</span>
-          <h3 class="grade-name">الصف الرابع</h3>
-          <p class="grade-desc">الابتدائي</p>
-          <div class="grade-arrow" aria-hidden="true">←</div>
-        </div>
-
-        <!-- الصف الخامس - مفتوح -->
-        <div class="grade-card grade-card--open"
-             onclick="enterApp('grade5')"
-             role="button"
-             tabindex="0"
-             aria-label="الصف الخامس الابتدائي - مفتوح الآن"
-             onkeydown="if(event.key==='Enter') enterApp('grade5')">
-          <span class="grade-badge grade-badge--open">مفتوح الآن</span>
-          <div class="grade-icon" aria-hidden="true">🔬</div>
-          <span class="grade-number" aria-hidden="true">05</span>
-          <h3 class="grade-name">الصف الخامس</h3>
-          <p class="grade-desc">الابتدائي</p>
-          <div class="grade-arrow" aria-hidden="true">←</div>
-        </div>
-
-        <!-- الصف السادس - مفتوح -->
-        <div class="grade-card grade-card--open"
-             onclick="enterApp('grade6')"
-             role="button"
-             tabindex="0"
-             aria-label="الصف السادس الابتدائي - مفتوح الآن"
-             onkeydown="if(event.key==='Enter') enterApp('grade6')">
-          <span class="grade-badge grade-badge--open">مفتوح الآن</span>
-          <div class="grade-icon" aria-hidden="true">⚗️</div>
-          <span class="grade-number" aria-hidden="true">06</span>
-          <h3 class="grade-name">الصف السادس</h3>
-          <p class="grade-desc">الابتدائي</p>
-          <div class="grade-arrow" aria-hidden="true">←</div>
-        </div>
-
+      <div class="print-preview-action">
+        <span>العلم في كل مكان ✈️</span>
+        <button onclick="scrollToGrades()">اختر صفك واطبع الدرس ←</button>
+        <small>جميع ملفات الدروس جاهزة للطباعة والاستخدام في الفصل أو المنزل.</small>
       </div>
     </div>
   </section>
@@ -306,10 +332,18 @@
 </div>
 
 <!-- ===== ذيل الصفحة ===== -->
-<footer role="contentinfo">
-  <div class="footer-inner">
-    <div class="footer-brand"><span class="brand-mark brand-mark--small">N</span><strong>نوات ستيم</strong></div>
-    <p>منصة تعليمية لمادة العلوم STEM • <strong>إعداد أ. أميرة عبدالله الحكمي</strong></p>
+<footer class="play-footer" role="contentinfo">
+  <div class="play-footer-wave" aria-hidden="true"></div>
+  <div class="play-footer-inner">
+    <div class="play-footer-brand"><span>⚛️</span><div><strong>نوات ستيم</strong><small>صغار اليوم.. علماء المستقبل</small></div></div>
+    <div class="play-footer-links">
+      <a href="#landing-page">الرئيسية</a>
+      <a href="#grades-section">الدروس</a>
+      <a href="#landing-games">الألعاب</a>
+      <a href="#landing-quiz">الاختبارات</a>
+      <a href="#landing-chat">الدردشة</a>
+    </div>
+    <p>إعداد أ. أميرة عبدالله الحكمي • معاً نحو جيل أكثر معرفة وإبداعاً 💜</p>
   </div>
 </footer>
 

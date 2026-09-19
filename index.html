@@ -9,7 +9,7 @@
   <meta name="description" content="نوات ستيم - منصة تعليمية عربية لمادة العلوم STEM للصفوف من الأول إلى السادس الابتدائي، تضم دروساً تفاعلية وألعاباً واختبارات وملفات طباعة موسعة.">
   <title>نوات ستيم | علوم الصفوف الأول والثاني والثالث والرابع والخامس والسادس</title>
   <link rel="stylesheet" href="style.css?v=20260919-base">
-  <link rel="stylesheet" href="playful-ui.css?v=20260919-3">
+  <link rel="stylesheet" href="playful-ui.css?v=20260919-4">
 </head>
 <body>
 
@@ -19,11 +19,7 @@
   <header class="play-header" aria-label="رأس موقع نوات ستيم">
     <div class="play-header-inner">
       <a class="play-brand" href="#landing-page" aria-label="نوات ستيم">
-        <span class="play-brand-orbit" aria-hidden="true">⚛️</span>
-        <span class="play-brand-copy">
-          <strong>نوات ستيم</strong>
-          <small>صغار اليوم.. علماء المستقبل</small>
-        </span>
+        <img class="play-brand-logo" src="assets/nawat-logo.svg?v=20260919-1" alt="شعار نوات ستيم">
       </a>
 
       <nav class="play-nav" aria-label="روابط الصفحة الرئيسية">
@@ -42,47 +38,73 @@
   </header>
 
   <section class="play-hero" aria-label="لنتعلم العلوم بالمرح والتجربة">
-    <div class="play-sky-decor decor-atom">⚛️</div>
-    <div class="play-sky-decor decor-star">⭐</div>
-    <div class="play-sky-decor decor-rocket">🚀</div>
+    <div class="hero-blob hero-blob-a" aria-hidden="true"></div>
+    <div class="hero-blob hero-blob-b" aria-hidden="true"></div>
+
     <div class="play-hero-inner">
       <div class="play-hero-copy">
-        <span class="play-hero-pill">علوم • ابتكار • مستقبل أفضل</span>
-        <h1>لنتعلّم العلوم<br><span>بالمرح والتجربة!</span></h1>
-        <p>دروس تفاعلية، ألعاب تعليمية، اختبارات ممتعة، وأنشطة STEM وملفات دروس مطبوعة باحترافية للصفوف من الأول إلى السادس.</p>
-        <div class="play-hero-actions">
-          <button class="play-primary" onclick="scrollToGrades()">ابدأ رحلتك الآن <span>←</span></button>
-          <button class="play-secondary" onclick="document.getElementById('landing-games').scrollIntoView({behavior:'smooth'})">شاهد الألعاب 🎮</button>
+        <span class="play-hero-pill"><i></i> منصة علوم STEM للمرحلة الابتدائية</span>
+
+        <div class="hero-brand-mini">
+          <img src="assets/nawat-logo.svg?v=20260919-1" alt="" aria-hidden="true">
         </div>
-        <div class="play-hero-mini">
-          <span>✓ منهج منظم</span>
-          <span>✓ تعلم باللعب</span>
-          <span>✓ ملفات STEM مطبوعة</span>
+
+        <h1>نكتشف العلوم<br><span>ونصنع الفكرة بأيدينا.</span></h1>
+
+        <p class="hero-lead">
+          تجربة تعليمية عربية تجمع الدروس التفاعلية والألعاب والاختبارات وأنشطة STEM
+          في مسار ممتع ومنظم للصفوف من الأول إلى السادس الابتدائي.
+        </p>
+
+        <div class="play-hero-actions">
+          <button class="play-primary" onclick="scrollToGrades()">
+            ابدأ رحلتك التعليمية
+            <span aria-hidden="true">←</span>
+          </button>
+          <button class="play-secondary" onclick="document.getElementById('landing-games').scrollIntoView({behavior:'smooth'})">
+            <span aria-hidden="true">🎮</span>
+            شاهد الألعاب
+          </button>
+        </div>
+
+        <div class="hero-trust-row" aria-label="مزايا المنصة">
+          <span><b>6</b><small>صفوف دراسية</small></span>
+          <span><b>5</b><small>أنواع ألعاب</small></span>
+          <span><b>STEM</b><small>تعلّم تطبيقي</small></span>
+          <span><b>PDF</b><small>ملفات مطبوعة</small></span>
         </div>
       </div>
 
-      <div class="play-hero-art" aria-hidden="true">
-        <div class="hero-cloud cloud-a"></div>
-        <div class="hero-cloud cloud-b"></div>
-        <div class="hero-hill hill-a"></div>
-        <div class="hero-hill hill-b"></div>
-        <div class="hero-city">
-          <i></i><i></i><i></i><i></i><i></i>
+      <div class="play-hero-art hero-lab-card" aria-hidden="true">
+        <div class="lab-card-glow"></div>
+        <div class="lab-card-top">
+          <span class="lab-status"><i></i> مختبر نوات</span>
+          <span class="lab-chip">اليوم: اكتشاف جديد ✨</span>
         </div>
-        <div class="hero-palm">🌴</div>
-        <div class="hero-kid hero-kid-boy">🧑🏻‍🔬<span class="kid-tool">🧪</span></div>
-        <div class="hero-kid hero-kid-girl">👩🏻‍🔬<span class="kid-tool">📱</span></div>
-        <div class="hero-bot">
-          <span class="bot-antenna">•</span>
-          <div class="bot-face">⌣</div>
-          <small>نوات</small>
+
+        <div class="lab-scene">
+          <div class="lab-orbit orbit-a"></div>
+          <div class="lab-orbit orbit-b"></div>
+          <div class="lab-core">
+            <div class="lab-core-logo"><img src="assets/nawat-logo.svg?v=20260919-1" alt=""></div>
+            <strong>اسأل • جرّب • اكتشف</strong>
+            <small>كل درس يبدأ بسؤال وينتهي بفكرة جديدة</small>
+          </div>
+
+          <div class="lab-float-card fc-one"><span>🧪</span><b>جرّب</b><small>نشاط آمن</small></div>
+          <div class="lab-float-card fc-two"><span>🧠</span><b>فكّر</b><small>حل المشكلة</small></div>
+          <div class="lab-float-card fc-three"><span>⚙️</span><b>صمّم</b><small>طوّر نموذجك</small></div>
+          <div class="lab-float-card fc-four"><span>⭐</span><b>أنجز</b><small>اجمع شاراتك</small></div>
         </div>
-        <span class="hero-float float-one">⭐</span>
-        <span class="hero-float float-two">🧬</span>
-        <span class="hero-float float-three">🔭</span>
-        <span class="hero-note">بالاستكشاف<br>نصنع مستقبلاً أجمل</span>
+
+        <div class="lab-card-bottom">
+          <div><span>📚</span><b>دروس</b><small>مرتبة حسب المنهج</small></div>
+          <div><span>🎮</span><b>ألعاب</b><small>تعلم بالمرح</small></div>
+          <div><span>📝</span><b>اختبارات</b><small>نتائج فورية</small></div>
+        </div>
       </div>
     </div>
+
     <div class="hero-wave" aria-hidden="true"></div>
   </section>
 
@@ -336,7 +358,7 @@
 <footer class="play-footer" role="contentinfo">
   <div class="play-footer-wave" aria-hidden="true"></div>
   <div class="play-footer-inner">
-    <div class="play-footer-brand"><span>⚛️</span><div><strong>نوات ستيم</strong><small>صغار اليوم.. علماء المستقبل</small></div></div>
+    <div class="play-footer-brand"><img src="assets/nawat-logo.svg?v=20260919-1" alt="نوات ستيم"></div>
     <div class="play-footer-links">
       <a href="#landing-page">الرئيسية</a>
       <a href="#grades-section">الدروس</a>

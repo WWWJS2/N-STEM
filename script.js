@@ -200,8 +200,9 @@ function getAvailableSemestersForGrade(gradeId) {
   return semesters;
 }
 
-function getAllLessonsFlat(gradeId = state.selectedGradeId) {
+function getAllLessonsFlat(gradeId = state.selectedGradeId, semesterFilter = null) {
   const result = [];
+  const includeSemester = (semester) => semesterFilter === null || semesterFilter === undefined || Number(semester) === Number(semesterFilter);
 
   if (gradeId === 'grade2' || gradeId === 'grade3' || gradeId === 'grade4' || gradeId === 'grade5' || gradeId === 'grade6') {
     const source = gradeId === 'grade2'
@@ -214,8 +215,10 @@ function getAllLessonsFlat(gradeId = state.selectedGradeId) {
     if (source && source.grades) {
       const grade = source.grades.find(g => g.id === gradeId) || source.grades[0];
       if (grade) {
-        (grade.units || []).forEach(unit => {
-          (unit.lessons || []).forEach(lesson => result.push({ lesson, unit, grade, semester: 1 }));
+        (grade.units || []).forEach((unit, idx) => {
+          const semester = Number(unit.semester || (idx < 3 ? 1 : 2));
+          if (!includeSemester(semester)) return;
+          (unit.lessons || []).forEach(lesson => result.push({ lesson, unit, grade, semester }));
         });
       }
     }
@@ -224,23 +227,24 @@ function getAllLessonsFlat(gradeId = state.selectedGradeId) {
 
   if (window.nawatData && nawatData.grades) {
     const grade = nawatData.grades.find(g => g.id === gradeId);
-    if (grade) {
+    if (grade && includeSemester(1)) {
       (grade.units || []).forEach(unit => {
         (unit.lessons || []).forEach(lesson => result.push({ lesson, unit, grade, semester: 1 }));
       });
     }
   }
 
-  if (gradeId === 'grade1' && window.semester2Data && semester2Data.grades) {
+  if (gradeId === 'grade1' && includeSemester(2) && window.semester2Data && semester2Data.grades) {
     const sem2Grade = semester2Data.grades.find(g => g.id === 'grade1-s2' || g.id === 'grade1') || semester2Data.grades[0];
     if (sem2Grade && semester2Data.lessons) {
       (sem2Grade.units || []).forEach((unit, idx) => {
         const normalizedUnit = {
           id: unit.id,
-          number: unit.number || idx + 1,
+          number: unit.number || idx + 4,
           name: unit.title || unit.name,
           icon: unit.icon || '📗',
           color: unit.color || '#4CAF50',
+          semester: 2,
           lessons: (unit.lessons || []).map(id => semester2Data.lessons.find(l => l.id === id)).filter(Boolean)
         };
         normalizedUnit.lessons.forEach(lesson => result.push({ lesson, unit: normalizedUnit, grade: sem2Grade, semester: 2 }));
@@ -711,11 +715,24 @@ function switchSemester(semesterNum, gradeId) {
   if (!grade) return;
   showSemesterTabs(id);
   _renderUnitsForSemester(grade, semesterNum);
+  renderGamesSection();
+  renderQuizSection();
 }
 
 function _getGradeData(grade, semesterNum) {
   if (!grade) return null;
-  if (grade.id === 'grade2' || grade.id === 'grade3' || grade.id === 'grade4' || grade.id === 'grade5' || grade.id === 'grade6') return semesterNum === 1 ? grade : null;
+
+  if (grade.id === 'grade2' || grade.id === 'grade3' || grade.id === 'grade4' || grade.id === 'grade5' || grade.id === 'grade6') {
+    const units = (grade.units || []).filter((unit, idx) => {
+      const semester = Number(unit.semester || (idx < 3 ? 1 : 2));
+      return semester === Number(semesterNum);
+    });
+    return {
+      ...grade,
+      semesterName: Number(semesterNum) === 2 ? 'الفصل الدراسي الثاني' : 'الفصل الدراسي الأول',
+      units
+    };
+  }
 
   if (semesterNum === 2 && window.semester2Data) {
     const sem2Grade = semester2Data.grades
@@ -723,6 +740,7 @@ function _getGradeData(grade, semesterNum) {
       : null;
     if (sem2Grade) return _normalizeSem2Grade(sem2Grade);
   }
+
   return grade;
 }
 
@@ -943,7 +961,7 @@ function renderGamesSection() {
   const view = document.getElementById('games-view');
   if (!view) return;
 
-  const allLessons = getAllLessonsFlat();
+  const allLessons = getAllLessonsFlat(state.selectedGradeId, state.currentSemester);
   const playedCount = allLessons.filter(({lesson}) => scores[`game_${lesson.id}`] !== undefined).length;
 
   view.innerHTML = `
@@ -1720,7 +1738,7 @@ function renderQuizSection() {
   const view = document.getElementById('quiz-view');
   if (!view) return;
 
-  const allLessons = getAllLessonsFlat();
+  const allLessons = getAllLessonsFlat(state.selectedGradeId, state.currentSemester);
   const completedCount = allLessons.filter(({lesson}) => scores[lesson.id] !== undefined).length;
 
   view.innerHTML = `

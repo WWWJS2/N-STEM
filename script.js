@@ -294,6 +294,8 @@ function buildMagnetStyleLessonSheets(lesson, unit, grade) {
   const unitNumber = unit.number || '';
   const unitTitle = unit.name || unit.title || '';
   const gradeName = (grade && grade.name) || 'الصف الثالث الابتدائي';
+  const semesterNumber = Number((lesson && lesson.semester) || state.currentSemester || 1);
+  const semesterName = semesterNumber === 2 ? 'الفصل الدراسي الثاني' : '${semesterName}';
   const stem = lesson.stem || {};
   const act = lesson.stemActivity || {};
   const escList = (arr) => (arr || []).map(x => `<li>${x}</li>`).join('');
@@ -336,7 +338,7 @@ function buildMagnetStyleLessonSheets(lesson, unit, grade) {
       <div style="font-size:42px;font-weight:900;color:var(--navy);line-height:1.35;margin-bottom:9mm">${lesson.title || ''}</div>
       <div style="width:44mm;height:2.5mm;background:var(--blue);margin:0 auto 10mm;border-radius:99px"></div>
       <div style="font-size:23px;font-weight:800;color:var(--navy)">العلوم - ${gradeName}</div>
-      <div style="font-size:19px;color:var(--muted);margin-top:3mm">الفصل الدراسي الأول</div>
+      <div style="font-size:19px;color:var(--muted);margin-top:3mm">${semesterName}</div>
     </div>
     <div class="hero-block" style="margin:0 auto;width:82%;text-align:center">
       <p>الوحدة ${unitNumber}: ${unitTitle}</p>
@@ -351,7 +353,7 @@ function buildMagnetStyleLessonSheets(lesson, unit, grade) {
       <h1>اسم الدرس: ${lesson.title || ''}</h1>
       <p>المبحث: العلوم | الصف: ${gradeName}</p>
       <p>رقم الوحدة وعنوانها: الوحدة ${unitNumber} - ${unitTitle}</p>
-      <p>${lesson.chapter || ''} | الفصل الدراسي الأول</p>
+      <p>${lesson.chapter || ''} | ${semesterName}</p>
     </div>
     <div class="inline-meta">
       <div class="info-box">

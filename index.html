@@ -7,7 +7,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="نوات ستيم - موقع تعليمي لمادة العلوم STEM للصفوف الأول والثاني والثالث الابتدائي">
-  <title>نوات ستيم | علوم الصفوف الأول والثاني والثالث</title>
+  <title>نوات ستيم | علوم الصفوف الأول والثاني والثالث والرابع</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -83,16 +83,18 @@
           <div class="grade-arrow" aria-hidden="true">←</div>
         </div>
 
-        <!-- الصف الرابع - قريباً -->
-        <div class="grade-card grade-card--soon"
+        <!-- الصف الرابع - مفتوح -->
+        <div class="grade-card grade-card--open"
+             onclick="enterApp('grade4')"
              role="button"
              tabindex="0"
-             aria-label="الصف الرابع الابتدائي - قريباً"
-             aria-disabled="true">
-          <span class="grade-badge grade-badge--soon">قريباً</span>
+             aria-label="الصف الرابع الابتدائي - مفتوح الآن"
+             onkeydown="if(event.key==='Enter') enterApp('grade4')">
+          <span class="grade-badge grade-badge--open">مفتوح الآن</span>
           <div class="grade-icon" aria-hidden="true">🧪</div>
           <h3 class="grade-name">الصف الرابع</h3>
           <p class="grade-desc">الابتدائي</p>
+          <div class="grade-arrow" aria-hidden="true">←</div>
         </div>
 
         <!-- الصف الخامس - قريباً -->
@@ -221,6 +223,7 @@
 <script src="semester2-data.js"></script>
 <script src="data-grade2.js"></script>
 <script src="data-grade3.js"></script>
+<script src="data-grade4.js"></script>
 <script src="script.js"></script>
 
 </body>

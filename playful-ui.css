@@ -488,7 +488,30 @@ main{background:
   box-shadow:0 0 0 5px rgba(49,187,134,.10);
 }
 .hero-brand-mini{
-  display:none;
+  display:flex!important;
+  align-items:center;
+  gap:10px;
+  width:max-content;
+  max-width:100%;
+  margin:18px 0 4px;
+  padding:9px 14px 9px 11px;
+  border-radius:18px;
+  background:rgba(255,255,255,.78);
+  border:1px solid rgba(22,121,164,.12);
+  box-shadow:0 10px 24px rgba(22,106,146,.07);
+}
+.hero-brand-mini .nawat-logo-mark{
+  width:48px;
+  height:48px;
+  flex:0 0 48px;
+}
+.hero-brand-mini .nawat-wordmark strong{
+  color:#0b4b80;
+  font-size:1rem;
+}
+.hero-brand-mini .nawat-wordmark small{
+  color:#28a590;
+  font-size:.58rem;
 }
 .play-hero h1{
   margin:22px 0 18px;
@@ -1033,5 +1056,40 @@ main{background:
   }
   .nawat-wordmark strong{
     font-size:.94rem;
+  }
+}
+
+
+/* ===== Logo visibility correction ===== */
+.play-header .play-brand{
+  visibility:visible!important;
+  opacity:1!important;
+}
+.play-header .nawat-logo-mark{
+  display:block!important;
+  visibility:visible!important;
+  opacity:1!important;
+  background:#fff;
+  border-radius:18px;
+  padding:3px;
+}
+.play-header .nawat-wordmark{
+  display:flex!important;
+  visibility:visible!important;
+  opacity:1!important;
+}
+.play-header .nawat-wordmark strong{
+  color:#fff!important;
+}
+.hero-brand-mini{
+  visibility:visible!important;
+  opacity:1!important;
+}
+@media(max-width:760px){
+  .hero-brand-mini{
+    margin-inline:auto;
+  }
+  .hero-brand-mini .nawat-wordmark small{
+    display:block!important;
   }
 }

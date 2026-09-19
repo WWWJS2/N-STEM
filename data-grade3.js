@@ -9536,3 +9536,88 @@ window.grade3Data = {
     }
   ]
 };
+
+
+;(() => {
+  const ROOT = window.grade3Data;
+  const MARK = "game-diversity-g3-v1";
+  if (!ROOT || ROOT.__gameDiversityUpgrade === MARK) return;
+
+  const normalizeQuiz = (lesson) => {
+    if (Array.isArray(lesson.quiz)) return lesson.quiz;
+    if (lesson.quiz && Array.isArray(lesson.quiz.questions)) return lesson.quiz.questions;
+    return [];
+  };
+  const conceptsOf = (lesson) => (lesson.concepts || [])
+    .map((c,i) => typeof c === 'string' ? {term:c,definition:'مفهوم من مفاهيم الدرس'} : {term:c.term || ('مفهوم '+(i+1)),definition:c.definition || ''})
+    .filter(c => c.term && c.definition);
+
+  const makeSorting = (lesson) => {
+    const concepts = conceptsOf(lesson).slice(0,3);
+    const items = [];
+    concepts.forEach((c,i) => {
+      items.push({id:'t'+i,text:c.term,category:'term',hint:'هذا مصطلح علمي'});
+      items.push({id:'d'+i,text:c.definition,category:'definition',hint:'هذا معنى أو تعريف'});
+    });
+    return {
+      type:'sorting',
+      title:'صنّف مفاهيم «' + lesson.title + '»',
+      instructions:'اسحب كل بطاقة إلى فئة «مصطلح علمي» أو «تعريف / معنى».',
+      categories:[
+        {id:'term',name:'مصطلح علمي',color:'#1677b8'},
+        {id:'definition',name:'تعريف / معنى',color:'#26a47c'}
+      ],
+      items
+    };
+  };
+
+  const makeDragDrop = (lesson) => {
+    const concepts = conceptsOf(lesson).slice(0,3);
+    const items = [];
+    concepts.forEach((c,i) => {
+      items.push({id:'dt'+i,text:c.term,category:'مصطلحات'});
+      items.push({id:'dd'+i,text:c.definition,category:'معاني'});
+    });
+    return {
+      type:'dragDrop',
+      title:'اسحب وضع البطاقة في مكانها',
+      instructions:'ضع المصطلحات في خانة «مصطلحات» والتعريفات في خانة «معاني».',
+      categories:['مصطلحات','معاني'],
+      items
+    };
+  };
+
+  const makeTrueFalse = (lesson) => {
+    const concepts = conceptsOf(lesson);
+    const a=concepts[0] || {term:lesson.title,definition:lesson.summary || ''};
+    const b=concepts[1] || a;
+    const c=concepts[2] || b;
+    const ideas=lesson.mainIdeas || [];
+    return {
+      type:'trueFalse',
+      title:'صح أم خطأ: «' + lesson.title + '»',
+      instructions:'اقرأ العبارة وحدد هل هي صحيحة أم خاطئة.',
+      questions:[
+        {statement:a.term + ': ' + a.definition,answer:true,explanation:'العبارة تطابق تعريف المفهوم في الدرس.'},
+        {statement:b.term + ': ' + c.definition,answer:b.definition === c.definition,explanation:'قارن المصطلح بتعريفه الصحيح في الدرس.'},
+        {statement:(ideas[0] || a.definition),answer:true,explanation:'هذه فكرة رئيسة واردة في الدرس.'},
+        {statement:c.term + ': ' + a.definition,answer:c.definition === a.definition,explanation:'راجع تعريف «' + c.term + '» في مفاهيم الدرس.'}
+      ]
+    };
+  };
+
+  (ROOT.grades || []).forEach(grade => {
+    let lessonIndex=0;
+    (grade.units || []).forEach(unit => {
+      (unit.lessons || []).forEach(lesson => {
+        const slot = lessonIndex % 6;
+        if (slot === 3) lesson.game = makeSorting(lesson);
+        else if (slot === 4) lesson.game = makeDragDrop(lesson);
+        else if (slot === 5) lesson.game = makeTrueFalse(lesson);
+        lessonIndex++;
+      });
+    });
+  });
+
+  ROOT.__gameDiversityUpgrade = MARK;
+})();

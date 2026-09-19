@@ -220,10 +220,186 @@ function getAllLessonsFlat(gradeId = state.selectedGradeId) {
 }
 
 function getCloudLessonPrintCss() {
-  return `:root{--navy:#183f64;--navy-deep:#122f4a;--blue:#0e79b7;--text:#17324a;--muted:#58728a;--line:#d8e0e7;--paper:#ffffff;--page-bg:#edf3f7}*{box-sizing:border-box}html,body{margin:0;padding:0}body{font-family:"IBM Plex Sans Arabic","Tajawal","Cairo",sans-serif;background:var(--page-bg);color:var(--text);direction:rtl}.toolbar{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 18px;background:rgba(237,243,247,.96);backdrop-filter:blur(10px);border-bottom:1px solid rgba(24,63,100,.08)}.toolbar-note{color:var(--muted);font-size:15px}.print-button{border:0;border-radius:14px;background:var(--navy);color:#fff;font:inherit;font-size:16px;font-weight:700;padding:10px 18px;cursor:pointer}.document{width:min(100%,920px);margin:0 auto;padding:24px 12px 42px}.sheet{position:relative;width:210mm;min-height:297mm;margin:0 auto 18px;background:var(--paper);box-shadow:0 20px 50px rgba(15,29,45,.12);overflow:hidden}.sheet::after{content:"";position:absolute;right:0;bottom:0;left:0;height:18mm;background:repeating-linear-gradient(to left,rgba(24,63,100,.12) 0 1mm,transparent 1mm 5mm);opacity:.45}.sheet-inner{position:relative;padding:14mm 12mm 18mm}.top-strip{display:grid;grid-template-columns:22mm 1fr 22mm;align-items:center;gap:6mm;margin-bottom:11mm}.top-strip .cap{height:13mm;border-radius:0 0 4mm 4mm;background:var(--blue)}.top-strip .title-bar{min-height:13mm;border-radius:0 0 4mm 4mm;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:flex-end;padding:0 7mm;font-size:20px;font-weight:700}.hero-block{border-radius:5mm;background:var(--navy);color:#fff;padding:8mm 9mm;margin-bottom:6mm}.hero-block h1{margin:0 0 3mm;font-size:24px;line-height:1.35;font-weight:700}.hero-block p{margin:0;font-size:17px;line-height:1.75}.inline-meta{display:grid;grid-template-columns:1fr 1fr;gap:6mm;margin-bottom:8mm}.info-box{border-radius:4mm;background:var(--navy);color:#fff;padding:5.5mm 6mm;min-height:26mm}.info-box p{margin:0;font-size:16px;line-height:1.85;font-weight:700}.two-col{display:grid;grid-template-columns:30mm 1fr;gap:6mm;margin-bottom:6mm;align-items:start}.label-box{border-radius:0 0 0 4mm;background:var(--blue);color:#fff;padding:4mm 3mm;min-height:20mm;display:flex;align-items:center;justify-content:center;text-align:center;font-size:17px;font-weight:700;line-height:1.35}.content-box{border-radius:4mm;background:var(--navy);color:#fff;padding:4.5mm 6mm;min-height:20mm}.content-box.light{background:#fff;color:var(--text);border:.4mm solid var(--line)}.content-box p,.content-box li,.content-box strong{margin:0;font-size:16px;line-height:1.9}.content-box ul,.content-box ol{margin:0;padding:0 5mm 0 0}.content-box li+li{margin-top:1.2mm}.stem-grid{display:grid;grid-template-columns:1fr 1fr;gap:5mm}.stem-panel{border:.4mm solid var(--line);border-radius:4mm;overflow:hidden;background:#fff}.stem-panel h3{margin:0;padding:3.5mm 5mm;background:var(--navy);color:#fff;font-size:16px;line-height:1.4}.stem-panel p{margin:0;padding:4.5mm 5mm 5mm;font-size:15px;line-height:1.85;min-height:29mm}.tools-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:4mm}.tool-item{text-align:center;padding:4mm;border:.4mm solid var(--line);border-radius:3mm;background:linear-gradient(180deg,#f8fbfd,#edf3f7);min-height:20mm;display:flex;align-items:center;justify-content:center}.tool-item span{font-size:15px;font-weight:700;color:var(--navy)}.worksheet-box{min-height:122mm;border:.5mm solid #6c7e8f;background:#fff;padding:8mm}.worksheet-box h3{margin:0 0 5mm;text-align:center;font-size:20px}.worksheet-box p{margin:0 0 3mm;font-size:15px;line-height:1.85}.rubric{width:100%;border-collapse:collapse}.rubric th,.rubric td{border:.4mm solid #8ea0b1;padding:3.2mm;text-align:right;vertical-align:top;font-size:14px;line-height:1.7}.rubric thead th{background:var(--navy);color:#fff}.page-number{position:absolute;right:12mm;bottom:6mm;width:8mm;height:8mm;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}.print-credit{margin-top:8mm;padding-top:4mm;border-top:.4mm solid #c9d4de;text-align:center;font-size:17px;font-weight:700;color:var(--navy)}@page{size:A4;margin:0}@media print{body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}.toolbar{display:none}.document{width:auto;margin:0;padding:0}.sheet{width:210mm;min-height:297mm;margin:0;box-shadow:none;overflow:hidden;break-after:page;page-break-after:always}}`;
+  return `:root{--navy:#183f64;--navy-deep:#122f4a;--blue:#0e79b7;--text:#17324a;--muted:#58728a;--line:#d8e0e7;--paper:#ffffff;--page-bg:#edf3f7}*{box-sizing:border-box}html,body{margin:0;padding:0}body{font-family:"IBM Plex Sans Arabic","Tajawal","Cairo",sans-serif;background:var(--page-bg);color:var(--text);direction:rtl}.toolbar{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 18px;background:rgba(237,243,247,.96);backdrop-filter:blur(10px);border-bottom:1px solid rgba(24,63,100,.08)}.toolbar-note{color:var(--muted);font-size:15px}.print-button{border:0;border-radius:14px;background:var(--navy);color:#fff;font:inherit;font-size:16px;font-weight:700;padding:10px 18px;cursor:pointer}.document{width:min(100%,920px);margin:0 auto;padding:24px 12px 42px}.sheet{position:relative;width:210mm;min-height:297mm;margin:0 auto 18px;background:var(--paper);box-shadow:0 20px 50px rgba(15,29,45,.12);overflow:hidden}.sheet::after{content:"";position:absolute;right:0;bottom:0;left:0;height:18mm;background:repeating-linear-gradient(to left,rgba(24,63,100,.12) 0 1mm,transparent 1mm 5mm);opacity:.45}.sheet-inner{position:relative;padding:14mm 12mm 18mm}.top-strip{display:grid;grid-template-columns:22mm 1fr 22mm;align-items:center;gap:6mm;margin-bottom:11mm}.top-strip .cap{height:13mm;border-radius:0 0 4mm 4mm;background:var(--blue)}.top-strip .title-bar{min-height:13mm;border-radius:0 0 4mm 4mm;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:flex-end;padding:0 7mm;font-size:20px;font-weight:700}.hero-block{border-radius:5mm;background:var(--navy);color:#fff;padding:8mm 9mm;margin-bottom:6mm}.hero-block h1{margin:0 0 3mm;font-size:24px;line-height:1.35;font-weight:700}.hero-block p{margin:0;font-size:17px;line-height:1.75}.inline-meta{display:grid;grid-template-columns:1fr 1fr;gap:6mm;margin-bottom:8mm}.info-box{border-radius:4mm;background:var(--navy);color:#fff;padding:5.5mm 6mm;min-height:26mm}.info-box p{margin:0;font-size:16px;line-height:1.85;font-weight:700}.two-col{display:grid;grid-template-columns:30mm 1fr;gap:6mm;margin-bottom:6mm;align-items:start}.label-box{border-radius:0 0 0 4mm;background:var(--blue);color:#fff;padding:4mm 3mm;min-height:20mm;display:flex;align-items:center;justify-content:center;text-align:center;font-size:17px;font-weight:700;line-height:1.35}.content-box{border-radius:4mm;background:var(--navy);color:#fff;padding:4.5mm 6mm;min-height:20mm}.content-box.light{background:#fff;color:var(--text);border:.4mm solid var(--line)}.content-box p,.content-box li,.content-box strong{margin:0;font-size:16px;line-height:1.9}.content-box ul,.content-box ol{margin:0;padding:0 5mm 0 0}.content-box li+li{margin-top:1.2mm}.stem-grid{display:grid;grid-template-columns:1fr 1fr;gap:5mm}.stem-panel{border:.4mm solid var(--line);border-radius:4mm;overflow:hidden;background:#fff}.stem-panel h3{margin:0;padding:3.5mm 5mm;background:var(--navy);color:#fff;font-size:16px;line-height:1.4}.stem-panel p{margin:0;padding:4.5mm 5mm 5mm;font-size:15px;line-height:1.85;min-height:29mm}.tools-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:4mm}.tool-item{text-align:center;padding:4mm;border:.4mm solid var(--line);border-radius:3mm;background:linear-gradient(180deg,#f8fbfd,#edf3f7);min-height:20mm;display:flex;align-items:center;justify-content:center}.tool-item span{font-size:15px;font-weight:700;color:var(--navy)}.worksheet-box{min-height:122mm;border:.5mm solid #6c7e8f;background:#fff;padding:8mm}.worksheet-box h3{margin:0 0 5mm;text-align:center;font-size:20px}.worksheet-box p{margin:0 0 3mm;font-size:15px;line-height:1.85}.rubric{width:100%;border-collapse:collapse}.rubric th,.rubric td{border:.4mm solid #8ea0b1;padding:3.2mm;text-align:right;vertical-align:top;font-size:14px;line-height:1.7}.rubric thead th{background:var(--navy);color:#fff}.page-number{position:absolute;right:12mm;bottom:6mm;width:8mm;height:8mm;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}.print-credit{margin-top:8mm;padding-top:4mm;border-top:.4mm solid #c9d4de;text-align:center;font-size:17px;font-weight:700;color:var(--navy)}.section-title{margin:0 0 5mm;padding:3.4mm 5mm;border-radius:3mm;background:var(--navy);color:#fff;font-size:18px;font-weight:800}.section-card{border:.4mm solid var(--line);border-radius:4mm;background:#fff;padding:5mm;margin-bottom:5mm}.section-card h3{margin:0 0 3mm;color:var(--navy);font-size:17px}.section-card p,.section-card li{font-size:14.5px;line-height:1.75;margin:0}.section-card ul,.section-card ol{margin:0;padding:0 5mm 0 0}.chips{display:flex;flex-wrap:wrap;gap:2.5mm}.chip{padding:2.5mm 4mm;border:.35mm solid var(--line);border-radius:99px;background:#f6fafc;font-size:13.5px;font-weight:700;color:var(--navy)}.compact-grid{display:grid;grid-template-columns:1fr 1fr;gap:4mm}.compact-table{width:100%;border-collapse:collapse;table-layout:fixed}.compact-table th,.compact-table td{border:.35mm solid #94a7b8;padding:2.7mm;vertical-align:top;text-align:right;font-size:12.5px;line-height:1.55}.compact-table th{background:var(--navy);color:#fff}.compact-table .time-col{width:18mm}.compact-table .stage-col{width:27mm}.worksheet-page .worksheet-box{min-height:190mm}.worksheet-meta{display:grid;grid-template-columns:repeat(4,1fr);gap:3mm;margin-bottom:5mm}.worksheet-meta div{border:.35mm solid var(--line);border-radius:3mm;padding:3mm;text-align:center;background:#f7fafc;font-size:13px;line-height:1.45}.worksheet-prompt{white-space:pre-line;font-size:15px;line-height:1.9}.answer-lines{margin-top:6mm;background:repeating-linear-gradient(to bottom,transparent 0 9mm,#cdd8e1 9mm 9.35mm);min-height:105mm}.note-box{border-right:2mm solid var(--blue);background:#f6fafc;padding:4mm 5mm;margin-bottom:4mm;border-radius:2mm;font-size:14px;line-height:1.75}.safety-box{border:.4mm solid #e0a33a;background:#fffaf0;padding:4mm 5mm;border-radius:3mm;font-size:14px;line-height:1.75}.project-box{border:.5mm solid var(--navy);border-radius:4mm;padding:6mm;background:#fbfdff}.small-text{font-size:13px!important;line-height:1.6!important}@page{size:A4;margin:0}@media print{body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}.toolbar{display:none}.document{width:auto;margin:0;padding:0}.sheet{width:210mm;min-height:297mm;margin:0;box-shadow:none;overflow:hidden;break-after:page;page-break-after:always}}`;
+}
+
+function buildMagnetStyleLessonSheets(lesson, unit, grade) {
+  const unitNumber = unit.number || '';
+  const unitTitle = unit.name || unit.title || '';
+  const gradeName = (grade && grade.name) || 'الصف الثالث الابتدائي';
+  const stem = lesson.stem || {};
+  const act = lesson.stemActivity || {};
+  const escList = (arr) => (arr || []).map(x => `<li>${x}</li>`).join('');
+  const chips = (arr) => (arr || []).map(x => `<span class="chip">${x}</span>`).join('');
+  const concepts = (lesson.concepts || []).map(c => `<li><strong>${c.term || c}:</strong> ${c.definition || ''}</li>`).join('');
+  const activities = (lesson.accompanyingActivities || []).map((a,i) => `
+    <tr><td>${i+1}</td><td>${a.name || ''}</td><td>${a.type || ''}</td><td>${a.source || ''}</td></tr>
+  `).join('');
+  const flowRows = (lesson.lessonFlow || []).map(x => `
+    <tr><td>${x.stage || ''}</td><td>${x.teacherRole || ''}</td><td>${x.studentRole || ''}</td><td>${x.time || ''}</td></tr>
+  `).join('');
+  const rubricRows = (lesson.rubric || []).map(r => `
+    <tr><td>${r.criterion || ''}</td><td>${r.excellent || ''}</td><td>${r.good || ''}</td><td>${r.needsSupport || ''}</td></tr>
+  `).join('');
+  const pageHead = (title) => `<div class="top-strip"><div class="cap"></div><div class="title-bar">${title}</div><div class="cap"></div></div>`;
+  const pageNum = (n) => `<div class="page-number">${n}</div>`;
+  const worksheets = (lesson.worksheets || []).map((w,idx) => `
+    <section class="sheet worksheet-page"><div class="sheet-inner">
+      ${pageHead(w.title || `ورقة عمل (${idx+1})`)}
+      <div class="worksheet-meta">
+        <div><strong>رقم النشاط</strong><br>${w.number || idx+1}</div>
+        <div><strong>الزمن</strong><br>عمل ${w.workMinutes || '-'} د / مناقشة ${w.discussionMinutes || '-'} د</div>
+        <div><strong>أسلوب التنفيذ</strong><br>${w.execution || 'فردي'}</div>
+        <div><strong>هدف النشاط</strong><br>${w.objective || ''}</div>
+      </div>
+      <div class="worksheet-box">
+        <h3>${w.title || `ورقة عمل (${idx+1})`}</h3>
+        <p class="worksheet-prompt">${w.prompt || ''}</p>
+        <div class="answer-lines"></div>
+      </div>
+      ${pageNum(8+idx)}
+    </div></section>
+  `).join('');
+
+  return `
+  <section class="sheet"><div class="sheet-inner">
+    ${pageHead(lesson.title || '')}
+    <div class="hero-block">
+      <h1>اسم الدرس: ${lesson.title || ''}</h1>
+      <p>المبحث: العلوم | الصف: ${gradeName}</p>
+      <p>رقم الوحدة وعنوانها: الوحدة ${unitNumber} - ${unitTitle}</p>
+      <p>${lesson.chapter || ''} | الفصل الدراسي الأول</p>
+    </div>
+    <div class="inline-meta">
+      <div class="info-box">
+        <p>عدد الجلسات: ${lesson.sessions || 'جلستان'}</p>
+        <p>مدة الدرس: ${lesson.duration || '90 دقيقة'}</p>
+      </div>
+      <div class="info-box">
+        <p>مصادر التعلم: ${lesson.resources || ''}</p>
+        <p>مرجع الكتاب: ${lesson.bookPages || ''}</p>
+      </div>
+    </div>
+    <div class="two-col"><div class="label-box">الوسائل التعليمية</div><div class="content-box light"><p>${lesson.teachingAids || ''}</p></div></div>
+    <div class="two-col"><div class="label-box">الأهداف التعليمية</div><div class="content-box"><ul>${escList(lesson.objectives)}</ul></div></div>
+    <div class="two-col"><div class="label-box">ملخص الدرس</div><div class="content-box light"><p>${lesson.summary || ''}</p></div></div>
+    ${pageNum(1)}
+  </div></section>
+
+  <section class="sheet"><div class="sheet-inner">
+    ${pageHead('تكامل العلوم والتقنية والهندسة والرياضيات STEM')}
+    <div class="stem-grid">
+      <div class="stem-panel"><h3>Science | العلوم</h3><p>${stem.science || ''}</p></div>
+      <div class="stem-panel"><h3>Technology | التقنية</h3><p>${stem.technology || ''}</p></div>
+      <div class="stem-panel"><h3>Engineering | الهندسة</h3><p>${stem.engineering || ''}</p></div>
+      <div class="stem-panel"><h3>Mathematics | الرياضيات</h3><p>${stem.mathematics || ''}</p></div>
+    </div>
+    <div class="section-title" style="margin-top:7mm">المحتوى العلمي والمفاهيم</div>
+    <div class="section-card"><p>${lesson.content || lesson.summary || ''}</p></div>
+    <div class="section-card"><h3>المفاهيم والمفردات</h3><ul>${concepts}</ul></div>
+    <div class="section-card"><h3>الأفكار الرئيسة للدرس</h3><ul>${escList(lesson.mainIdeas)}</ul></div>
+    ${pageNum(2)}
+  </div></section>
+
+  <section class="sheet"><div class="sheet-inner">
+    ${pageHead('عادات العقل ومهارات القرن الحادي والعشرين')}
+    <div class="compact-grid">
+      <div class="section-card"><h3>عادات العقل</h3><ul>${escList(lesson.habitsOfMind)}</ul></div>
+      <div class="section-card"><h3>مهارات القرن الحادي والعشرين</h3><ul>${escList(lesson.skills21)}</ul></div>
+    </div>
+    <div class="section-card"><h3>توجيه الأسئلة</h3><ul>${escList(lesson.guidingQuestions)}</ul></div>
+    <div class="section-card"><h3>المفردات</h3><div class="chips">${chips(lesson.vocabulary)}</div></div>
+    <div class="section-card"><h3>معالجة المفاهيم الشائعة (غير الصحيحة) عند الطلبة</h3><ul>${escList(lesson.misconceptions)}</ul></div>
+    ${pageNum(3)}
+  </div></section>
+
+  <section class="sheet"><div class="sheet-inner">
+    ${pageHead('الفروق الفردية والتعلم السابق')}
+    <div class="section-card"><h3>الفروق الفردية</h3><ol>${escList(lesson.differentiation)}</ol></div>
+    <div class="section-card"><h3>تقويم ومناقشة التعلم السابق</h3><ul>${escList(lesson.priorLearning)}</ul></div>
+    <div class="section-card"><h3>الإجراءات | التمهيد</h3><p>${lesson.introduction || ''}</p></div>
+    <div class="section-card"><h3>خطوات التدريس والإجراءات</h3><ol>${escList(lesson.teachingSteps)}</ol></div>
+    <div class="safety-box"><strong>السلامة:</strong> ${act.safety || lesson.teacherNotes || 'اتباع تعليمات السلامة الصفية.'}</div>
+    ${pageNum(4)}
+  </div></section>
+
+  <section class="sheet"><div class="sheet-inner">
+    ${pageHead('التوسع والإثراء والأنشطة المرافقة')}
+    <div class="section-card"><h3>التوسع والإثراء</h3><p>${lesson.extension || ''}</p></div>
+    <div class="section-title">الأنشطة المرافقة للدرس</div>
+    <table class="compact-table">
+      <thead><tr><th style="width:14mm">#</th><th>النشاط</th><th>نوع النشاط</th><th>المصدر/المرجع</th></tr></thead>
+      <tbody>${activities}</tbody>
+    </table>
+    <div class="section-card" style="margin-top:6mm"><h3>تطبيقات حياتية</h3><ul>${escList(lesson.realLifeApplications)}</ul></div>
+    <div class="section-card"><h3>أسئلة امتداد</h3><ul>${escList((lesson.guidingQuestions || []).slice(-3))}</ul></div>
+    ${pageNum(5)}
+  </div></section>
+
+  <section class="sheet"><div class="sheet-inner">
+    ${pageHead('خطة تنفيذ الدرس: دور المعلم والطالب والزمن')}
+    <table class="compact-table">
+      <thead><tr><th class="stage-col">أجزاء الدرس</th><th>دور المعلم</th><th>دور الطالب</th><th class="time-col">الزمن</th></tr></thead>
+      <tbody>${flowRows}</tbody>
+    </table>
+    <div class="compact-grid" style="margin-top:5mm">
+      <div class="section-card"><h3>النتائج وتحليلها</h3><ul>${escList(lesson.resultsAnalysis)}</ul></div>
+      <div class="section-card"><h3>التقويم</h3><ul>${escList(lesson.assessmentQuestions)}</ul></div>
+    </div>
+    ${pageNum(6)}
+  </div></section>
+
+  <section class="sheet"><div class="sheet-inner">
+    ${pageHead('النشاط العملي / الاستقصائي STEM')}
+    <div class="hero-block">
+      <h1>${act.title || lesson.activityName || 'النشاط العملي'}</h1>
+      <p>الزمن: ${act.time || '25 دقيقة'} | أسلوب التنفيذ: مجموعات صغيرة</p>
+      <p>هدف النشاط: ${act.expectedOutcome || lesson.activityDescription || ''}</p>
+    </div>
+    <div class="two-col"><div class="label-box">الأدوات والمواد</div><div class="content-box light"><ul>${escList(act.materials || lesson.activityTools)}</ul></div></div>
+    <div class="two-col"><div class="label-box">الخطوات</div><div class="content-box light"><ol>${escList(act.steps || lesson.activitySteps)}</ol></div></div>
+    <div class="two-col"><div class="label-box">أسئلة التفكير</div><div class="content-box light"><ul>${escList(act.thinkingQuestions)}</ul></div></div>
+    <div class="two-col"><div class="label-box">النتيجة المتوقعة</div><div class="content-box"><p>${act.expectedOutcome || ''}</p></div></div>
+    <div class="safety-box"><strong>قواعد السلامة:</strong> ${act.safety || 'اتباع تعليمات المعلم.'}</div>
+    ${pageNum(7)}
+  </div></section>
+
+  ${worksheets}
+
+  <section class="sheet"><div class="sheet-inner">
+    ${pageHead((lesson.projectSheet && lesson.projectSheet.title) || 'المشروع التطبيقي')}
+    <div class="project-box">
+      <div class="worksheet-meta">
+        <div><strong>الزمن</strong><br>عمل ${(lesson.projectSheet||{}).workMinutes || 20} د</div>
+        <div><strong>العرض والمناقشة</strong><br>${(lesson.projectSheet||{}).discussionMinutes || 10} د</div>
+        <div><strong>أسلوب التنفيذ</strong><br>${(lesson.projectSheet||{}).execution || 'مجموعات صغيرة'}</div>
+        <div><strong>هدف المشروع</strong><br>${(lesson.projectSheet||{}).objective || ''}</div>
+      </div>
+      <h3>${(lesson.projectSheet||{}).title || ''}</h3>
+      <p class="worksheet-prompt">${(lesson.projectSheet||{}).prompt || ''}</p>
+      <div class="answer-lines" style="min-height:90mm"></div>
+    </div>
+    <div class="section-card" style="margin-top:6mm"><h3>ملاحظات المعلم</h3><p>${lesson.teacherNotes || ''}</p></div>
+    ${pageNum(12)}
+  </div></section>
+
+  <section class="sheet"><div class="sheet-inner">
+    ${pageHead('سلم التقدير والتقويم الأدائي')}
+    <table class="rubric">
+      <thead><tr><th>المعيار</th><th>متميز</th><th>جيد</th><th>بحاجة إلى دعم</th></tr></thead>
+      <tbody>${rubricRows}</tbody>
+    </table>
+    <div class="section-card" style="margin-top:7mm"><h3>التقويم الختامي</h3><ul>${escList(lesson.assessmentQuestions)}</ul></div>
+    <div class="section-card"><h3>توثيق تعلم الطالب</h3><p>اسم الطالب: ____________________ &nbsp;&nbsp; الصف: __________ &nbsp;&nbsp; التاريخ: __________</p><div class="answer-lines" style="min-height:65mm"></div></div>
+    <div class="print-credit">إعداد أ. أميرة عبدالله الحكمي | نوات ستيم</div>
+    ${pageNum(13)}
+  </div></section>`;
 }
 
 function buildCloudLessonSheets(lesson, unit, grade) {
+  if (lesson && lesson.printModel === 'magnet-full') {
+    return buildMagnetStyleLessonSheets(lesson, unit, grade);
+  }
   const unitNumber = unit.number || (unit.id || '').replace('g3-unit', '').replace('g2-unit', '').replace('unit', '').replace('-s2', '');
   const unitTitle = unit.name || unit.title || '';
   const lessonTitle = lesson.title || '';

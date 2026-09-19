@@ -936,3 +936,102 @@ main{background:
     width:185px;
   }
 }
+
+
+/* ===== Inline Nawat logo: guaranteed rendering ===== */
+.play-brand{
+  display:flex!important;
+  align-items:center!important;
+  gap:10px!important;
+  min-width:230px;
+  text-decoration:none!important;
+}
+.nawat-logo-mark{
+  display:block;
+  width:58px;
+  height:58px;
+  flex:0 0 58px;
+  filter:drop-shadow(0 6px 12px rgba(4,73,116,.13));
+}
+.nawat-wordmark{
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+  line-height:1.15;
+}
+.nawat-wordmark strong{
+  color:#fff;
+  font-size:1.18rem;
+  font-weight:950;
+  white-space:nowrap;
+}
+.nawat-wordmark small{
+  margin-top:5px;
+  color:#dff6ff;
+  font-size:.59rem;
+  font-weight:700;
+  white-space:nowrap;
+}
+.hero-brand-mini{
+  display:none;
+}
+.lab-core-logo{
+  width:86px!important;
+  height:86px!important;
+  margin-bottom:7px!important;
+  overflow:visible!important;
+}
+.lab-core-logo .nawat-logo-mark{
+  width:86px;
+  height:86px;
+}
+.play-footer-brand{
+  display:flex!important;
+  align-items:center!important;
+  gap:10px!important;
+}
+.play-footer-brand .nawat-logo-mark{
+  width:56px;
+  height:56px;
+}
+.play-footer-brand .nawat-wordmark strong{
+  color:#fff;
+  font-size:1rem;
+}
+.play-footer-brand .nawat-wordmark small{
+  color:#afd8eb;
+}
+
+/* Hide legacy external-logo styling so it cannot interfere */
+.play-brand-logo,
+.play-footer-brand>img{
+  display:none!important;
+}
+
+@media(max-width:760px){
+  .play-brand{
+    min-width:0;
+    gap:8px!important;
+  }
+  .nawat-logo-mark{
+    width:49px;
+    height:49px;
+    flex-basis:49px;
+  }
+  .nawat-wordmark strong{
+    font-size:1rem;
+  }
+  .nawat-wordmark small{
+    display:none;
+  }
+}
+@media(max-width:430px){
+  .nawat-logo-mark{
+    width:44px;
+    height:44px;
+    flex-basis:44px;
+  }
+  .nawat-wordmark strong{
+    font-size:.94rem;
+  }
+}

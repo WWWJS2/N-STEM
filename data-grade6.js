@@ -5,21 +5,23 @@
 
 window.grade6Data = {
   "version": "1448-2026",
-  "source": "كتاب العلوم - الصف السادس الابتدائي - الفصل الدراسي الأول - الجزآن الأول والثاني من المقرر",
+  "source": "كتاب العلوم - الصف السادس الابتدائي - الجزآن الأول والثاني من المقرر",
   "sourceNotes": "تم اعتماد ترتيب الوحدات والفصول والدروس على قائمتي المحتويات في الجزأين الأول والثاني. صيغت الملخصات والأنشطة وأوراق العمل بما يحافظ على مفاهيم الكتاب وتسلسله، مع تطبيق نموذج نوات ستيم للطباعة الموسعة.",
   "availableSemesters": [
-    1
+    1,
+    2
   ],
   "grades": [
     {
       "id": "grade6",
       "name": "الصف السادس الابتدائي",
       "icon": "⚗️",
-      "semesterName": "الفصل الدراسي الأول",
+      "semesterName": "الفصلان الدراسيان الأول والثاني",
       "units": [
         {
           "id": "g6-unit1",
           "number": 1,
+          "semester": 1,
           "name": "تنوع الحياة",
           "icon": "🧬",
           "color": "#43A047",
@@ -2102,6 +2104,7 @@ window.grade6Data = {
         {
           "id": "g6-unit2",
           "number": 2,
+          "semester": 1,
           "name": "عمليات الحياة",
           "icon": "🌱",
           "color": "#00897B",
@@ -4211,6 +4214,7 @@ window.grade6Data = {
         {
           "id": "g6-unit3",
           "number": 3,
+          "semester": 1,
           "name": "الأنظمة البيئية ومواردها",
           "icon": "🌍",
           "color": "#7CB342",
@@ -6296,6 +6300,7 @@ window.grade6Data = {
         {
           "id": "g6-unit4",
           "number": 4,
+          "semester": 2,
           "name": "الفضاء",
           "icon": "🚀",
           "color": "#F57C00",
@@ -8372,6 +8377,7 @@ window.grade6Data = {
         {
           "id": "g6-unit5",
           "number": 5,
+          "semester": 2,
           "name": "المادة",
           "icon": "⚗️",
           "color": "#0288D1",
@@ -10496,6 +10502,7 @@ window.grade6Data = {
         {
           "id": "g6-unit6",
           "number": 6,
+          "semester": 2,
           "name": "القوى والطاقة",
           "icon": "⚡",
           "color": "#6A1B9A",

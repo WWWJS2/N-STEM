@@ -1449,9 +1449,9 @@ function renderSequencingGame(game, unit, lesson) {
             <span style="flex:1">${item.text}</span>
             <div style="display:flex;gap:4px">
               <button class="btn btn-outline" style="padding:6px 10px;min-height:36px"
-                      onclick="moveSeqUp(${idx})" aria-label="نقل للأعلى">▲</button>
+                      onclick="moveSeqItem(this, -1)" aria-label="نقل للأعلى">▲</button>
               <button class="btn btn-outline" style="padding:6px 10px;min-height:36px"
-                      onclick="moveSeqDown(${idx})" aria-label="نقل للأسفل">▼</button>
+                      onclick="moveSeqItem(this, 1)" aria-label="نقل للأسفل">▼</button>
             </div>
           </div>
         `).join('')}
@@ -1466,6 +1466,17 @@ function renderSequencingGame(game, unit, lesson) {
   `;
 
   state.game.seqItems = [...shuffled];
+}
+
+function moveSeqItem(button, direction) {
+  const item = button && button.closest ? button.closest('.sequence-item') : null;
+  const list = document.getElementById('seqList');
+  if (!item || !list) return;
+  const items = Array.from(list.querySelectorAll('.sequence-item'));
+  const idx = items.indexOf(item);
+  if (idx < 0) return;
+  if (direction < 0) moveSeqUp(idx);
+  else moveSeqDown(idx);
 }
 
 function moveSeqUp(idx) {

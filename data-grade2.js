@@ -6,18 +6,20 @@ window.grade2Data = {
   "version": "1448-2026",
   "source": "كتاب العلوم – الصف الثاني الابتدائي – الجزآن الأول والثاني من المقرر",
   "availableSemesters": [
-    1
+    1,
+    2
   ],
   "grades": [
     {
       "id": "grade2",
       "name": "الصف الثاني الابتدائي",
       "icon": "📖",
-      "semesterName": "الفصل الدراسي الأول",
+      "semesterName": "الفصلان الدراسيان الأول والثاني",
       "units": [
         {
           "id": "g2-unit1",
           "number": 1,
+          "semester": 1,
           "name": "النباتات والحيوانات",
           "icon": "🌱",
           "color": "#4CAF50",
@@ -955,6 +957,7 @@ window.grade2Data = {
         {
           "id": "g2-unit2",
           "number": 2,
+          "semester": 1,
           "name": "المواطن",
           "icon": "🏜️",
           "color": "#8D6E63",
@@ -1860,6 +1863,7 @@ window.grade2Data = {
         {
           "id": "g2-unit3",
           "number": 3,
+          "semester": 1,
           "name": "أرضنا",
           "icon": "🌍",
           "color": "#0277BD",
@@ -2798,6 +2802,7 @@ window.grade2Data = {
         {
           "id": "g2-unit4",
           "number": 4,
+          "semester": 2,
           "name": "الفضاء",
           "icon": "🚀",
           "color": "#5C6BC0",
@@ -3736,6 +3741,7 @@ window.grade2Data = {
         {
           "id": "g2-unit5",
           "number": 5,
+          "semester": 2,
           "name": "المادة",
           "icon": "🎨",
           "color": "#00838F",
@@ -4650,6 +4656,7 @@ window.grade2Data = {
         {
           "id": "g2-unit6",
           "number": 6,
+          "semester": 2,
           "name": "القوى والطاقة",
           "icon": "⚡",
           "color": "#D84315",

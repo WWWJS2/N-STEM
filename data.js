@@ -1,7 +1,7 @@
 // data.js - بيانات موقع نوات ستيم
 // المعلمة: أستاذة أميرة عبدالله الحكمي - الصف الأول الابتدائي - الفصل الأول
 
-const nawatData = {
+const nawatData = window.nawatData = {
   grades: [
     {
       id: 'grade1',

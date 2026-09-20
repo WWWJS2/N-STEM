@@ -4,20 +4,22 @@
 
 window.grade3Data = {
   "version": "1448-2026",
-  "source": "كتاب العلوم - الصف الثالث الابتدائي - الفصل الدراسي الأول - الجزآن الأول والثاني من المقرر",
+  "source": "كتاب العلوم - الصف الثالث الابتدائي - الجزآن الأول والثاني من المقرر",
   "availableSemesters": [
-    1
+    1,
+    2
   ],
   "grades": [
     {
       "id": "grade3",
       "name": "الصف الثالث الابتدائي",
       "icon": "🔬",
-      "semesterName": "الفصل الدراسي الأول",
+      "semesterName": "الفصلان الدراسيان الأول والثاني",
       "units": [
         {
           "id": "g3-unit1",
           "number": 1,
+          "semester": 1,
           "name": "المخلوقات الحية",
           "icon": "🌱",
           "color": "#43A047",
@@ -1533,6 +1535,7 @@ window.grade3Data = {
         {
           "id": "g3-unit2",
           "number": 2,
+          "semester": 1,
           "name": "النظام البيئي",
           "icon": "🌿",
           "color": "#2E7D32",
@@ -3072,6 +3075,7 @@ window.grade3Data = {
         {
           "id": "g3-unit3",
           "number": 3,
+          "semester": 1,
           "name": "الأرض ومواردها",
           "icon": "🌍",
           "color": "#8D6E63",
@@ -4589,6 +4593,7 @@ window.grade3Data = {
         {
           "id": "g3-unit4",
           "number": 4,
+          "semester": 2,
           "name": "الطقس والمناخ",
           "icon": "🌦️",
           "color": "#EF6C00",
@@ -6102,6 +6107,7 @@ window.grade3Data = {
         {
           "id": "g3-unit5",
           "number": 5,
+          "semester": 2,
           "name": "المادة",
           "icon": "🧪",
           "color": "#039BE5",
@@ -7645,6 +7651,7 @@ window.grade3Data = {
         {
           "id": "g3-unit6",
           "number": 6,
+          "semester": 2,
           "name": "الشغل والطاقة",
           "icon": "⚙️",
           "color": "#5E35B1",

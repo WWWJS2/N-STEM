@@ -5,20 +5,22 @@
 
 window.grade4Data = {
   "version": "1448-2026",
-  "source": "كتاب العلوم - الصف الرابع الابتدائي - الفصل الدراسي الأول - الجزآن الأول والثاني من المقرر",
+  "source": "كتاب العلوم - الصف الرابع الابتدائي - الجزآن الأول والثاني من المقرر",
   "availableSemesters": [
-    1
+    1,
+    2
   ],
   "grades": [
     {
       "id": "grade4",
       "name": "الصف الرابع الابتدائي",
       "icon": "🧪",
-      "semesterName": "الفصل الدراسي الأول",
+      "semesterName": "الفصلان الدراسيان الأول والثاني",
       "units": [
         {
           "id": "g4-unit1",
           "number": 1,
+          "semester": 1,
           "name": "المخلوقات الحية",
           "icon": "🌿",
           "color": "#43A047",
@@ -2598,6 +2600,7 @@ window.grade4Data = {
         {
           "id": "g4-unit2",
           "number": 2,
+          "semester": 1,
           "name": "الأنظمة البيئية",
           "icon": "🌎",
           "color": "#00897B",
@@ -4143,6 +4146,7 @@ window.grade4Data = {
         {
           "id": "g4-unit3",
           "number": 3,
+          "semester": 1,
           "name": "صحة الإنسان",
           "icon": "🫀",
           "color": "#E53935",
@@ -6192,6 +6196,7 @@ window.grade4Data = {
         {
           "id": "g4-unit4",
           "number": 4,
+          "semester": 2,
           "name": "الأرض ومواردها",
           "icon": "🪨",
           "color": "#8D6E63",
@@ -7233,6 +7238,7 @@ window.grade4Data = {
         {
           "id": "g4-unit5",
           "number": 5,
+          "semester": 2,
           "name": "الفضاء",
           "icon": "🪐",
           "color": "#3949AB",
@@ -8250,6 +8256,7 @@ window.grade4Data = {
         {
           "id": "g4-unit6",
           "number": 6,
+          "semester": 2,
           "name": "المادة",
           "icon": "🧪",
           "color": "#039BE5",
@@ -9795,6 +9802,7 @@ window.grade4Data = {
         {
           "id": "g4-unit7",
           "number": 7,
+          "semester": 2,
           "name": "القوى والطاقة",
           "icon": "⚡",
           "color": "#6D4C41",

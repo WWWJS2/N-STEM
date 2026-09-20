@@ -5,21 +5,23 @@
 
 window.grade5Data = {
   "version": "1448-2026",
-  "source": "كتاب العلوم - الصف الخامس الابتدائي - الفصل الدراسي الأول - الجزآن الأول والثاني من المقرر",
+  "source": "كتاب العلوم - الصف الخامس الابتدائي - الجزآن الأول والثاني من المقرر",
   "sourceNotes": "تم اعتماد ترتيب الوحدات والفصول والدروس على قائمتي المحتويات في الجزأين الأول والثاني. المحتوى ملخص ومُعاد الصياغة، وأوراق العمل والمشروعات من إعداد نوات ستيم.",
   "availableSemesters": [
-    1
+    1,
+    2
   ],
   "grades": [
     {
       "id": "grade5",
       "name": "الصف الخامس الابتدائي",
       "icon": "🔬",
-      "semesterName": "الفصل الدراسي الأول",
+      "semesterName": "الفصلان الدراسيان الأول والثاني",
       "units": [
         {
           "id": "g5-unit1",
           "number": 1,
+          "semester": 1,
           "name": "تنوع الحياة",
           "icon": "🧬",
           "color": "#43A047",
@@ -2108,6 +2110,7 @@ window.grade5Data = {
         {
           "id": "g5-unit2",
           "number": 2,
+          "semester": 1,
           "name": "الأنظمة البيئية",
           "icon": "🌿",
           "color": "#00897B",
@@ -4217,6 +4220,7 @@ window.grade5Data = {
         {
           "id": "g5-unit3",
           "number": 3,
+          "semester": 1,
           "name": "الأرض ومواردها",
           "icon": "🌍",
           "color": "#8D6E63",
@@ -6311,6 +6315,7 @@ window.grade5Data = {
         {
           "id": "g5-unit4",
           "number": 4,
+          "semester": 2,
           "name": "الطقس",
           "icon": "🌦️",
           "color": "#F57C00",
@@ -8402,6 +8407,7 @@ window.grade5Data = {
         {
           "id": "g5-unit5",
           "number": 5,
+          "semester": 2,
           "name": "المادة",
           "icon": "⚛️",
           "color": "#0288D1",
@@ -10514,6 +10520,7 @@ window.grade5Data = {
         {
           "id": "g5-unit6",
           "number": 6,
+          "semester": 2,
           "name": "القوى والطاقة",
           "icon": "⚙️",
           "color": "#6A1B9A",

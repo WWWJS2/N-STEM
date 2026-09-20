@@ -750,7 +750,7 @@ function _getGradeData(grade, semesterNum) {
 function _normalizeSem2Grade(sem2Grade) {
   const normalizedUnits = (sem2Grade.units || []).map((unit, idx) => ({
     id: unit.id,
-    number: unit.number || idx + 1,
+    number: unit.number || idx + 4,
     name: unit.title || unit.name,
     icon: unit.icon || '📗',
     color: unit.color || '#4CAF50',

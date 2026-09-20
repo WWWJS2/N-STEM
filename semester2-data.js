@@ -12,7 +12,7 @@ window.semester2Data = {
         },
         {
           id: "unit5-s2",
-          title: "المادة من حولنا",
+          title: "المادة",
           lessons: ["s2-lesson-matter1", "s2-lesson-matter2", "s2-lesson-matter3", "s2-lesson7", "s2-lesson8"]
         },
         {

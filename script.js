@@ -299,7 +299,7 @@ function buildMagnetStyleLessonSheets(lesson, unit, grade) {
   const unitTitle = unit.name || unit.title || '';
   const gradeName = (grade && grade.name) || 'الصف الثالث الابتدائي';
   const semesterNumber = Number((lesson && lesson.semester) || state.currentSemester || 1);
-  const semesterName = semesterNumber === 2 ? 'الفصل الدراسي الثاني' : '${semesterName}';
+  const semesterName = semesterNumber === 2 ? 'الفصل الدراسي الثاني' : 'الفصل الدراسي الأول';
   const stem = lesson.stem || {};
   const act = lesson.stemActivity || {};
   const escList = (arr) => (arr || []).map(x => `<li>${x}</li>`).join('');

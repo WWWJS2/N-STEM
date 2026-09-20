@@ -143,7 +143,10 @@ function updateAppGradeChip() {
 
 function setupKeyboardNav() {
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && e.target.tagName === 'BUTTON') e.target.click();
+    if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('[role="button"]')) {
+      e.preventDefault();
+      e.target.click();
+    }
     if (e.key === 'Escape') {
       const backBtn = document.querySelector('.btn-back:not([style*="none"])');
       if (backBtn) backBtn.click();
@@ -299,7 +302,7 @@ function buildMagnetStyleLessonSheets(lesson, unit, grade) {
   const unitTitle = unit.name || unit.title || '';
   const gradeName = (grade && grade.name) || 'الصف الثالث الابتدائي';
   const semesterNumber = Number((lesson && lesson.semester) || state.currentSemester || 1);
-  const semesterName = semesterNumber === 2 ? 'الفصل الدراسي الثاني' : '${semesterName}';
+  const semesterName = semesterNumber === 2 ? 'الفصل الدراسي الثاني' : 'الفصل الدراسي الأول';
   const stem = lesson.stem || {};
   const act = lesson.stemActivity || {};
   const escList = (arr) => (arr || []).map(x => `<li>${x}</li>`).join('');
@@ -632,8 +635,8 @@ function renderLessonsSection() {
     <div class="cards-grid grade-selection-grid">
       ${grades.map((grade, idx) => {
         const isSelected = grade.id === state.selectedGradeId;
-        const unitsCount = (grade.units || []).length;
         const gradeLessons = getAllLessonsFlat(grade.id);
+        const unitsCount = new Set(gradeLessons.map(({ unit }) => unit && unit.id).filter(Boolean)).size;
         const lessonsCount = gradeLessons.length;
         const completed = gradeLessons.filter(({lesson}) => scores[lesson.id] !== undefined).length;
         const progress = lessonsCount ? Math.round((completed / lessonsCount) * 100) : 0;
@@ -1449,9 +1452,9 @@ function renderSequencingGame(game, unit, lesson) {
             <span style="flex:1">${item.text}</span>
             <div style="display:flex;gap:4px">
               <button class="btn btn-outline" style="padding:6px 10px;min-height:36px"
-                      onclick="moveSeqUp(${idx})" aria-label="نقل للأعلى">▲</button>
+                      onclick="moveSeqItem(this, -1)" aria-label="نقل للأعلى">▲</button>
               <button class="btn btn-outline" style="padding:6px 10px;min-height:36px"
-                      onclick="moveSeqDown(${idx})" aria-label="نقل للأسفل">▼</button>
+                      onclick="moveSeqItem(this, 1)" aria-label="نقل للأسفل">▼</button>
             </div>
           </div>
         `).join('')}
@@ -1466,6 +1469,17 @@ function renderSequencingGame(game, unit, lesson) {
   `;
 
   state.game.seqItems = [...shuffled];
+}
+
+function moveSeqItem(button, direction) {
+  const item = button && button.closest ? button.closest('.sequence-item') : null;
+  const list = document.getElementById('seqList');
+  if (!item || !list) return;
+  const items = Array.from(list.querySelectorAll('.sequence-item'));
+  const idx = items.indexOf(item);
+  if (idx < 0) return;
+  if (direction < 0) moveSeqUp(idx);
+  else moveSeqDown(idx);
 }
 
 function moveSeqUp(idx) {

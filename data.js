@@ -1,7 +1,7 @@
 // data.js - بيانات موقع نوات ستيم
 // المعلمة: أستاذة أميرة عبدالله الحكمي - الصف الأول الابتدائي - الفصل الأول
 
-const nawatData = {
+const nawatData = window.nawatData = {
   grades: [
     {
       id: 'grade1',
@@ -79,7 +79,23 @@ const nawatData = {
                   "explanation": "التكاثر هو إنتاج صغار من النوع نفسه."
                 }
               ],
-              game: { type: 'sorting', title: 'صنّف المخلوقات!', instructions: '', items: [], categories: [] },
+              game: {
+                type: 'sorting',
+                title: 'صنّف المخلوقات!',
+                instructions: 'اسحب كل صورة أو اسم إلى الفئة المناسبة: مخلوق حي أو شيء غير حي.',
+                categories: [
+                  { id: 'living', name: 'مخلوق حي', color: '#2E7D32' },
+                  { id: 'nonliving', name: 'شيء غير حي', color: '#607D8B' }
+                ],
+                items: [
+                  { id: 'tree', text: 'شجرة', category: 'living' },
+                  { id: 'cat', text: 'قطة', category: 'living' },
+                  { id: 'bird', text: 'عصفور', category: 'living' },
+                  { id: 'rock', text: 'حجر', category: 'nonliving' },
+                  { id: 'chair', text: 'كرسي', category: 'nonliving' },
+                  { id: 'pencil', text: 'قلم', category: 'nonliving' }
+                ]
+              },
               sessions: '2',
               duration: '45 دقيقة',
               resources: 'كتاب الطالب ص 14-19، بطاقات تصنيف وصور لمخلوقات حية وغير حية',
@@ -199,7 +215,17 @@ const nawatData = {
                   "explanation": "الأزهار تساعد النبات على إنتاج البذور."
                 }
               ],
-              game: { type: 'matching', title: 'طابق جزء النبات بوظيفته!', instructions: '', pairs: [] },
+              game: {
+                type: 'matching',
+                title: 'طابق جزء النبات بوظيفته!',
+                instructions: 'اختر جزء النبات ثم اختر الوظيفة المناسبة له.',
+                pairs: [
+                  { id: 0, term: 'الجذور', definition: 'تثبت النبات وتمتص الماء' },
+                  { id: 1, term: 'الساق', definition: 'يدعم النبات ويساعد على نقل الماء والمواد' },
+                  { id: 2, term: 'الأوراق', definition: 'تصنع الغذاء مستفيدة من الضوء والماء والهواء' },
+                  { id: 3, term: 'الأزهار', definition: 'تساعد النباتات الزهرية على تكوين البذور' }
+                ]
+              },
               sessions: '2',
               duration: '45 دقيقة',
               resources: 'كتاب الطالب ص 20-25، نبتة حقيقية أو صورة مكبرة لأجزاء النبات',
@@ -322,7 +348,24 @@ const nawatData = {
                   "explanation": "لكل حيوان صفات تساعده على العيش في بيئته."
                 }
               ],
-              game: { type: 'sorting', title: 'صنّف الحيوانات!', instructions: '', items: [], categories: [] },
+              game: {
+                type: 'sorting',
+                title: 'صنّف الحيوانات!',
+                instructions: 'صنّف الحيوانات حسب غطاء الجسم الأكثر وضوحاً.',
+                categories: [
+                  { id: 'fur', name: 'فرو أو شعر', color: '#8D6E63' },
+                  { id: 'feathers', name: 'ريش', color: '#1976D2' },
+                  { id: 'scales', name: 'حراشف', color: '#388E3C' }
+                ],
+                items: [
+                  { id: 'cat', text: 'قطة', category: 'fur' },
+                  { id: 'rabbit', text: 'أرنب', category: 'fur' },
+                  { id: 'pigeon', text: 'حمامة', category: 'feathers' },
+                  { id: 'sparrow', text: 'عصفور', category: 'feathers' },
+                  { id: 'fish', text: 'سمكة', category: 'scales' },
+                  { id: 'lizard', text: 'سحلية', category: 'scales' }
+                ]
+              },
               sessions: '2',
               duration: '45 دقيقة',
               resources: 'كتاب الطالب ص 48-55، بطاقات صور لحيوانات مختلفة',

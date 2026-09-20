@@ -143,7 +143,10 @@ function updateAppGradeChip() {
 
 function setupKeyboardNav() {
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && e.target.tagName === 'BUTTON') e.target.click();
+    if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('[role="button"]')) {
+      e.preventDefault();
+      e.target.click();
+    }
     if (e.key === 'Escape') {
       const backBtn = document.querySelector('.btn-back:not([style*="none"])');
       if (backBtn) backBtn.click();

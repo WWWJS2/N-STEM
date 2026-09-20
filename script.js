@@ -632,8 +632,8 @@ function renderLessonsSection() {
     <div class="cards-grid grade-selection-grid">
       ${grades.map((grade, idx) => {
         const isSelected = grade.id === state.selectedGradeId;
-        const unitsCount = (grade.units || []).length;
         const gradeLessons = getAllLessonsFlat(grade.id);
+        const unitsCount = new Set(gradeLessons.map(({ unit }) => unit && unit.id).filter(Boolean)).size;
         const lessonsCount = gradeLessons.length;
         const completed = gradeLessons.filter(({lesson}) => scores[lesson.id] !== undefined).length;
         const progress = lessonsCount ? Math.round((completed / lessonsCount) * 100) : 0;

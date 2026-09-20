@@ -9802,6 +9802,7 @@ window.grade4Data = {
         {
           "id": "g4-unit7",
           "number": 7,
+          "semester": 2,
           "name": "القوى والطاقة",
           "icon": "⚡",
           "color": "#6D4C41",

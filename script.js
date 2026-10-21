@@ -925,6 +925,107 @@ function startGameFromLesson(lessonId) {
   setTimeout(() => startGame(lessonId), 100);
 }
 
+
+const SECOND_SEMESTER_FUN_LIBRARY = {
+  "s2p1-living": {
+    pairs:[["🌳","مخلوق حي"],["🐦","مخلوق حي"],["🪨","شيء غير حي"],["🪑","شيء غير حي"]],
+    mission:{type:"sort",categories:["حي","غير حي"],items:[["🌳","شجرة","حي"],["🐈","قطة","حي"],["🪨","صخرة","غير حي"],["✏️","قلم","غير حي"],["🌷","زهرة","حي"],["🚲","دراجة","غير حي"]]}
+  },
+  "s2p1-plantparts": {
+    pairs:[["🌱","الجذور"],["🌿","الساق"],["🍃","الأوراق"],["🌸","الزهرة"],["🍎","الثمرة"]],
+    mission:{type:"sequence",title:"ابنِ نباتك من أسفل إلى أعلى",items:[["🌱","الجذور"],["🌿","الساق"],["🍃","الأوراق"],["🌸","الزهرة"]]}
+  },
+  "s2p1-growth": {
+    pairs:[["🫘","بذرة"],["🌱","بذرة نامية"],["🌿","بادرة"],["🌳","نبات بالغ"]],
+    mission:{type:"sequence",title:"رتّب دورة نمو النبات",items:[["🫘","بذرة"],["🌱","إنبات"],["🌿","بادرة"],["🌳","نبات بالغ"]]}
+  },
+  "s2p1-plantplaces": {
+    pairs:[["🌵","نبات الصحراء"],["🏜️","الصحراء"],["🌳","نبات الغابة"],["🌧️","مكان رطب"]],
+    mission:{type:"sort",categories:["الصحراء","الغابة/الرطوبة"],items:[["🌵","صبار","الصحراء"],["🏜️","جو جاف","الصحراء"],["🌳","أشجار كثيرة","الغابة/الرطوبة"],["🌧️","رطوبة أعلى","الغابة/الرطوبة"]]}
+  },
+  "s2p1-animaltypes": {
+    pairs:[["🐇","ثدييات"],["🐦","طيور"],["🐢","زواحف"],["🐸","برمائيات"],["🐟","أسماك"],["🐜","حشرات"]],
+    mission:{type:"sort",categories:["ثدييات","طيور","زواحف","برمائيات","أسماك","حشرات"],items:[["🐇","أرنب","ثدييات"],["🐦","عصفور","طيور"],["🐢","سلحفاة","زواحف"],["🐸","ضفدع","برمائيات"],["🐟","سمكة","أسماك"],["🐜","نملة","حشرات"]]}
+  },
+  "s2p1-animalneeds": {
+    pairs:[["💧","ماء"],["🍎","غذاء"],["🌬️","هواء"],["🏠","مأوى"],["🐟","خياشيم"]],
+    mission:{type:"sort",categories:["حاجة للحياة","جزء يساعد الحيوان"],items:[["💧","الماء","حاجة للحياة"],["🍎","الغذاء","حاجة للحياة"],["🏠","المأوى","حاجة للحياة"],["🐟","الخياشيم","جزء يساعد الحيوان"],["🦷","الأسنان","جزء يساعد الحيوان"]]}
+  },
+  "s2p1-landhabitats": {
+    pairs:[["🏜️","الصحراء"],["🌾","منطقة عشبية"],["🌳","الغابة"],["🐪","حيوان صحراوي"]],
+    mission:{type:"sort",categories:["الصحراء","المنطقة العشبية","الغابة"],items:[["🐪","جمل","الصحراء"],["🌵","صبار","الصحراء"],["🦌","غزال","المنطقة العشبية"],["🌾","أعشاب","المنطقة العشبية"],["🌳","أشجار كثيفة","الغابة"],["🐒","حيوان بين الأشجار","الغابة"]]}
+  },
+  "s2p1-waterhabitats": {
+    pairs:[["🏞️","بحيرة"],["🌊","محيط"],["🐟","سمكة"],["🪸","مخلوقات بحرية"]],
+    mission:{type:"sort",categories:["بحيرة","محيط"],items:[["🏞️","ماء تحيط به اليابسة","بحيرة"],["🐟","سمكة مياه داخلية","بحيرة"],["🌊","ماء واسع مالح","محيط"],["🪸","شعاب بحرية","محيط"]]}
+  },
+  "s2p1-earthresources": {
+    pairs:[["💧","الماء"],["🌬️","الهواء"],["🪨","الصخور"],["🌱","النباتات"],["🐑","الحيوانات"],["🌍","التربة"]],
+    mission:{type:"sort",categories:["مورد من الأرض","شيء مصنوع"],items:[["💧","الماء","مورد من الأرض"],["🪨","صخر","مورد من الأرض"],["🌱","نبات","مورد من الأرض"],["🧸","لعبة","شيء مصنوع"],["📱","هاتف","شيء مصنوع"],["🥤","كوب بلاستيكي","شيء مصنوع"]]}
+  },
+  "s2p1-resourceuse": {
+    pairs:[["💧","ماء نظيف"],["🌬️","هواء نظيف"],["🗑️","تلوث"],["🚯","حماية البيئة"]],
+    mission:{type:"sort",categories:["يحافظ","يلوّث"],items:[["🚰","إغلاق الصنبور","يحافظ"],["🧹","تنظيف المكان","يحافظ"],["🗑️","رمي النفايات في الماء","يلوّث"],["🏭","دخان كثيف","يلوّث"]]}
+  },
+  "s2p1-conservation": {
+    pairs:[["♻️","تدوير"],["🔁","إعادة استخدام"],["🚰","ترشيد الماء"],["💡","ترشيد الكهرباء"]],
+    mission:{type:"sort",categories:["إعادة استخدام","ترشيد","تدوير"],items:[["🖍️","علبة قديمة تصبح حافظة أقلام","إعادة استخدام"],["🚰","إغلاق الصنبور","ترشيد"],["💡","إطفاء الضوء غير الضروري","ترشيد"],["♻️","تحويل الورق المستعمل إلى ورق جديد","تدوير"]]}
+  },
+  "s2-lesson-weather1": {
+    pairs:[["☀️","مشمس"],["☁️","غائم"],["🌧️","ممطر"],["💨","عاصف"],["🌡️","درجة الحرارة"]],
+    mission:{type:"sort",categories:["طقس مناسب للمظلة","طقس مناسب لقبعة الشمس"],items:[["🌧️","مطر","طقس مناسب للمظلة"],["☔","مظلة","طقس مناسب للمظلة"],["☀️","شمس","طقس مناسب لقبعة الشمس"],["🧢","قبعة شمس","طقس مناسب لقبعة الشمس"]]}
+  },
+  "s2-lesson-weather2": {
+    pairs:[["🌸","الربيع"],["☀️","الصيف"],["🍂","الخريف"],["❄️","الشتاء"]],
+    mission:{type:"sequence",title:"رتّب الفصول",items:[["🌸","الربيع"],["☀️","الصيف"],["🍂","الخريف"],["❄️","الشتاء"]]}
+  },
+  "s2-lesson-matter1": {
+    pairs:[["🪨","صلب"],["🧽","لين"],["🧶","ناعم"],["🧱","خشن"]],
+    mission:{type:"sort",categories:["صلب","لين"],items:[["🪨","حجر","صلب"],["🧱","طوبة","صلب"],["🧽","إسفنجة","لين"],["🧸","لعبة قماشية","لين"]]}
+  },
+  "s2-lesson-matter2": {
+    pairs:[["📘","كتاب صلب"],["🪑","كرسي صلب"],["🧱","طوبة صلبة"],["⚽","كرة جسم صلب"]],
+    mission:{type:"sort",categories:["مادة صلبة","ليست مادة صلبة في هذا المثال"],items:[["📘","كتاب","مادة صلبة"],["🪑","كرسي","مادة صلبة"],["💧","ماء","ليست مادة صلبة في هذا المثال"],["💨","هواء","ليست مادة صلبة في هذا المثال"]]}
+  },
+  "s2-lesson-matter3": {
+    pairs:[["💧","سائل"],["🥛","سائل"],["💨","غاز"],["🎈","غاز يملأ البالون"]],
+    mission:{type:"sort",categories:["سائل","غاز"],items:[["💧","ماء","سائل"],["🥛","حليب","سائل"],["💨","هواء","غاز"],["🎈","هواء داخل بالون","غاز"]]}
+  },
+  "s2-lesson7": {
+    pairs:[["🧊","ثلج"],["💧","ماء بعد الانصهار"],["📄","ورقة"],["✂️","ورقة مقصوصة"]],
+    mission:{type:"sequence",title:"رتّب تغير الثلج",items:[["🧊","مكعب ثلج"],["☀️","يتعرض للدفء"],["💧","يذوب ويصبح ماء"]]}
+  },
+  "s2-lesson8": {
+    pairs:[["🥗","مخلوط"],["🧲","مغناطيس"],["🪨","حصى"],["🧺","منخل"]],
+    mission:{type:"sort",categories:["يفصل بالمغناطيس","يفصل بالمنخل"],items:[["📎","مشابك ورق مع رمل","يفصل بالمغناطيس"],["🧲","مغناطيس","يفصل بالمغناطيس"],["🪨","حصى مع رمل","يفصل بالمنخل"],["🧺","منخل","يفصل بالمنخل"]]}
+  },
+  "s2-lesson1": {
+    pairs:[["⬆️","فوق"],["⬇️","تحت"],["↔️","المسافة"],["🏃","حركة"],["🚀","سريع"]],
+    mission:{type:"sort",categories:["يتحرك","لا يتحرك الآن"],items:[["🏃","طفل يجري","يتحرك"],["🚗","سيارة تسير","يتحرك"],["🪑","كرسي ثابت","لا يتحرك الآن"],["🧱","جدار","لا يتحرك الآن"]]}
+  },
+  "s2-lesson2": {
+    pairs:[["👉📦","دفع"],["🫴📦","سحب"],["🧲","قوة"],["🛑","إيقاف الحركة"]],
+    mission:{type:"sort",categories:["دفع","سحب"],items:[["👉🚪","إغلاق الباب بعيداً عنك","دفع"],["👉⚽","تحريك الكرة بقدمك","دفع"],["🫴🧳","جر حقيبة نحوك","سحب"],["🫴🚪","فتح درج نحوك","سحب"]]}
+  },
+  "s2-lesson3": {
+    pairs:[["☀️","مصدر حرارة"],["🔥","ساخن"],["🧊","بارد"],["🌡️","درجة الحرارة"]],
+    mission:{type:"sort",categories:["أدفأ","أبرد"],items:[["☀️","مكان تحت الشمس","أدفأ"],["🔥","قرب مصدر حرارة آمن","أدفأ"],["🧊","ثلج","أبرد"],["❄️","جو شديد البرودة","أبرد"]]}
+  },
+  "s2-lesson4": {
+    pairs:[["☀️","ضوء"],["💡","ضوء"],["🥁","صوت"],["🔔","صوت"],["〰️","اهتزاز"]],
+    mission:{type:"sort",categories:["مصدر ضوء","مصدر صوت"],items:[["☀️","الشمس","مصدر ضوء"],["💡","مصباح","مصدر ضوء"],["🥁","طبل","مصدر صوت"],["🔔","جرس","مصدر صوت"]]}
+  }
+};
+
+function _isSecondSemesterFunLesson(lesson) {
+  return !!(lesson && SECOND_SEMESTER_FUN_LIBRARY[lesson.id]);
+}
+
+function _funRecordKey(mode, lessonId) {
+  return `fun_${mode}_${lessonId}`;
+}
+
+
 // ============================================================
 // ===== قسم الألعاب =====
 // ============================================================
@@ -934,19 +1035,23 @@ function renderGamesSection() {
   if (!view) return;
 
   const allLessons = getAllLessonsFlat(state.selectedGradeId, state.currentSemester);
-  const playedCount = allLessons.filter(({lesson}) =>
-    scores[`game_${lesson.id}`] !== undefined ||
-    scores[`game_speed_${lesson.id}`] !== undefined ||
-    scores[`game_boss_${lesson.id}`] !== undefined
-  ).length;
+  const secondFun = Number(state.currentSemester) === 2;
+  const playedCount = allLessons.filter(({lesson}) => {
+    if (_isSecondSemesterFunLesson(lesson)) {
+      return ['picture','memory','mission'].some(mode => scores[_funRecordKey(mode, lesson.id)] !== undefined);
+    }
+    return scores[`game_${lesson.id}`] !== undefined ||
+      scores[`game_speed_${lesson.id}`] !== undefined ||
+      scores[`game_boss_${lesson.id}`] !== undefined;
+  }).length;
 
   view.innerHTML = `
     <div class="section-header section-header--rich">
       <span class="section-kicker">تعلّم باللعب</span>
-      <h2>مختبر ألعاب ستيم 🎮</h2>
-      <p>كل درس يحتوي الآن على ثلاثة تحديات: لعبة أساسية، تحدي سرعة، وتحدي البطل بالنقاط والقلوب وسلسلة الإجابات.</p>
+      <h2>${secondFun ? 'ألعاب العلوم الممتعة 🌟' : 'مختبر ألعاب ستيم 🎮'}</h2>
+      <p>${secondFun ? 'ألعاب قصيرة وبصرية مناسبة للصف الأول: اختر الصورة، اكشف بطاقات الذاكرة، ثم نفّذ مهمة الدرس.' : 'اختر لعبة مرتبطة بأحد الدروس، واجمع النقاط وأعد المحاولة لتحسين نتيجتك.'}</p>
       <div class="section-summary-pills">
-        <span><b>${allLessons.length * 3}</b> تحدياً</span>
+        <span><b>${allLessons.length * 3}</b> لعبة صغيرة</span>
         <span><b>${playedCount}</b> درساً تم اللعب فيه</span>
       </div>
     </div>
@@ -954,29 +1059,24 @@ function renderGamesSection() {
     <div id="gameContent">
       <div class="cards-grid content-cards-grid">
         ${allLessons.map(({lesson, unit, semester}) => {
-          const classic = scores[`game_${lesson.id}`];
-          const speed = scores[`game_speed_${lesson.id}`];
-          const boss = scores[`game_boss_${lesson.id}`];
-          const game = lesson.game || {};
-          const gameTypeIcon = getGameTypeIcon(game.type || '');
+          const isFun = _isSecondSemesterFunLesson(lesson);
+          const completedModes = isFun
+            ? ['picture','memory','mission'].filter(mode => scores[_funRecordKey(mode, lesson.id)] !== undefined).length
+            : [scores[`game_${lesson.id}`], scores[`game_speed_${lesson.id}`], scores[`game_boss_${lesson.id}`]].filter(v => v !== undefined).length;
           const color = unit.color || '#0e79b7';
           const semBadge = semester === 2 ? 'الفصل الثاني' : 'الفصل الأول';
-          const completedModes = [classic, speed, boss].filter(v => v !== undefined).length;
           return `
             <div class="card activity-card game-arcade-card" style="--card-color:${color}"
                  onclick="startGame('${lesson.id}')"
                  role="button" tabindex="0" aria-label="ألعاب درس: ${lesson.title}">
               <div class="card-topline">
-                <span class="card-icon activity-icon">${gameTypeIcon}</span>
+                <span class="card-icon activity-icon">${isFun ? (SECOND_SEMESTER_FUN_LIBRARY[lesson.id].pairs[0][0] || '🎮') : getGameTypeIcon((lesson.game || {}).type || '')}</span>
                 <div class="card-badge" style="background:${color}">3 ألعاب</div>
               </div>
               <h3>${lesson.title}</h3>
-              <p>${unit.name || unit.title} • لعبة أساسية + سرعة + بطل</p>
-              <div class="card-meta-line">
-                <span>${semBadge}</span>
-                <span>${completedModes ? `🏆 ${completedModes}/3 مكتملة` : 'جاهز للعب'}</span>
-              </div>
-              <div class="card-action">افتح صالة الألعاب <span aria-hidden="true">←</span></div>
+              <p>${isFun ? 'صور وذاكرة ومهمة تفاعلية' : (unit.name || unit.title)}</p>
+              <div class="card-meta-line"><span>${semBadge}</span><span>${completedModes ? `⭐ ${completedModes}/3 مكتملة` : 'لم تلعب بعد'}</span></div>
+              <div class="card-action">ابدأ اللعب <span aria-hidden="true">←</span></div>
             </div>
           `;
         }).join('')}
@@ -1026,11 +1126,17 @@ function startGame(lessonId, mode = null) {
   state.game.total = 0;
   state.game.matchSelected = null;
 
+  if (_isSecondSemesterFunLesson(lesson)) {
+    if (!mode) return renderFunGameHub(lesson, unit);
+    if (mode === 'picture') return renderPicturePickGame(lesson, unit);
+    if (mode === 'memory') return renderMemoryFlipGame(lesson, unit);
+    if (mode === 'mission') return renderFunMissionGame(lesson, unit);
+  }
+
   if (!mode) {
     renderGameHub(lesson, unit);
     return;
   }
-
   if (mode === 'speed') {
     renderAdvancedChallenge(lesson, unit, 'speed');
     return;
@@ -1043,25 +1149,13 @@ function startGame(lessonId, mode = null) {
   state.game.data = lesson.game;
   const gameType = lesson.game.type;
   switch (gameType) {
-    case 'sorting':
-      renderSortingGame(lesson.game, unit, lesson);
-      break;
-    case 'dragDrop':
-      renderDragDropGame(lesson.game, unit, lesson);
-      break;
-    case 'matching':
-      renderMatchingGame(lesson.game, unit, lesson);
-      break;
-    case 'sequencing':
-      renderSequencingGame(lesson.game, unit, lesson);
-      break;
+    case 'sorting': renderSortingGame(lesson.game, unit, lesson); break;
+    case 'dragDrop': renderDragDropGame(lesson.game, unit, lesson); break;
+    case 'matching': renderMatchingGame(lesson.game, unit, lesson); break;
+    case 'sequencing': renderSequencingGame(lesson.game, unit, lesson); break;
     case 'multiple_choice':
-    case 'multipleChoice':
-      renderMCQGame(lesson.game, unit, lesson);
-      break;
-    case 'trueFalse':
-      renderTrueFalseGame(lesson.game, unit, lesson);
-      break;
+    case 'multipleChoice': renderMCQGame(lesson.game, unit, lesson); break;
+    case 'trueFalse': renderTrueFalseGame(lesson.game, unit, lesson); break;
     default: {
       const view = document.getElementById('gameContent');
       if (view) view.innerHTML = `<div class="game-container"><p class="not-available">هذه اللعبة غير متوفرة حالياً.</p></div>`;
@@ -1069,6 +1163,300 @@ function startGame(lessonId, mode = null) {
   }
 }
 
+
+
+function renderFunGameHub(lesson, unit) {
+  const view = document.getElementById('gameContent');
+  const cfg = SECOND_SEMESTER_FUN_LIBRARY[lesson.id];
+  if (!view || !cfg) return;
+  const picture = scores[_funRecordKey('picture', lesson.id)];
+  const memory = scores[_funRecordKey('memory', lesson.id)];
+  const mission = scores[_funRecordKey('mission', lesson.id)];
+
+  view.innerHTML = `
+    <button class="btn-back" onclick="renderGamesSection()">← كل الألعاب</button>
+    <div class="kid-game-hub">
+      <div class="kid-game-title">
+        <div class="kid-hero-icon">${cfg.pairs[0][0]}</div>
+        <div>
+          <span>🎈 ألعاب درس</span>
+          <h2>${lesson.title}</h2>
+          <p>اختر لعبة قصيرة، وكلما أنهيت لعبة تحصل على نجوم.</p>
+        </div>
+      </div>
+      <div class="kid-mode-grid">
+        <button class="kid-mode-card kid-mode-picture" onclick="startGame('${lesson.id}','picture')">
+          <span class="kid-mode-emoji">👀</span>
+          <strong>شوف واختر</strong>
+          <small>شاهد الرمز واختر الكلمة الصحيحة.</small>
+          <b>${picture !== undefined ? `⭐ ${picture} نقاط` : 'ابدأ'}</b>
+        </button>
+        <button class="kid-mode-card kid-mode-memory" onclick="startGame('${lesson.id}','memory')">
+          <span class="kid-mode-emoji">🧠</span>
+          <strong>لعبة الذاكرة</strong>
+          <small>اكشف بطاقتين وابحث عن الأزواج المتطابقة.</small>
+          <b>${memory !== undefined ? `⭐ ${memory} نقاط` : 'ابدأ'}</b>
+        </button>
+        <button class="kid-mode-card kid-mode-mission" onclick="startGame('${lesson.id}','mission')">
+          <span class="kid-mode-emoji">🚀</span>
+          <strong>مهمة ستيم</strong>
+          <small>${cfg.mission.type === 'sequence' ? 'رتب المراحل بالترتيب الصحيح.' : 'صنّف البطاقات في المكان الصحيح.'}</small>
+          <b>${mission !== undefined ? `⭐ ${mission} نقاط` : 'ابدأ'}</b>
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function _saveFunScore(mode, lessonId, score) {
+  const key = _funRecordKey(mode, lessonId);
+  const prev = scores[key] || 0;
+  if (score > prev) {
+    scores[key] = score;
+    localStorage.setItem('nawat_scores', JSON.stringify(scores));
+  }
+}
+
+function renderPicturePickGame(lesson, unit) {
+  const view = document.getElementById('gameContent');
+  const cfg = SECOND_SEMESTER_FUN_LIBRARY[lesson.id];
+  const pairs = shuffleArray(cfg.pairs.map((p,idx)=>({icon:p[0],label:p[1],id:idx}))).slice(0, Math.min(5,cfg.pairs.length));
+  state.game.funPicture = {pairs,index:0,score:0};
+  view.innerHTML = `
+    <button class="btn-back" onclick="startGame('${lesson.id}')">← ألعاب الدرس</button>
+    <div class="kid-play-shell">
+      <div class="kid-progress-row"><span>👀 شوف واختر</span><span id="kidPictureProgress">1/${pairs.length}</span></div>
+      <div id="kidPictureArea"></div>
+    </div>
+  `;
+  _renderPictureRound();
+}
+
+function _renderPictureRound() {
+  const g = state.game.funPicture;
+  const lesson = state.game.lesson;
+  const cfg = SECOND_SEMESTER_FUN_LIBRARY[lesson.id];
+  if (!g || g.index >= g.pairs.length) {
+    const score = g ? g.score : 0;
+    _saveFunScore('picture', lesson.id, score);
+    return _showKidGameResult('picture', score, g ? g.pairs.length : 0);
+  }
+  const current = g.pairs[g.index];
+  const labels = Array.from(new Set([current.label, ...shuffleArray(cfg.pairs.map(p=>p[1]).filter(x=>x!==current.label))])).slice(0,4);
+  const options = shuffleArray(labels);
+  const area = document.getElementById('kidPictureArea');
+  document.getElementById('kidPictureProgress').textContent = `${g.index+1}/${g.pairs.length}`;
+  area.innerHTML = `
+    <div class="picture-round">
+      <div class="picture-prompt">ما الكلمة المناسبة؟</div>
+      <div class="picture-big-icon">${current.icon}</div>
+      <div class="picture-options">
+        ${options.map((label,i)=>`<button onclick="_answerPicturePick(${JSON.stringify(label)})">${label}</button>`).join('')}
+      </div>
+      <div id="pictureFeedback" class="kid-feedback"></div>
+    </div>
+  `;
+}
+
+function _answerPicturePick(label) {
+  const g = state.game.funPicture;
+  if (!g) return;
+  const current = g.pairs[g.index];
+  const buttons = document.querySelectorAll('.picture-options button');
+  buttons.forEach(b=>b.disabled=true);
+  const ok = label === current.label;
+  if (ok) g.score++;
+  const fb = document.getElementById('pictureFeedback');
+  fb.textContent = ok ? '🎉 ممتاز!' : `🌟 الإجابة الصحيحة: ${current.label}`;
+  fb.className = 'kid-feedback ' + (ok ? 'good' : 'try');
+  g.index++;
+  setTimeout(_renderPictureRound, 900);
+}
+
+function renderMemoryFlipGame(lesson, unit) {
+  const view = document.getElementById('gameContent');
+  const cfg = SECOND_SEMESTER_FUN_LIBRARY[lesson.id];
+  const base = cfg.pairs.slice(0, Math.min(6,cfg.pairs.length));
+  const cards = [];
+  base.forEach((p,idx)=>{
+    cards.push({pair:idx,face:p[0],kind:'icon'});
+    cards.push({pair:idx,face:p[1],kind:'label'});
+  });
+  const deck = shuffleArray(cards).map((c,idx)=>({...c,idx}));
+  state.game.funMemory = {deck,open:[],matched:new Set(),moves:0,lock:false};
+  view.innerHTML = `
+    <button class="btn-back" onclick="startGame('${lesson.id}')">← ألعاب الدرس</button>
+    <div class="kid-play-shell">
+      <div class="kid-progress-row"><span>🧠 لعبة الذاكرة</span><span id="memoryMoves">0 محاولة</span></div>
+      <div class="memory-board">
+        ${deck.map(c=>`<button class="memory-card" id="memoryCard-${c.idx}" onclick="_flipMemoryCard(${c.idx})"><span>❓</span></button>`).join('')}
+      </div>
+      <div id="memoryFeedback" class="kid-feedback"></div>
+    </div>
+  `;
+}
+
+function _flipMemoryCard(idx) {
+  const g = state.game.funMemory;
+  if (!g || g.lock || g.matched.has(idx) || g.open.includes(idx)) return;
+  const card=g.deck[idx], el=document.getElementById('memoryCard-'+idx);
+  el.classList.add('is-open');
+  el.innerHTML = `<span>${card.face}</span>`;
+  g.open.push(idx);
+  if(g.open.length<2) return;
+
+  g.moves++;
+  const movesEl=document.getElementById('memoryMoves');
+  if(movesEl) movesEl.textContent = g.moves + ' محاولة';
+  const [a,b]=g.open;
+  const ca=g.deck[a], cb=g.deck[b];
+  if(ca.pair===cb.pair && ca.kind!==cb.kind){
+    g.matched.add(a); g.matched.add(b);
+    document.getElementById('memoryCard-'+a).classList.add('is-matched');
+    document.getElementById('memoryCard-'+b).classList.add('is-matched');
+    g.open=[];
+    document.getElementById('memoryFeedback').textContent='✨ زوج صحيح!';
+    if(g.matched.size===g.deck.length){
+      const score=Math.max(1, 100 - Math.max(0,g.moves-(g.deck.length/2))*5);
+      _saveFunScore('memory', state.game.lessonId, score);
+      setTimeout(()=>_showKidGameResult('memory',score,100),700);
+    }
+  } else {
+    g.lock=true;
+    setTimeout(()=>{
+      [a,b].forEach(i=>{
+        const x=document.getElementById('memoryCard-'+i);
+        if(x && !g.matched.has(i)){x.classList.remove('is-open');x.innerHTML='<span>❓</span>';}
+      });
+      g.open=[];g.lock=false;
+    },700);
+  }
+}
+
+function renderFunMissionGame(lesson, unit) {
+  const view = document.getElementById('gameContent');
+  const cfg = SECOND_SEMESTER_FUN_LIBRARY[lesson.id];
+  const mission = cfg.mission;
+  if(mission.type==='sequence') return _renderKidSequenceMission(lesson, mission);
+
+  const items = shuffleArray(mission.items.map((x,idx)=>({idx,icon:x[0],label:x[1],category:x[2]})));
+  state.game.funMission={type:'sort',items,selected:null,done:new Set(),score:0};
+  view.innerHTML=`
+    <button class="btn-back" onclick="startGame('${lesson.id}')">← ألعاب الدرس</button>
+    <div class="kid-play-shell">
+      <div class="kid-progress-row"><span>🚀 مهمة ستيم</span><span id="missionProgress">0/${items.length}</span></div>
+      <p class="kid-mission-hint">اضغط بطاقة، ثم اضغط المكان الصحيح.</p>
+      <div class="kid-sort-items">
+        ${items.map(item=>`<button id="kidSortItem-${item.idx}" onclick="_selectKidSortItem(${item.idx})"><span>${item.icon}</span><b>${item.label}</b></button>`).join('')}
+      </div>
+      <div class="kid-sort-zones">
+        ${mission.categories.map((cat,i)=>`<button onclick="_placeKidSortItem(${JSON.stringify(cat)})"><span>${['🎯','⭐','🌟','🚀','🌈','🧩'][i]||'🎯'}</span><b>${cat}</b></button>`).join('')}
+      </div>
+      <div id="kidMissionFeedback" class="kid-feedback"></div>
+    </div>
+  `;
+}
+
+function _selectKidSortItem(idx){
+  const g=state.game.funMission;
+  if(!g || g.done.has(idx)) return;
+  g.selected=idx;
+  document.querySelectorAll('.kid-sort-items button').forEach(b=>b.classList.remove('selected'));
+  const el=document.getElementById('kidSortItem-'+idx);
+  if(el) el.classList.add('selected');
+}
+
+function _placeKidSortItem(category){
+  const g=state.game.funMission;
+  if(!g || g.selected===null) return;
+  const item=g.items.find(x=>x.idx===g.selected);
+  const el=document.getElementById('kidSortItem-'+g.selected);
+  const fb=document.getElementById('kidMissionFeedback');
+  if(item.category===category){
+    g.done.add(g.selected);g.score++;
+    if(el){el.classList.remove('selected');el.classList.add('done');el.disabled=true;}
+    fb.textContent='✅ رائع! مكان صحيح.';
+    fb.className='kid-feedback good';
+    document.getElementById('missionProgress').textContent=`${g.done.size}/${g.items.length}`;
+    g.selected=null;
+    if(g.done.size===g.items.length){
+      _saveFunScore('mission',state.game.lessonId,g.score);
+      setTimeout(()=>_showKidGameResult('mission',g.score,g.items.length),700);
+    }
+  }else{
+    fb.textContent='💡 جرّب مكاناً آخر.';
+    fb.className='kid-feedback try';
+    if(el){el.classList.add('shake');setTimeout(()=>el.classList.remove('shake'),450);}
+  }
+}
+
+function _renderKidSequenceMission(lesson, mission){
+  const view=document.getElementById('gameContent');
+  const items=shuffleArray(mission.items.map((x,idx)=>({order:idx+1,icon:x[0],label:x[1]})));
+  state.game.funMission={type:'sequence',items};
+  view.innerHTML=`
+    <button class="btn-back" onclick="startGame('${lesson.id}')">← ألعاب الدرس</button>
+    <div class="kid-play-shell">
+      <div class="kid-progress-row"><span>🚀 ${mission.title||'رتب المراحل'}</span><span>رتّبها</span></div>
+      <div class="kid-sequence-list" id="kidSequenceList">
+        ${items.map((item,idx)=>`
+          <div class="kid-sequence-item" data-order="${item.order}">
+            <span class="kid-sequence-number">${idx+1}</span>
+            <span class="kid-sequence-icon">${item.icon}</span>
+            <b>${item.label}</b>
+            <div><button onclick="_moveKidSequence(this,-1)">▲</button><button onclick="_moveKidSequence(this,1)">▼</button></div>
+          </div>
+        `).join('')}
+      </div>
+      <button class="kid-check-btn" onclick="_checkKidSequence()">✅ تحقق من الترتيب</button>
+      <div id="kidMissionFeedback" class="kid-feedback"></div>
+    </div>
+  `;
+}
+
+function _moveKidSequence(btn,dir){
+  const row=btn.closest('.kid-sequence-item'),list=document.getElementById('kidSequenceList');
+  const rows=[...list.children],idx=rows.indexOf(row);
+  if(dir<0 && idx>0) list.insertBefore(row,rows[idx-1]);
+  if(dir>0 && idx<rows.length-1) list.insertBefore(rows[idx+1],row);
+  [...list.children].forEach((r,i)=>r.querySelector('.kid-sequence-number').textContent=i+1);
+}
+
+function _checkKidSequence(){
+  const rows=[...document.querySelectorAll('#kidSequenceList .kid-sequence-item')];
+  const ok=rows.every((r,i)=>Number(r.dataset.order)===i+1);
+  const fb=document.getElementById('kidMissionFeedback');
+  if(ok){
+    fb.textContent='🎉 ممتاز! الترتيب صحيح.';
+    fb.className='kid-feedback good';
+    _saveFunScore('mission',state.game.lessonId,rows.length);
+    setTimeout(()=>_showKidGameResult('mission',rows.length,rows.length),700);
+  }else{
+    fb.textContent='🧩 قريب! حرّك البطاقات وحاول مرة أخرى.';
+    fb.className='kid-feedback try';
+  }
+}
+
+function _showKidGameResult(mode,score,total){
+  const view=document.getElementById('gameContent');
+  const lessonId=state.game.lessonId;
+  const labels={picture:'شوف واختر',memory:'لعبة الذاكرة',mission:'مهمة ستيم'};
+  const pct=total?Math.round((score/total)*100):100;
+  const stars=pct>=90?3:pct>=60?2:1;
+  view.innerHTML=`
+    <div class="kid-result">
+      <div class="kid-result-emoji">${stars===3?'🏆':'🌟'}</div>
+      <h2>أحسنت!</h2>
+      <p>أنهيت ${labels[mode]}.</p>
+      <div class="kid-stars">${'⭐'.repeat(stars)}${'☆'.repeat(3-stars)}</div>
+      <div class="kid-result-score">${mode==='memory'?score:score+' / '+total}</div>
+      <div class="gap-row" style="justify-content:center">
+        <button class="btn btn-primary btn-lg" onclick="startGame('${lessonId}','${mode}')">🔄 العب مرة أخرى</button>
+        <button class="btn btn-outline btn-lg" onclick="startGame('${lessonId}')">🎈 ألعاب الدرس</button>
+      </div>
+    </div>
+  `;
+}
 
 function renderGameHub(lesson, unit) {
   const view = document.getElementById('gameContent');

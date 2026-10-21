@@ -934,42 +934,49 @@ function renderGamesSection() {
   if (!view) return;
 
   const allLessons = getAllLessonsFlat(state.selectedGradeId, state.currentSemester);
-  const playedCount = allLessons.filter(({lesson}) => scores[`game_${lesson.id}`] !== undefined).length;
+  const playedCount = allLessons.filter(({lesson}) =>
+    scores[`game_${lesson.id}`] !== undefined ||
+    scores[`game_speed_${lesson.id}`] !== undefined ||
+    scores[`game_boss_${lesson.id}`] !== undefined
+  ).length;
 
   view.innerHTML = `
     <div class="section-header section-header--rich">
       <span class="section-kicker">تعلّم باللعب</span>
-      <h2>ألعب مع ستيم 🎮</h2>
-      <p>اختر لعبة مرتبطة بأحد الدروس، واجمع النقاط وأعد المحاولة لتحسين نتيجتك.</p>
+      <h2>مختبر ألعاب ستيم 🎮</h2>
+      <p>كل درس يحتوي الآن على ثلاثة تحديات: لعبة أساسية، تحدي سرعة، وتحدي البطل بالنقاط والقلوب وسلسلة الإجابات.</p>
       <div class="section-summary-pills">
-        <span><b>${allLessons.length}</b> لعبة</span>
-        <span><b>${playedCount}</b> تم لعبها</span>
+        <span><b>${allLessons.length * 3}</b> تحدياً</span>
+        <span><b>${playedCount}</b> درساً تم اللعب فيه</span>
       </div>
     </div>
     <div id="gameScoreBoard" class="highlight mb-3" style="display:none"></div>
     <div id="gameContent">
       <div class="cards-grid content-cards-grid">
         ${allLessons.map(({lesson, unit, semester}) => {
-          const sc = scores[`game_${lesson.id}`];
+          const classic = scores[`game_${lesson.id}`];
+          const speed = scores[`game_speed_${lesson.id}`];
+          const boss = scores[`game_boss_${lesson.id}`];
           const game = lesson.game || {};
-          const gameType = game.type || '';
-          const gameTypeIcon = getGameTypeIcon(gameType);
-          const gameTypeName = getGameTypeName(gameType);
+          const gameTypeIcon = getGameTypeIcon(game.type || '');
           const color = unit.color || '#0e79b7';
-          const gameTitle = game.title || lesson.title;
           const semBadge = semester === 2 ? 'الفصل الثاني' : 'الفصل الأول';
+          const completedModes = [classic, speed, boss].filter(v => v !== undefined).length;
           return `
-            <div class="card activity-card" style="--card-color:${color}"
+            <div class="card activity-card game-arcade-card" style="--card-color:${color}"
                  onclick="startGame('${lesson.id}')"
-                 role="button" tabindex="0" aria-label="لعبة: ${gameTitle}">
+                 role="button" tabindex="0" aria-label="ألعاب درس: ${lesson.title}">
               <div class="card-topline">
                 <span class="card-icon activity-icon">${gameTypeIcon}</span>
-                <div class="card-badge" style="background:${color}">${gameTypeName}</div>
+                <div class="card-badge" style="background:${color}">3 ألعاب</div>
               </div>
-              <h3>${gameTitle}</h3>
-              <p>${lesson.title} &bull; ${unit.name || unit.title}</p>
-              <div class="card-meta-line"><span>${semBadge}</span><span>${sc !== undefined ? `🏆 ${sc} نقطة` : 'لم تلعب بعد'}</span></div>
-              <div class="card-action">ابدأ اللعبة <span aria-hidden="true">←</span></div>
+              <h3>${lesson.title}</h3>
+              <p>${unit.name || unit.title} • لعبة أساسية + سرعة + بطل</p>
+              <div class="card-meta-line">
+                <span>${semBadge}</span>
+                <span>${completedModes ? `🏆 ${completedModes}/3 مكتملة` : 'جاهز للعب'}</span>
+              </div>
+              <div class="card-action">افتح صالة الألعاب <span aria-hidden="true">←</span></div>
             </div>
           `;
         }).join('')}
@@ -1003,18 +1010,38 @@ function getGameTypeName(type) {
   return names[type] || 'لعبة';
 }
 
-function startGame(lessonId) {
+function startGame(lessonId, mode = null) {
   const { lesson, unit } = findLessonById(lessonId);
   if (!lesson || !lesson.game) return;
 
+  if (state.game && state.game.challengeTimer) {
+    clearInterval(state.game.challengeTimer);
+    state.game.challengeTimer = null;
+  }
+
   state.game.lessonId = lessonId;
-  state.game.data = lesson.game;
+  state.game.lesson = lesson;
+  state.game.unit = unit;
   state.game.score = 0;
   state.game.total = 0;
   state.game.matchSelected = null;
 
-  const gameType = lesson.game.type;
+  if (!mode) {
+    renderGameHub(lesson, unit);
+    return;
+  }
 
+  if (mode === 'speed') {
+    renderAdvancedChallenge(lesson, unit, 'speed');
+    return;
+  }
+  if (mode === 'boss') {
+    renderAdvancedChallenge(lesson, unit, 'boss');
+    return;
+  }
+
+  state.game.data = lesson.game;
+  const gameType = lesson.game.type;
   switch (gameType) {
     case 'sorting':
       renderSortingGame(lesson.game, unit, lesson);
@@ -1042,71 +1069,432 @@ function startGame(lessonId) {
   }
 }
 
-// ---- لعبة الفرز (sorting) ----
-function renderSortingGame(game, unit, lesson) {
+
+function renderGameHub(lesson, unit) {
   const view = document.getElementById('gameContent');
-  const shuffled = shuffleArray([...game.items]);
+  if (!view) return;
+  const classic = scores[`game_${lesson.id}`];
+  const speed = scores[`game_speed_${lesson.id}`];
+  const boss = scores[`game_boss_${lesson.id}`];
+  const classicType = getGameTypeName((lesson.game || {}).type || '');
+  const quizCount = _getGameQuizQuestions(lesson).length;
 
   view.innerHTML = `
     <button class="btn-back" onclick="renderGamesSection()">← العودة للألعاب</button>
-    <div class="game-container">
-      <div class="game-score-bar">
+    <div class="game-hub">
+      <div class="game-hub-head">
+        <span class="game-hub-icon">🕹️</span>
         <div>
-          <div class="score-label">النقاط</div>
-          <div class="score-display" id="gameScore">0</div>
-        </div>
-        <div style="text-align:center">
-          <div class="score-label">التقدم</div>
-          <div id="gameProgress" class="badge badge-primary">0/${game.items.length}</div>
+          <span class="section-kicker">صالة ألعاب الدرس</span>
+          <h2>${lesson.title}</h2>
+          <p>اختر مستوى اللعب. يمكنك إعادة أي تحدٍ لتحسين نتيجتك.</p>
         </div>
       </div>
-      <div class="game-title">${game.title}</div>
-      <div class="game-instructions">${game.instructions}</div>
 
+      <div class="game-mode-grid">
+        <button class="game-mode-card mode-classic" onclick="startGame('${lesson.id}','classic')">
+          <span class="mode-icon">${getGameTypeIcon((lesson.game || {}).type)}</span>
+          <span class="mode-level">المستوى 1</span>
+          <strong>اللعبة الأساسية</strong>
+          <small>${classicType} • تعلم المفهوم بالحركة والمطابقة</small>
+          <span class="mode-record">${classic !== undefined ? `🏆 أفضل نتيجة: ${classic}` : 'ابدأ الآن'}</span>
+        </button>
+
+        <button class="game-mode-card mode-speed" onclick="startGame('${lesson.id}','speed')">
+          <span class="mode-icon">⚡</span>
+          <span class="mode-level">المستوى 2</span>
+          <strong>تحدي السرعة</strong>
+          <small>${Math.max(quizCount, 4)} أسئلة • مؤقت • نقاط للسرعة والسلسلة</small>
+          <span class="mode-record">${speed !== undefined ? `⚡ الرقم القياسي: ${speed}` : 'اكسب نقاطاً مضاعفة'}</span>
+        </button>
+
+        <button class="game-mode-card mode-boss" onclick="startGame('${lesson.id}','boss')">
+          <span class="mode-icon">👑</span>
+          <span class="mode-level">المستوى 3</span>
+          <strong>تحدي البطل</strong>
+          <small>أسئلة مختلطة • 3 قلوب • سلسلة إجابات • مستوى أصعب</small>
+          <span class="mode-record">${boss !== undefined ? `👑 أفضل نقاط: ${boss}` : 'هل تستطيع إنهاء التحدي؟'}</span>
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function _getGameQuizQuestions(lesson) {
+  if (!lesson || !lesson.quiz) return [];
+  const raw = Array.isArray(lesson.quiz) ? lesson.quiz : (lesson.quiz.questions || []);
+  return raw.filter(q => q && Array.isArray(q.options) && q.options.length >= 2)
+    .map(q => ({
+      question: q.question || q.text || 'اختر الإجابة الصحيحة.',
+      options: [...q.options],
+      correct: Number(q.correct || 0),
+      explanation: q.explanation || ''
+    }));
+}
+
+function _choiceQuestion(question, correctText, optionPool, explanation = '') {
+  const unique = Array.from(new Set([correctText, ...(optionPool || [])].filter(Boolean)));
+  while (unique.length < 2) unique.push('خيار آخر');
+  const options = shuffleArray(unique.slice(0, 6));
+  return {
+    question,
+    options,
+    correct: options.indexOf(correctText),
+    explanation
+  };
+}
+
+function _getDerivedGameQuestions(lesson) {
+  const game = lesson.game || {};
+  const out = [];
+
+  if ((game.type === 'matching') && Array.isArray(game.pairs)) {
+    const pairs = game.pairs.map((p, idx) => ({
+      left: p.left || p.term || `عنصر ${idx+1}`,
+      right: p.right || p.definition || ''
+    })).filter(p => p.right);
+    const rights = pairs.map(p => p.right);
+    pairs.forEach(p => out.push(_choiceQuestion(
+      `ما المطابق لـ «${p.left}»؟`,
+      p.right,
+      rights,
+      `الإجابة الصحيحة: ${p.left} ↔ ${p.right}`
+    )));
+  }
+
+  if ((game.type === 'sorting' || game.type === 'dragDrop') && Array.isArray(game.items)) {
+    const categories = (game.categories || []).map(c => typeof c === 'string' ? c : c.name || c.id).filter(Boolean);
+    game.items.forEach(item => {
+      const cat = typeof item.category === 'string' ? item.category : String(item.category || '');
+      if (cat) out.push(_choiceQuestion(
+        `إلى أي فئة ينتمي «${item.text || item.label || 'هذا العنصر'}»؟`,
+        cat,
+        categories,
+        `الفئة الصحيحة هي: ${cat}`
+      ));
+    });
+  }
+
+  if (game.type === 'sequencing' && Array.isArray(game.items)) {
+    const seq = game.items.map((item, idx) => ({
+      text: typeof item === 'string' ? item : (item.text || `الخطوة ${idx+1}`),
+      order: typeof item === 'string' ? idx + 1 : Number(item.order || idx + 1)
+    })).sort((a,b) => a.order-b.order);
+    if (seq.length > 1) {
+      out.push(_choiceQuestion('ما الخطوة أو المرحلة التي تأتي أولاً؟', seq[0].text, seq.map(x=>x.text), 'ابدأ من أول مرحلة في التسلسل.'));
+      out.push(_choiceQuestion('ما الخطوة أو المرحلة التي تأتي أخيراً؟', seq[seq.length-1].text, seq.map(x=>x.text), 'هذه هي المرحلة الأخيرة في التسلسل.'));
+    }
+  }
+
+  if (game.type === 'trueFalse' && Array.isArray(game.questions)) {
+    game.questions.forEach(q => {
+      out.push({
+        question: q.statement || q.question || 'صح أم خطأ؟',
+        options: ['صح','خطأ'],
+        correct: q.answer === true ? 0 : 1,
+        explanation: q.explanation || ''
+      });
+    });
+  }
+
+  return out;
+}
+
+function _buildChallengeQuestions(lesson, mode) {
+  const quiz = _getGameQuizQuestions(lesson);
+  const derived = _getDerivedGameQuestions(lesson);
+  let pool = mode === 'boss' ? [...derived, ...quiz, ...quiz] : [...quiz, ...derived];
+
+  const seen = new Set();
+  pool = pool.filter(q => {
+    const key = q.question + '|' + q.options.join('|');
+    if (seen.has(key) || q.correct < 0) return false;
+    seen.add(key);
+    return true;
+  });
+
+  pool = shuffleArray(pool);
+  const target = mode === 'boss' ? 10 : 6;
+  if (pool.length > target) pool = pool.slice(0, target);
+  return pool;
+}
+
+function renderAdvancedChallenge(lesson, unit, mode) {
+  const view = document.getElementById('gameContent');
+  if (!view) return;
+
+  const questions = _buildChallengeQuestions(lesson, mode);
+  if (!questions.length) {
+    view.innerHTML = `
+      <button class="btn-back" onclick="startGame('${lesson.id}')">← العودة لصالة الدرس</button>
+      <div class="game-container"><p class="not-available">لا توجد أسئلة كافية لهذا التحدي حالياً.</p></div>
+    `;
+    return;
+  }
+
+  state.game.challenge = {
+    mode,
+    questions,
+    index: 0,
+    points: 0,
+    correct: 0,
+    streak: 0,
+    maxStreak: 0,
+    lives: mode === 'boss' ? 3 : 99,
+    seconds: mode === 'boss' ? 15 : 12,
+    timeLeft: 0,
+    answered: false
+  };
+
+  const title = mode === 'boss' ? 'تحدي البطل 👑' : 'تحدي السرعة ⚡';
+  const subtitle = mode === 'boss'
+    ? 'لديك 3 قلوب. حافظ على سلسلة الإجابات واربح نقاطاً إضافية.'
+    : 'أجب قبل انتهاء الوقت. كل ثانية متبقية تمنحك نقاطاً إضافية.';
+
+  view.innerHTML = `
+    <button class="btn-back" onclick="startGame('${lesson.id}')">← صالة ألعاب الدرس</button>
+    <div class="advanced-game">
+      <div class="advanced-game-head">
+        <div>
+          <span class="section-kicker">${lesson.title}</span>
+          <h2>${title}</h2>
+          <p>${subtitle}</p>
+        </div>
+        <div class="challenge-lives" id="challengeLives"></div>
+      </div>
+
+      <div class="challenge-hud">
+        <div><span>النقاط</span><strong id="challengePoints">0</strong></div>
+        <div><span>السلسلة</span><strong id="challengeStreak">🔥 0</strong></div>
+        <div><span>التقدم</span><strong id="challengeProgress">1/${questions.length}</strong></div>
+      </div>
+
+      <div class="challenge-timer">
+        <div class="challenge-timer-row"><span>⏱️ الوقت</span><strong id="challengeTime"></strong></div>
+        <div class="challenge-timer-track"><div id="challengeTimerFill" class="challenge-timer-fill"></div></div>
+      </div>
+
+      <div id="challengeArea"></div>
+    </div>
+  `;
+
+  _renderChallengeQuestion();
+}
+
+function _renderChallengeQuestion() {
+  const c = state.game.challenge;
+  if (!c) return;
+
+  if (c.index >= c.questions.length || (c.mode === 'boss' && c.lives <= 0)) {
+    _showAdvancedGameResult();
+    return;
+  }
+
+  if (state.game.challengeTimer) clearInterval(state.game.challengeTimer);
+
+  const q = c.questions[c.index];
+  c.answered = false;
+  c.timeLeft = c.seconds;
+
+  const livesEl = document.getElementById('challengeLives');
+  if (livesEl) livesEl.innerHTML = c.mode === 'boss'
+    ? Array.from({length:3},(_,i)=>`<span class="${i<c.lives?'heart-live':'heart-lost'}">❤</span>`).join('')
+    : '<span class="speed-bolt">⚡ وضع السرعة</span>';
+
+  const p = document.getElementById('challengeProgress');
+  if (p) p.textContent = `${c.index+1}/${c.questions.length}`;
+  const points = document.getElementById('challengePoints');
+  if (points) points.textContent = c.points;
+  const streak = document.getElementById('challengeStreak');
+  if (streak) streak.textContent = `🔥 ${c.streak}`;
+
+  const area = document.getElementById('challengeArea');
+  if (!area) return;
+  area.innerHTML = `
+    <div class="challenge-question-card">
+      <div class="challenge-question-number">السؤال ${c.index+1}</div>
+      <div class="challenge-question-text">${q.question}</div>
+      <div class="challenge-options">
+        ${q.options.map((opt,i)=>`
+          <button class="challenge-option" onclick="_answerChallenge(${i})">
+            <span class="option-letter">${['أ','ب','ج','د','هـ','و'][i] || (i+1)}</span>
+            <span>${opt}</span>
+          </button>
+        `).join('')}
+      </div>
+      <div id="challengeFeedback" class="challenge-feedback"></div>
+    </div>
+  `;
+
+  _updateChallengeTimerUI();
+  state.game.challengeTimer = setInterval(() => {
+    c.timeLeft--;
+    _updateChallengeTimerUI();
+    if (c.timeLeft <= 0) {
+      clearInterval(state.game.challengeTimer);
+      state.game.challengeTimer = null;
+      _answerChallenge(-1, true);
+    }
+  }, 1000);
+}
+
+function _updateChallengeTimerUI() {
+  const c = state.game.challenge;
+  if (!c) return;
+  const time = document.getElementById('challengeTime');
+  const fill = document.getElementById('challengeTimerFill');
+  if (time) time.textContent = `${Math.max(0,c.timeLeft)} ث`;
+  if (fill) {
+    const pct = Math.max(0, Math.min(100, (c.timeLeft / c.seconds) * 100));
+    fill.style.width = pct + '%';
+    fill.classList.toggle('timer-danger', pct <= 30);
+  }
+}
+
+function _answerChallenge(chosen, timedOut = false) {
+  const c = state.game.challenge;
+  if (!c || c.answered) return;
+  c.answered = true;
+  if (state.game.challengeTimer) {
+    clearInterval(state.game.challengeTimer);
+    state.game.challengeTimer = null;
+  }
+
+  const q = c.questions[c.index];
+  const opts = Array.from(document.querySelectorAll('.challenge-option'));
+  opts.forEach(b => b.disabled = true);
+  const correct = chosen === q.correct;
+
+  if (opts[q.correct]) opts[q.correct].classList.add('correct');
+  if (chosen >= 0 && chosen !== q.correct && opts[chosen]) opts[chosen].classList.add('wrong');
+
+  const fb = document.getElementById('challengeFeedback');
+  if (correct) {
+    c.correct++;
+    c.streak++;
+    c.maxStreak = Math.max(c.maxStreak, c.streak);
+    const base = c.mode === 'boss' ? 150 : 100;
+    const streakBonus = Math.min(100, Math.max(0, (c.streak - 1) * 20));
+    const timeBonus = Math.max(0, c.timeLeft) * 5;
+    const earned = base + streakBonus + timeBonus;
+    c.points += earned;
+    if (fb) {
+      fb.innerHTML = `<strong>✅ ممتاز! +${earned} نقطة</strong>${q.explanation ? `<small>${q.explanation}</small>` : ''}`;
+      fb.className = 'challenge-feedback is-correct';
+    }
+  } else {
+    c.streak = 0;
+    if (c.mode === 'boss') c.lives--;
+    if (fb) {
+      fb.innerHTML = `<strong>${timedOut ? '⏱️ انتهى الوقت!' : '❌ ليست الإجابة الصحيحة'}</strong><small>${q.explanation || `الإجابة الصحيحة: ${q.options[q.correct]}`}</small>`;
+      fb.className = 'challenge-feedback is-wrong';
+    }
+  }
+
+  const points = document.getElementById('challengePoints');
+  if (points) points.textContent = c.points;
+  const streak = document.getElementById('challengeStreak');
+  if (streak) streak.textContent = `🔥 ${c.streak}`;
+
+  c.index++;
+  setTimeout(() => _renderChallengeQuestion(), correct ? 1100 : 1700);
+}
+
+function _showAdvancedGameResult() {
+  const c = state.game.challenge;
+  const lessonId = state.game.lessonId;
+  const view = document.getElementById('gameContent');
+  if (!c || !view) return;
+
+  if (state.game.challengeTimer) {
+    clearInterval(state.game.challengeTimer);
+    state.game.challengeTimer = null;
+  }
+
+  const answered = Math.min(c.index, c.questions.length);
+  const accuracy = answered ? Math.round((c.correct / answered) * 100) : 0;
+  const stars = accuracy >= 90 ? 3 : accuracy >= 70 ? 2 : accuracy >= 50 ? 1 : 0;
+  const key = c.mode === 'boss' ? `game_boss_${lessonId}` : `game_speed_${lessonId}`;
+  const prev = scores[key] || 0;
+  if (c.points > prev) {
+    scores[key] = c.points;
+    localStorage.setItem('nawat_scores', JSON.stringify(scores));
+  }
+
+  const modeTitle = c.mode === 'boss' ? 'تحدي البطل' : 'تحدي السرعة';
+  const icon = stars === 3 ? '🏆' : stars === 2 ? '🌟' : stars === 1 ? '⭐' : '💪';
+  view.innerHTML = `
+    <div class="advanced-result">
+      <div class="result-emoji bounce">${icon}</div>
+      <h2>${modeTitle}</h2>
+      <div class="stars-row">${[0,1,2].map(i=>`<span class="${i<stars?'star-on':'star-off'}">★</span>`).join('')}</div>
+      <div class="advanced-result-score">${c.points} <small>نقطة</small></div>
+      <div class="result-stat-grid">
+        <div><strong>${accuracy}%</strong><span>الدقة</span></div>
+        <div><strong>${c.correct}/${answered}</strong><span>صحيح</span></div>
+        <div><strong>🔥 ${c.maxStreak}</strong><span>أفضل سلسلة</span></div>
+      </div>
+      <div class="gap-row" style="justify-content:center;margin-top:24px">
+        <button class="btn btn-primary btn-lg" onclick="startGame('${lessonId}','${c.mode}')">🔄 العب مرة أخرى</button>
+        <button class="btn btn-outline btn-lg" onclick="startGame('${lessonId}')">🕹️ صالة الدرس</button>
+        <button class="btn btn-outline btn-lg" onclick="renderGamesSection()">🎮 كل الألعاب</button>
+      </div>
+    </div>
+  `;
+}
+
+// ---- لعبة الفرز (sorting) ----
+function renderSortingGame(game, unit, lesson) {
+  const view = document.getElementById('gameContent');
+  const itemsWithId = (game.items || []).map((item, idx) => ({
+    ...item,
+    id: item.id !== undefined ? item.id : idx
+  }));
+  const shuffled = shuffleArray([...itemsWithId]);
+  const categories = game.categories || [];
+
+  view.innerHTML = `
+    <button class="btn-back" onclick="startGame('${lesson.id}')">← صالة ألعاب الدرس</button>
+    <div class="game-container">
+      <div class="game-score-bar">
+        <div><div class="score-label">النقاط</div><div class="score-display" id="gameScore">0</div></div>
+        <div style="text-align:center"><div class="score-label">التقدم</div><div id="gameProgress" class="badge badge-primary">0/${itemsWithId.length}</div></div>
+      </div>
+      <div class="game-title">${game.title}</div>
+      <div class="game-instructions">${game.instructions || 'اسحب كل بطاقة إلى الفئة الصحيحة، أو اضغط البطاقة ثم اضغط الفئة.'}</div>
       <div class="sort-items-pool" id="sortPool">
         ${shuffled.map(item => `
-          <div class="sort-item"
-               draggable="true"
-               id="sitem-${item.id}"
-               data-id="${item.id}"
-               data-category="${item.category}"
-               title="${item.hint || ''}"
-               aria-label="${item.text}"
-               ondragstart="onDragStart(event)"
-               onclick="onSortItemClick(this)">
-            <span class="item-emoji">${item.image || ''}</span>
-            <span>${item.text}</span>
+          <div class="sort-item" draggable="true" id="sitem-${item.id}"
+               data-id="${item.id}" data-category="${item.category}"
+               title="${item.hint || ''}" aria-label="${item.text}"
+               ondragstart="onDragStart(event)" onclick="onSortItemClick(this)">
+            <span class="item-emoji">${item.image || ''}</span><span>${item.text}</span>
           </div>
         `).join('')}
       </div>
-
       <div class="sort-areas">
-        ${game.categories.map(cat => {
-          const catId = (typeof cat === 'string') ? cat : cat.id;
-          const catName = (typeof cat === 'string') ? cat : cat.name;
-          const catColor = (typeof cat === 'object' && cat.color) ? cat.color : '#1565C0';
+        ${categories.map(cat => {
+          const catId = typeof cat === 'string' ? cat : cat.id;
+          const catName = typeof cat === 'string' ? cat : cat.name;
+          const catColor = typeof cat === 'object' && cat.color ? cat.color : '#1565C0';
           return `
-            <div class="sort-zone"
-                 id="zone-${catId}"
-                 data-category="${catId}"
-                 ondragover="onDragOver(event)"
-                 ondrop="onDrop(event)"
-                 ondragenter="onDragEnter(event)"
-                 ondragleave="onDragLeave(event)">
+            <div class="sort-zone" id="zone-${catId}" data-category="${catId}"
+                 ondragover="onDragOver(event)" ondrop="onDrop(event)"
+                 ondragenter="onDragEnter(event)" ondragleave="onDragLeave(event)">
               <div class="sort-zone-label" style="background:${catColor}">${catName}</div>
               <div class="zone-items" id="zitems-${catId}"></div>
-            </div>
-          `;
+            </div>`;
         }).join('')}
       </div>
-
       <div id="sortFeedback" style="margin-top:12px;text-align:center;font-weight:700;font-size:1rem"></div>
     </div>
   `;
 
-  state.game.sortItems = game.items;
+  state.game.data = { ...game, items: itemsWithId };
+  state.game.sortItems = itemsWithId;
   state.game.sortPlaced = {};
   state.game.sortClickSelected = null;
+  state.game.score = 0;
 }
 
 // ---- لعبة السحب والإفلات (dragDrop) - مشابهة للفرز لكن الفئات strings ----
@@ -1404,15 +1792,20 @@ function showMatchFeedback(msg, correct) {
 // ---- لعبة الترتيب (sequencing) ----
 function renderSequencingGame(game, unit, lesson) {
   const view = document.getElementById('gameContent');
-  const shuffled = shuffleArray([...game.items]);
+  const normalized = (game.items || []).map((item, idx) => (
+    typeof item === 'string'
+      ? { text:item, order:idx+1 }
+      : { ...item, text:item.text || ('المرحلة ' + (idx+1)), order:Number(item.order || idx+1) }
+  ));
+  const shuffled = shuffleArray([...normalized]);
 
   view.innerHTML = `
-    <button class="btn-back" onclick="renderGamesSection()">← العودة للألعاب</button>
+    <button class="btn-back" onclick="startGame('${lesson.id}')">← صالة ألعاب الدرس</button>
     <div class="game-container">
       <div class="game-title">${game.title}</div>
-      <div class="game-instructions">${game.instructions}</div>
+      <div class="game-instructions">${game.instructions || 'رتب المراحل من البداية إلى النهاية.'}</div>
       <p style="text-align:center;color:var(--text-secondary);margin-bottom:16px;font-size:0.875rem">
-        انقر على الأزرار ▲ ▼ لتحريك العناصر وترتيبها
+        استخدم ▲ ▼ لتغيير الترتيب، ثم اضغط تحقق.
       </p>
       <div class="sequence-items" id="seqList">
         ${shuffled.map((item, idx) => `
@@ -1420,23 +1813,20 @@ function renderSequencingGame(game, unit, lesson) {
             <span class="sequence-num">${idx+1}</span>
             <span style="flex:1">${item.text}</span>
             <div style="display:flex;gap:4px">
-              <button class="btn btn-outline" style="padding:6px 10px;min-height:36px"
-                      onclick="moveSeqItem(this, -1)" aria-label="نقل للأعلى">▲</button>
-              <button class="btn btn-outline" style="padding:6px 10px;min-height:36px"
-                      onclick="moveSeqItem(this, 1)" aria-label="نقل للأسفل">▼</button>
+              <button class="btn btn-outline" style="padding:6px 10px;min-height:36px" onclick="moveSeqItem(this,-1)" aria-label="نقل للأعلى">▲</button>
+              <button class="btn btn-outline" style="padding:6px 10px;min-height:36px" onclick="moveSeqItem(this,1)" aria-label="نقل للأسفل">▼</button>
             </div>
           </div>
         `).join('')}
       </div>
       <div style="text-align:center;margin-top:20px">
-        <button class="btn btn-primary btn-lg" onclick="checkSequence()">
-          ✅ تحقق من الترتيب
-        </button>
+        <button class="btn btn-primary btn-lg" onclick="checkSequence()">✅ تحقق من الترتيب</button>
       </div>
       <div id="seqFeedback" style="text-align:center;font-weight:700;margin-top:16px;min-height:28px"></div>
     </div>
   `;
 
+  state.game.data = { ...game, items: normalized };
   state.game.seqItems = [...shuffled];
 }
 
@@ -1704,8 +2094,8 @@ function showGameResult(score, total, type) {
           <button class="btn btn-primary btn-lg" onclick="startGame('${state.game.lessonId}')">
             🔄 إعادة اللعبة
           </button>
-          <button class="btn btn-outline btn-lg" onclick="renderGamesSection()">
-            🎮 ألعاب أخرى
+          <button class="btn btn-outline btn-lg" onclick="startGame('${state.game.lessonId}')">
+            🕹️ صالة الدرس
           </button>
         </div>
       </div>

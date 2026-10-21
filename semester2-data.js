@@ -1,9 +1,9 @@
-﻿// بيانات الفصل الدراسي الثاني - الصف الأول الابتدائي
+﻿// بيانات الفصل الدراسي الأول - الصف الأول الابتدائي
 window.semester2Data = {
   grades: [
     {
       id: "grade1-s2",
-      name: "الصف الأول - الفصل الدراسي الثاني",
+      name: "الصف الأول الابتدائي",
       units: [
         {
           id: "unit4-s2",
@@ -1036,7 +1036,7 @@ window.semester2Data = {
 
 ;(() => {
   const ROOT = window.semester2Data;
-  const CFG = {"label":"grade 1 semester 2","source":"كتاب العلوم - الصف الأول الابتدائي - الفصل الدراسي الثاني","flatLessons":true};
+  const CFG = {"label":"grade 1 semester 1","source":"كتاب العلوم - الصف الأول الابتدائي - الفصل الدراسي الأول","flatLessons":true};
   const marker = "full-print-grade1-s2-v1";
   if (!ROOT || ROOT.__fullPrintUpgrade === marker) return;
 
@@ -1260,7 +1260,7 @@ window.semester2Data = {
   const MARK = "grade1-s2-worksheet-source-fix-v1";
   if (!ROOT || ROOT.__worksheetSourceFix === MARK) return;
   (ROOT.lessons || []).forEach((lesson) => {
-    lesson.semester = 2;
+    lesson.semester = 1;
     const ideas = lesson.mainIdeas || [];
     const assess = lesson.assessmentQuestions || [];
     const vocab = lesson.vocabulary || lesson.concepts || [];
@@ -1291,7 +1291,7 @@ window.semester2Data = {
   const grade = ROOT.grades && ROOT.grades[0];
   if (!grade) return;
   grade.name = 'الصف الأول الابتدائي';
-  grade.semesterName = 'الفصل الدراسي الثاني';
+  grade.semesterName = 'الفصل الدراسي الأول';
   (grade.units || []).forEach((unit, idx) => {
     unit.number = idx + 4;
     if (unit.id === 'unit5-s2') unit.title = 'المادة';
@@ -1313,7 +1313,7 @@ window.semester2Data = {
   Object.entries(chapters).forEach(([id, chapter]) => {
     if (byId[id]) {
       byId[id].chapter = chapter;
-      byId[id].semester = 2;
+      byId[id].semester = 1;
       byId[id].sourcePart = 'الجزء الثاني';
     }
   });

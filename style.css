@@ -5417,3 +5417,423 @@ main{background:
     font-size: 1.1rem;
   }
 }
+
+
+/* ===== Grade 1 Semester 2 Playful Games v2 ===== */
+.kid-game-hub,
+.kid-play-shell,
+.kid-result {
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+.kid-game-title {
+  display:flex;
+  align-items:center;
+  gap:18px;
+  padding:22px;
+  margin-bottom:22px;
+  border-radius:28px;
+  background:linear-gradient(135deg,#fff8df,#eef9ff);
+  border:2px solid rgba(14,121,183,.12);
+}
+
+.kid-game-title h2 {
+  margin:4px 0 6px;
+  font-size:1.65rem;
+}
+
+.kid-game-title p,
+.kid-game-title span {
+  margin:0;
+  color:var(--text-secondary);
+}
+
+.kid-hero-icon {
+  width:86px;
+  height:86px;
+  display:grid;
+  place-items:center;
+  flex:0 0 86px;
+  border-radius:28px;
+  font-size:50px;
+  background:#fff;
+  box-shadow:0 10px 28px rgba(24,63,100,.10);
+}
+
+.kid-mode-grid {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:18px;
+}
+
+.kid-mode-card {
+  min-height:245px;
+  border:0;
+  border-radius:28px;
+  padding:22px;
+  text-align:center;
+  cursor:pointer;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
+  box-shadow:0 14px 30px rgba(24,63,100,.10);
+  transition:transform .18s ease, box-shadow .18s ease;
+}
+
+.kid-mode-card:hover,
+.kid-mode-card:focus-visible {
+  transform:translateY(-5px) scale(1.01);
+  box-shadow:0 20px 40px rgba(24,63,100,.16);
+  outline:4px solid rgba(14,121,183,.14);
+}
+
+.kid-mode-picture { background:linear-gradient(180deg,#fff7cf,#fff); }
+.kid-mode-memory { background:linear-gradient(180deg,#e9f8ff,#fff); }
+.kid-mode-mission { background:linear-gradient(180deg,#edfce9,#fff); }
+
+.kid-mode-emoji {
+  font-size:52px;
+  line-height:1;
+}
+
+.kid-mode-card strong {
+  font-size:1.3rem;
+}
+
+.kid-mode-card small {
+  line-height:1.7;
+  color:var(--text-secondary);
+  flex:1;
+}
+
+.kid-mode-card b {
+  display:inline-block;
+  padding:7px 12px;
+  border-radius:999px;
+  background:#fff;
+}
+
+.kid-play-shell {
+  background:#fff;
+  border-radius:28px;
+  padding:22px;
+  border:1px solid rgba(24,63,100,.12);
+  box-shadow:0 16px 36px rgba(24,63,100,.08);
+}
+
+.kid-progress-row {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:14px;
+  font-weight:900;
+  font-size:1.05rem;
+  margin-bottom:18px;
+}
+
+.picture-round {
+  text-align:center;
+}
+
+.picture-prompt {
+  font-size:1.1rem;
+  font-weight:900;
+  color:var(--text-secondary);
+}
+
+.picture-big-icon {
+  width:180px;
+  height:180px;
+  margin:18px auto;
+  display:grid;
+  place-items:center;
+  font-size:100px;
+  border-radius:36px;
+  background:linear-gradient(135deg,#f8fcff,#fff8dd);
+  border:3px solid rgba(14,121,183,.10);
+  box-shadow:inset 0 0 0 8px rgba(255,255,255,.65);
+}
+
+.picture-options {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+  max-width:680px;
+  margin:0 auto;
+}
+
+.picture-options button {
+  min-height:68px;
+  border:2px solid rgba(24,63,100,.12);
+  border-radius:20px;
+  background:#fff;
+  font-size:1.1rem;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.picture-options button:hover:not(:disabled),
+.picture-options button:focus-visible:not(:disabled) {
+  border-color:#0e79b7;
+  transform:translateY(-2px);
+  outline:none;
+}
+
+.kid-feedback {
+  min-height:38px;
+  margin-top:14px;
+  padding:8px;
+  border-radius:14px;
+  font-weight:900;
+  text-align:center;
+}
+
+.kid-feedback.good {
+  background:rgba(46,125,50,.09);
+  color:#1b5e20;
+}
+
+.kid-feedback.try {
+  background:rgba(245,166,35,.12);
+  color:#7a5300;
+}
+
+.memory-board {
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:12px;
+}
+
+.memory-card {
+  aspect-ratio:1 / .82;
+  min-height:92px;
+  border:0;
+  border-radius:22px;
+  background:linear-gradient(135deg,#167e97,#315a78);
+  color:#fff;
+  font-size:1.15rem;
+  font-weight:900;
+  cursor:pointer;
+  box-shadow:0 10px 22px rgba(24,63,100,.14);
+  transition:transform .18s ease, background .18s ease;
+}
+
+.memory-card > span {
+  display:block;
+  padding:8px;
+}
+
+.memory-card:hover:not(:disabled) {
+  transform:translateY(-3px);
+}
+
+.memory-card.is-open {
+  background:#fff7d8;
+  color:#183f64;
+  border:2px solid #f0b33a;
+}
+
+.memory-card.is-matched {
+  background:#e6f7e9;
+  color:#1b5e20;
+  border:2px solid #4caf50;
+  transform:scale(.96);
+}
+
+.kid-mission-hint {
+  text-align:center;
+  color:var(--text-secondary);
+  font-weight:800;
+  margin:0 0 16px;
+}
+
+.kid-sort-items {
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:10px;
+  margin-bottom:24px;
+}
+
+.kid-sort-items button {
+  min-width:130px;
+  min-height:105px;
+  padding:12px;
+  border-radius:22px;
+  border:2px solid rgba(24,63,100,.12);
+  background:#fff;
+  cursor:pointer;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:5px;
+}
+
+.kid-sort-items button span {
+  font-size:38px;
+}
+
+.kid-sort-items button.selected {
+  border-color:#f0a500;
+  background:#fff7d8;
+  transform:translateY(-3px);
+}
+
+.kid-sort-items button.done {
+  border-color:#4caf50;
+  background:#ecf8ee;
+  opacity:.62;
+}
+
+.kid-sort-zones {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:12px;
+}
+
+.kid-sort-zones button {
+  min-height:92px;
+  border:2px dashed rgba(14,121,183,.38);
+  border-radius:22px;
+  background:#f4fbff;
+  cursor:pointer;
+  font-weight:900;
+  padding:12px;
+}
+
+.kid-sort-zones button span,
+.kid-sort-zones button b {
+  display:block;
+}
+
+.kid-sort-zones button span {
+  font-size:30px;
+  margin-bottom:4px;
+}
+
+.kid-sequence-list {
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.kid-sequence-item {
+  display:grid;
+  grid-template-columns:42px 54px 1fr auto;
+  gap:10px;
+  align-items:center;
+  padding:12px;
+  border-radius:18px;
+  border:2px solid rgba(24,63,100,.12);
+  background:#fbfdff;
+}
+
+.kid-sequence-number {
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:#183f64;
+  color:#fff;
+  font-weight:900;
+}
+
+.kid-sequence-icon {
+  font-size:36px;
+}
+
+.kid-sequence-item button {
+  width:38px;
+  height:38px;
+  border:0;
+  border-radius:11px;
+  margin-inline-start:4px;
+  cursor:pointer;
+  background:#eaf4f8;
+  font-weight:900;
+}
+
+.kid-check-btn {
+  display:block;
+  min-width:220px;
+  min-height:54px;
+  margin:20px auto 0;
+  border:0;
+  border-radius:18px;
+  background:#0e79b7;
+  color:#fff;
+  font-size:1.05rem;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.kid-result {
+  text-align:center;
+  padding:34px 22px;
+  border-radius:30px;
+  background:linear-gradient(180deg,#fff9db,#fff);
+  border:2px solid rgba(240,165,0,.22);
+}
+
+.kid-result-emoji {
+  font-size:74px;
+}
+
+.kid-stars {
+  font-size:42px;
+  letter-spacing:6px;
+  direction:ltr;
+  margin:10px 0;
+}
+
+.kid-result-score {
+  font-size:1.6rem;
+  font-weight:900;
+  margin:12px 0 24px;
+}
+
+.shake {
+  animation:kidShake .36s ease;
+}
+
+@keyframes kidShake {
+  0%,100%{transform:translateX(0)}
+  25%{transform:translateX(-7px)}
+  75%{transform:translateX(7px)}
+}
+
+@media (max-width:760px) {
+  .kid-mode-grid,
+  .picture-options {
+    grid-template-columns:1fr;
+  }
+
+  .kid-game-title {
+    align-items:flex-start;
+  }
+
+  .kid-hero-icon {
+    width:68px;
+    height:68px;
+    flex-basis:68px;
+    font-size:40px;
+  }
+
+  .memory-board {
+    grid-template-columns:repeat(3,minmax(0,1fr));
+  }
+
+  .kid-sequence-item {
+    grid-template-columns:34px 42px 1fr;
+  }
+
+  .kid-sequence-item > div {
+    grid-column:1 / -1;
+    display:flex;
+    justify-content:center;
+  }
+}

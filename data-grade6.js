@@ -8,15 +8,14 @@ window.grade6Data = {
   "source": "كتاب العلوم - الصف السادس الابتدائي - الجزآن الأول والثاني من المقرر",
   "sourceNotes": "تم اعتماد ترتيب الوحدات والفصول والدروس على قائمتي المحتويات في الجزأين الأول والثاني. صيغت الملخصات والأنشطة وأوراق العمل بما يحافظ على مفاهيم الكتاب وتسلسله، مع تطبيق نموذج نوات ستيم للطباعة الموسعة.",
   "availableSemesters": [
-    1,
-    2
+    1
   ],
   "grades": [
     {
       "id": "grade6",
       "name": "الصف السادس الابتدائي",
       "icon": "⚗️",
-      "semesterName": "الفصلان الدراسيان الأول والثاني",
+      "semesterName": "الفصل الدراسي الأول",
       "units": [
         {
           "id": "g6-unit1",
@@ -6300,7 +6299,7 @@ window.grade6Data = {
         {
           "id": "g6-unit4",
           "number": 4,
-          "semester": 2,
+          "semester": 1,
           "name": "الفضاء",
           "icon": "🚀",
           "color": "#F57C00",
@@ -8377,7 +8376,7 @@ window.grade6Data = {
         {
           "id": "g6-unit5",
           "number": 5,
-          "semester": 2,
+          "semester": 1,
           "name": "المادة",
           "icon": "⚗️",
           "color": "#0288D1",
@@ -10502,7 +10501,7 @@ window.grade6Data = {
         {
           "id": "g6-unit6",
           "number": 6,
-          "semester": 2,
+          "semester": 1,
           "name": "القوى والطاقة",
           "icon": "⚡",
           "color": "#6A1B9A",
@@ -12605,7 +12604,7 @@ window.grade6Data = {
   ROOT.source="كتاب العلوم - الصف السادس الابتدائي - الجزآن الأول والثاني من المقرر";
   const grade=ROOT.grades&&ROOT.grades[0];
   if(!grade)return;
-  grade.semesterName='الفصلان الدراسيان الأول والثاني';
+  grade.semesterName='الفصل الدراسي الأول';
   const lessons=[];
   (grade.units||[]).forEach((u,idx)=>{
     u.number=u.number||idx+1;u.semester=idx<3?1:2;

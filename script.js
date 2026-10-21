@@ -183,8 +183,8 @@ function getAvailableGrades() {
 }
 
 function getAvailableSemestersForGrade(gradeId) {
-  // جميع البيانات المنشورة حالياً تخص الفصل الدراسي الأول فقط.
-  return [1];
+  // الفصل الأول يحتوي المحتوى الحالي، والفصل الثاني مُجهّز فارغاً للإضافة لاحقاً.
+  return [1, 2];
 }
 
 function getAllLessonsFlat(gradeId = state.selectedGradeId, semesterFilter = null) {
@@ -710,8 +710,12 @@ function switchSemester(semesterNum, gradeId) {
 function _getGradeData(grade, semesterNum) {
   if (!grade) return null;
 
-  if (Number(semesterNum) !== 1) {
-    return { ...grade, semesterName: 'الفصل الدراسي الأول', units: [] };
+  if (Number(semesterNum) === 2) {
+    return {
+      ...grade,
+      semesterName: 'الفصل الدراسي الثاني',
+      units: []
+    };
   }
 
   if (grade.id === 'grade2' || grade.id === 'grade3' || grade.id === 'grade4' || grade.id === 'grade5' || grade.id === 'grade6') {
@@ -765,6 +769,7 @@ function _renderUnitsForSemester(grade, semesterNum) {
   const lessonCount = units.reduce((sum,u) => sum + (u.lessons || []).length, 0);
   const completed = units.reduce((sum,u) => sum + (u.lessons || []).filter(l => scores[l.id] !== undefined).length, 0);
   const progress = lessonCount ? Math.round((completed / lessonCount) * 100) : 0;
+  const isEmptySecondSemester = Number(semesterNum) === 2 && units.length === 0;
 
   view.innerHTML = `
     <button class="btn-back" onclick="renderLessonsSection()" aria-label="العودة للصفوف">
@@ -777,7 +782,7 @@ function _renderUnitsForSemester(grade, semesterNum) {
         <div>
           <span class="section-kicker section-kicker--light">${semLabel}</span>
           <h2>${gradeData.name}</h2>
-          <p>اختر وحدة لتبدأ رحلة التعلم، ثم انتقل بين الدرس والنشاط واللعبة والاختبار.</p>
+          <p>${isEmptySecondSemester ? 'هذه الخانة جاهزة لإضافة وحدات ودروس الفصل الدراسي الثاني.' : 'اختر وحدة لتبدأ رحلة التعلم، ثم انتقل بين الدرس والنشاط واللعبة والاختبار.'}</p>
         </div>
       </div>
       <div class="overview-stats">
@@ -788,31 +793,39 @@ function _renderUnitsForSemester(grade, semesterNum) {
       </div>
     </section>
 
-    <div class="cards-grid unit-grid">
-      ${units.map((unit, idx) => {
-        const color = unit.color || unitColors[idx % unitColors.length];
-        const unitLabel = `الوحدة ${unit.number || idx + 1}`;
-        const unitLessons = unit.lessons || [];
-        const unitCompleted = unitLessons.filter(l => scores[l.id] !== undefined).length;
-        return `
-          <div class="card unit-card" style="--card-color:${color}"
-               onclick="showLessons('${unit.id}')"
-               role="button" tabindex="0" aria-label="وحدة: ${unit.name}">
-            <div class="card-topline">
-              <span class="card-icon">${unit.icon || '📚'}</span>
-              <div class="card-badge" style="background:${color}">${unitLabel}</div>
+    ${isEmptySecondSemester ? `
+      <div class="card" style="max-width:720px;margin:24px auto;text-align:center;padding:42px 28px;border:2px dashed #b7c9d8;background:#f8fbfd">
+        <div style="font-size:48px;margin-bottom:12px">📘</div>
+        <h3 style="margin:0 0 10px">الفصل الدراسي الثاني</h3>
+        <p style="margin:0;color:#58728a;line-height:1.9">لا توجد وحدات أو دروس مضافة بعد. هذه الخانة مخصصة للفصل الدراسي الثاني وسنبدأ بإضافة محتوى الصف الأول عند اعتماد الكتاب.</p>
+      </div>
+    ` : `
+      <div class="cards-grid unit-grid">
+        ${units.map((unit, idx) => {
+          const color = unit.color || unitColors[idx % unitColors.length];
+          const unitLabel = `الوحدة ${unit.number || idx + 1}`;
+          const unitLessons = unit.lessons || [];
+          const unitCompleted = unitLessons.filter(l => scores[l.id] !== undefined).length;
+          return `
+            <div class="card unit-card" style="--card-color:${color}"
+                 onclick="showLessons('${unit.id}')"
+                 role="button" tabindex="0" aria-label="وحدة: ${unit.name}">
+              <div class="card-topline">
+                <span class="card-icon">${unit.icon || '📚'}</span>
+                <div class="card-badge" style="background:${color}">${unitLabel}</div>
+              </div>
+              <h3>${unit.name}</h3>
+              <p>${unitLessons.length} دروس تفاعلية مع أنشطة STEM وأوراق عمل واختبارات.</p>
+              <div class="card-meta-line">
+                <span>✓ ${unitCompleted} مكتمل</span>
+                <span>${unitLessons.length - unitCompleted} متبقٍ</span>
+              </div>
+              <div class="card-action">عرض الدروس <span aria-hidden="true">←</span></div>
             </div>
-            <h3>${unit.name}</h3>
-            <p>${unitLessons.length} دروس تفاعلية مع أنشطة STEM وأوراق عمل واختبارات.</p>
-            <div class="card-meta-line">
-              <span>✓ ${unitCompleted} مكتمل</span>
-              <span>${unitLessons.length - unitCompleted} متبقٍ</span>
-            </div>
-            <div class="card-action">عرض الدروس <span aria-hidden="true">←</span></div>
-          </div>
-        `;
-      }).join('')}
-    </div>
+          `;
+        }).join('')}
+      </div>
+    `}
   `;
 
   state.currentGrade = gradeData;

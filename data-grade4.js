@@ -7,15 +7,14 @@ window.grade4Data = {
   "version": "1448-2026",
   "source": "كتاب العلوم - الصف الرابع الابتدائي - الجزآن الأول والثاني من المقرر",
   "availableSemesters": [
-    1,
-    2
+    1
   ],
   "grades": [
     {
       "id": "grade4",
       "name": "الصف الرابع الابتدائي",
       "icon": "🧪",
-      "semesterName": "الفصلان الدراسيان الأول والثاني",
+      "semesterName": "الفصل الدراسي الأول",
       "units": [
         {
           "id": "g4-unit1",
@@ -6196,7 +6195,7 @@ window.grade4Data = {
         {
           "id": "g4-unit4",
           "number": 4,
-          "semester": 2,
+          "semester": 1,
           "name": "الأرض ومواردها",
           "icon": "🪨",
           "color": "#8D6E63",
@@ -7238,7 +7237,7 @@ window.grade4Data = {
         {
           "id": "g4-unit5",
           "number": 5,
-          "semester": 2,
+          "semester": 1,
           "name": "الفضاء",
           "icon": "🪐",
           "color": "#3949AB",
@@ -8256,7 +8255,7 @@ window.grade4Data = {
         {
           "id": "g4-unit6",
           "number": 6,
-          "semester": 2,
+          "semester": 1,
           "name": "المادة",
           "icon": "🧪",
           "color": "#039BE5",
@@ -9802,7 +9801,7 @@ window.grade4Data = {
         {
           "id": "g4-unit7",
           "number": 7,
-          "semester": 2,
+          "semester": 1,
           "name": "القوى والطاقة",
           "icon": "⚡",
           "color": "#6D4C41",
@@ -12396,7 +12395,7 @@ window.grade4Data = {
   ROOT.source = "كتاب العلوم - الصف الرابع الابتدائي - الجزآن الأول والثاني من المقرر";
   const grade = ROOT.grades && ROOT.grades[0];
   if (!grade) return;
-  grade.semesterName = 'الفصلان الدراسيان الأول والثاني';
+  grade.semesterName = 'الفصل الدراسي الأول';
 
   const allLessons = [];
   (grade.units || []).forEach((unit, idx) => {

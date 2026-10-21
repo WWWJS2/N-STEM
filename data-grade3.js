@@ -6,15 +6,14 @@ window.grade3Data = {
   "version": "1448-2026",
   "source": "كتاب العلوم - الصف الثالث الابتدائي - الجزآن الأول والثاني من المقرر",
   "availableSemesters": [
-    1,
-    2
+    1
   ],
   "grades": [
     {
       "id": "grade3",
       "name": "الصف الثالث الابتدائي",
       "icon": "🔬",
-      "semesterName": "الفصلان الدراسيان الأول والثاني",
+      "semesterName": "الفصل الدراسي الأول",
       "units": [
         {
           "id": "g3-unit1",
@@ -4593,7 +4592,7 @@ window.grade3Data = {
         {
           "id": "g3-unit4",
           "number": 4,
-          "semester": 2,
+          "semester": 1,
           "name": "الطقس والمناخ",
           "icon": "🌦️",
           "color": "#EF6C00",
@@ -6107,7 +6106,7 @@ window.grade3Data = {
         {
           "id": "g3-unit5",
           "number": 5,
-          "semester": 2,
+          "semester": 1,
           "name": "المادة",
           "icon": "🧪",
           "color": "#039BE5",
@@ -7651,7 +7650,7 @@ window.grade3Data = {
         {
           "id": "g3-unit6",
           "number": 6,
-          "semester": 2,
+          "semester": 1,
           "name": "الشغل والطاقة",
           "icon": "⚙️",
           "color": "#5E35B1",
@@ -9556,7 +9555,7 @@ window.grade3Data = {
   ROOT.source = "كتاب العلوم - الصف الثالث الابتدائي - الجزآن الأول والثاني من المقرر";
   const grade = ROOT.grades && ROOT.grades[0];
   if (!grade) return;
-  grade.semesterName = 'الفصلان الدراسيان الأول والثاني';
+  grade.semesterName = 'الفصل الدراسي الأول';
 
   const allLessons = [];
   (grade.units || []).forEach((unit, idx) => {

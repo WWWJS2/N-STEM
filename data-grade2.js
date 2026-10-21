@@ -6,15 +6,14 @@ window.grade2Data = {
   "version": "1448-2026",
   "source": "كتاب العلوم – الصف الثاني الابتدائي – الجزآن الأول والثاني من المقرر",
   "availableSemesters": [
-    1,
-    2
+    1
   ],
   "grades": [
     {
       "id": "grade2",
       "name": "الصف الثاني الابتدائي",
       "icon": "📖",
-      "semesterName": "الفصلان الدراسيان الأول والثاني",
+      "semesterName": "الفصل الدراسي الأول",
       "units": [
         {
           "id": "g2-unit1",
@@ -2802,7 +2801,7 @@ window.grade2Data = {
         {
           "id": "g2-unit4",
           "number": 4,
-          "semester": 2,
+          "semester": 1,
           "name": "الفضاء",
           "icon": "🚀",
           "color": "#5C6BC0",
@@ -3741,7 +3740,7 @@ window.grade2Data = {
         {
           "id": "g2-unit5",
           "number": 5,
-          "semester": 2,
+          "semester": 1,
           "name": "المادة",
           "icon": "🎨",
           "color": "#00838F",
@@ -4656,7 +4655,7 @@ window.grade2Data = {
         {
           "id": "g2-unit6",
           "number": 6,
-          "semester": 2,
+          "semester": 1,
           "name": "القوى والطاقة",
           "icon": "⚡",
           "color": "#D84315",
@@ -5620,7 +5619,7 @@ window.grade2Data = {
 
   ROOT.availableSemesters = [1, 2];
   ROOT.source = "كتاب العلوم - الصف الثاني الابتدائي - الجزآن الأول والثاني من المقرر";
-  grade.semesterName = 'الفصلان الدراسيان الأول والثاني';
+  grade.semesterName = 'الفصل الدراسي الأول';
   (grade.units || []).forEach((unit, idx) => {
     unit.number = unit.number || idx + 1;
     unit.semester = idx < 3 ? 1 : 2;

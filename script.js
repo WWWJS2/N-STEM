@@ -1510,7 +1510,7 @@ function renderDragDropGame(game, unit, lesson) {
   }));
 
   view.innerHTML = `
-    <button class="btn-back" onclick="renderGamesSection()">← العودة للألعاب</button>
+    <button class="btn-back" onclick="startGame(\'${lesson.id}\')">← صالة ألعاب الدرس</button>
     <div class="game-container">
       <div class="game-score-bar">
         <div>
@@ -1675,7 +1675,7 @@ function renderMatchingGame(game, unit, lesson) {
   const shuffledRight = shuffleArray([...normalizedPairs]);
 
   view.innerHTML = `
-    <button class="btn-back" onclick="renderGamesSection()">← العودة للألعاب</button>
+    <button class="btn-back" onclick="startGame(\'${lesson.id}\')">← صالة ألعاب الدرس</button>
     <div class="game-container">
       <div class="game-score-bar">
         <div>
@@ -1902,7 +1902,7 @@ function renderMCQGame(game, unit, lesson) {
   state.game.score = 0;
 
   view.innerHTML = `
-    <button class="btn-back" onclick="renderGamesSection()">← العودة للألعاب</button>
+    <button class="btn-back" onclick="startGame(\'${lesson.id}\')">← صالة ألعاب الدرس</button>
     <div class="game-container">
       <div class="game-score-bar">
         <div>
@@ -1984,7 +1984,7 @@ function renderTrueFalseGame(game, unit, lesson) {
   state.game.score = 0;
 
   view.innerHTML = `
-    <button class="btn-back" onclick="renderGamesSection()">← العودة للألعاب</button>
+    <button class="btn-back" onclick="startGame(\'${lesson.id}\')">← صالة ألعاب الدرس</button>
     <div class="game-container">
       <div class="game-score-bar">
         <div>

@@ -8,15 +8,14 @@ window.grade5Data = {
   "source": "كتاب العلوم - الصف الخامس الابتدائي - الجزآن الأول والثاني من المقرر",
   "sourceNotes": "تم اعتماد ترتيب الوحدات والفصول والدروس على قائمتي المحتويات في الجزأين الأول والثاني. المحتوى ملخص ومُعاد الصياغة، وأوراق العمل والمشروعات من إعداد نوات ستيم.",
   "availableSemesters": [
-    1,
-    2
+    1
   ],
   "grades": [
     {
       "id": "grade5",
       "name": "الصف الخامس الابتدائي",
       "icon": "🔬",
-      "semesterName": "الفصلان الدراسيان الأول والثاني",
+      "semesterName": "الفصل الدراسي الأول",
       "units": [
         {
           "id": "g5-unit1",
@@ -6315,7 +6314,7 @@ window.grade5Data = {
         {
           "id": "g5-unit4",
           "number": 4,
-          "semester": 2,
+          "semester": 1,
           "name": "الطقس",
           "icon": "🌦️",
           "color": "#F57C00",
@@ -8407,7 +8406,7 @@ window.grade5Data = {
         {
           "id": "g5-unit5",
           "number": 5,
-          "semester": 2,
+          "semester": 1,
           "name": "المادة",
           "icon": "⚛️",
           "color": "#0288D1",
@@ -10520,7 +10519,7 @@ window.grade5Data = {
         {
           "id": "g5-unit6",
           "number": 6,
-          "semester": 2,
+          "semester": 1,
           "name": "القوى والطاقة",
           "icon": "⚙️",
           "color": "#6A1B9A",
@@ -12626,7 +12625,7 @@ window.grade5Data = {
   ROOT.source = "كتاب العلوم - الصف الخامس الابتدائي - الجزآن الأول والثاني من المقرر";
   const grade = ROOT.grades && ROOT.grades[0];
   if (!grade) return;
-  grade.semesterName = 'الفصلان الدراسيان الأول والثاني';
+  grade.semesterName = 'الفصل الدراسي الأول';
   const lessons=[];
   (grade.units||[]).forEach((u,idx)=>{
     u.number=u.number||idx+1; u.semester=idx<3?1:2;

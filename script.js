@@ -58,7 +58,7 @@ function enterAppSection(gradeId, section) {
 
 function enterApp(gradeId = state.selectedGradeId || 'grade1') {
   state.selectedGradeId = gradeId;
-  state.currentSemester = (gradeId === 'grade2' || gradeId === 'grade3') ? 2 : 1;
+  state.currentSemester = gradeId === 'grade2' ? 2 : 1;
   state.currentGrade = null;
   state.currentGradeData = null;
   state.currentUnit = null;
@@ -183,8 +183,6 @@ function getAvailableGrades() {
 }
 
 function getAvailableSemestersForGrade(gradeId) {
-  // الصف الثالث بعد مراجعة كتابي 1448-2026 متاح في الموقع ضمن الفصل الدراسي الثاني فقط.
-  if (gradeId === 'grade3') return [2];
   return [1, 2];
 }
 

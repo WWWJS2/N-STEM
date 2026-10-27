@@ -13049,3 +13049,63 @@ window.grade4Data = {
   ROOT.__gameDiversityUpgrade = MARK;
 })();
 
+
+
+;(() => {
+  const ROOT = window.grade4Data;
+  const MARK = 'grade4-semester2-both-books-1448-v1';
+  if (!ROOT || ROOT.__semester2BothBooks === MARK) return;
+
+  const grade = ROOT.grades && ROOT.grades.find(g => g.id === 'grade4');
+  if (!grade) return;
+
+  const originals = (grade.units || []).filter(u => !String(u.id || '').startsWith('g4-s2-'));
+
+  // Preserve the semester-one content exactly as it was displayed before this update:
+  // units 1-3 remain in semester 1. Units 4-7 already belong to semester 2.
+  originals.forEach((unit, idx) => {
+    const semester = idx < 3 ? 1 : 2;
+    unit.semester = semester;
+    (unit.lessons || []).forEach(lesson => {
+      lesson.semester = semester;
+      lesson.sourcePart = idx < 3 ? 'الجزء الأول' : 'الجزء الثاني';
+    });
+  });
+
+  // The two books supplied for semester 2 together contain all seven units.
+  // Clone units 1-3 into semester 2 with unique IDs, leaving semester 1 untouched.
+  const semester2Part1 = originals.slice(0, 3).map((unit, ui) => {
+    const cloned = JSON.parse(JSON.stringify(unit));
+    cloned.id = 'g4-s2-unit' + (ui + 1);
+    cloned.semester = 2;
+    cloned.semesterSource = 'الفصل الدراسي الثاني - الجزء الأول من الكتاب';
+    cloned.lessons = (cloned.lessons || []).map((lesson, li) => {
+      lesson.id = 'g4-s2-u' + (ui + 1) + '-l' + (li + 1);
+      lesson.semester = 2;
+      lesson.sourcePart = 'الجزء الأول';
+      lesson.semesterSource = 'الفصل الدراسي الثاني';
+      lesson.fullBookReview = '1448-2026-page-by-page';
+      return lesson;
+    });
+    return cloned;
+  });
+
+  // Keep filtered order correct for both tabs:
+  // semester 1 => units 1,2,3
+  // semester 2 => units 1,2,3,4,5,6,7
+  const arranged = [];
+  for (let i = 0; i < originals.length; i++) {
+    arranged.push(originals[i]);
+    if (i < 3) arranged.push(semester2Part1[i]);
+  }
+
+  grade.units = arranged;
+  ROOT.availableSemesters = [1, 2];
+  ROOT.semester2Curriculum = {
+    source: 'كتاب العلوم للصف الرابع الابتدائي - الجزء الأول والجزء الثاني - طبعة 1448-2026',
+    units: 7,
+    lessons: 24,
+    review: 'مراجعة كاملة للكتابين'
+  };
+  ROOT.__semester2BothBooks = MARK;
+})();

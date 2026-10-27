@@ -183,7 +183,8 @@ function getAvailableGrades() {
 }
 
 function getAvailableSemestersForGrade(gradeId) {
-  // الفصل الأول يحتوي المحتوى الحالي، والفصل الثاني مُجهّز فارغاً للإضافة لاحقاً.
+  // الصف الثالث بعد مراجعة كتابي 1448-2026 متاح في الموقع ضمن الفصل الدراسي الثاني فقط.
+  if (gradeId === 'grade3') return [2];
   return [1, 2];
 }
 
@@ -1076,7 +1077,7 @@ function renderGamesSection() {
   if (!view) return;
 
   const allLessons = getAllLessonsFlat(state.selectedGradeId, state.currentSemester);
-  const secondFun = Number(state.currentSemester) === 2;
+  const secondFun = state.selectedGradeId === 'grade1' && Number(state.currentSemester) === 2;
   const playedCount = allLessons.filter(({lesson}) => {
     if (_isSecondSemesterFunLesson(lesson)) {
       return ['picture','memory','mission'].some(mode => scores[_funRecordKey(mode, lesson.id)] !== undefined);

@@ -6,6 +6,7 @@ window.grade3Data = {
   "version": "1448-2026",
   "source": "كتاب العلوم - الصف الثالث الابتدائي - الجزآن الأول والثاني من المقرر",
   "availableSemesters": [
+    1,
     2
   ],
   "grades": [
@@ -13,7 +14,7 @@ window.grade3Data = {
       "id": "grade3",
       "name": "الصف الثالث الابتدائي",
       "icon": "🔬",
-      "semesterName": "الفصل الدراسي الثاني",
+      "semesterName": "الفصل الدراسي الأول",
       "units": [
         {
           "id": "g3-unit1",
@@ -10594,3 +10595,29 @@ window.grade3Data = {
   ROOT.__gameDiversityUpgrade = MARK;
 })();
 
+
+
+;(() => {
+  const ROOT = window.grade3Data;
+  const MARK = 'grade3-semester-split-restored-v1';
+  if (!ROOT || ROOT.__semesterSplitRestored === MARK) return;
+  const grade = ROOT.grades && ROOT.grades.find(g => g.id === 'grade3');
+  if (!grade) return;
+
+  ROOT.availableSemesters = [1, 2];
+  ROOT.source = 'كتاب العلوم - الصف الثالث الابتدائي - الجزآن الأول والثاني من المقرر';
+  grade.semesterName = 'الفصل الدراسي الأول';
+
+  (grade.units || []).forEach((unit, idx) => {
+    const semester = idx < 3 ? 1 : 2;
+    unit.number = idx + 1;
+    unit.semester = semester;
+    (unit.lessons || []).forEach(lesson => {
+      lesson.semester = semester;
+      lesson.sourcePart = idx < 3 ? 'الجزء الأول' : 'الجزء الثاني';
+    });
+  });
+
+  ROOT.__semesterSplit1448 = 'grade3-units1-3-sem1-units4-6-sem2';
+  ROOT.__semesterSplitRestored = MARK;
+})();

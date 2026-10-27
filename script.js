@@ -58,7 +58,7 @@ function enterAppSection(gradeId, section) {
 
 function enterApp(gradeId = state.selectedGradeId || 'grade1') {
   state.selectedGradeId = gradeId;
-  state.currentSemester = 1;
+  state.currentSemester = gradeId === 'grade2' ? 2 : 1;
   state.currentGrade = null;
   state.currentGradeData = null;
   state.currentUnit = null;
@@ -189,22 +189,46 @@ function getAvailableSemestersForGrade(gradeId) {
 
 function getAllLessonsFlat(gradeId = state.selectedGradeId, semesterFilter = null) {
   const result = [];
-  const wantsSemester1 = semesterFilter === null || semesterFilter === undefined || Number(semesterFilter) === 1;
-  const wantsSemester2 = semesterFilter === null || semesterFilter === undefined || Number(semesterFilter) === 2;
+  const desiredSemester = semesterFilter === null || semesterFilter === undefined
+    ? null
+    : Number(semesterFilter);
 
   if (gradeId === 'grade2' || gradeId === 'grade3' || gradeId === 'grade4' || gradeId === 'grade5' || gradeId === 'grade6') {
-    if (!wantsSemester1) return result;
-    const source = gradeId === 'grade2' ? window.grade2Data : (gradeId === 'grade3' ? window.grade3Data : (gradeId === 'grade4' ? window.grade4Data : (gradeId === 'grade5' ? window.grade5Data : window.grade6Data)));
+    const source = gradeId === 'grade2'
+      ? window.grade2Data
+      : (gradeId === 'grade3'
+        ? window.grade3Data
+        : (gradeId === 'grade4'
+          ? window.grade4Data
+          : (gradeId === 'grade5' ? window.grade5Data : window.grade6Data)));
+
     if (source && source.grades) {
       const grade = source.grades.find(g => g.id === gradeId) || source.grades[0];
-      if (grade) (grade.units || []).forEach(unit => (unit.lessons || []).forEach(lesson => result.push({ lesson, unit, grade, semester: 1 })));
+      if (grade) {
+        (grade.units || []).forEach(unit => {
+          const unitSemester = Number(unit.semester || 1);
+          if (desiredSemester !== null && unitSemester !== desiredSemester) return;
+          (unit.lessons || []).forEach(lesson => {
+            const lessonSemester = Number(lesson.semester || unitSemester || 1);
+            if (desiredSemester !== null && lessonSemester !== desiredSemester) return;
+            result.push({ lesson, unit, grade, semester: lessonSemester });
+          });
+        });
+      }
     }
     return result;
   }
 
+  const wantsSemester1 = desiredSemester === null || desiredSemester === 1;
+  const wantsSemester2 = desiredSemester === null || desiredSemester === 2;
+
   if (gradeId === 'grade1' && wantsSemester1 && window.nawatData && nawatData.grades) {
     const grade = nawatData.grades.find(g => g.id === gradeId);
-    if (grade) (grade.units || []).forEach(unit => (unit.lessons || []).forEach(lesson => result.push({ lesson, unit, grade, semester: 1 })));
+    if (grade) {
+      (grade.units || []).forEach(unit => {
+        (unit.lessons || []).forEach(lesson => result.push({ lesson, unit, grade, semester: 1 }));
+      });
+    }
   }
 
   if (gradeId === 'grade1' && wantsSemester2 && window.semester2Data && semester2Data.grades) {
@@ -213,14 +237,19 @@ function getAllLessonsFlat(gradeId = state.selectedGradeId, semesterFilter = nul
       (sem2Grade.units || []).forEach((unit, idx) => {
         const normalizedUnit = {
           id: unit.id,
-          number: unit.number || idx + 4,
+          number: unit.number || idx + 1,
           name: unit.title || unit.name,
           icon: unit.icon || '📗',
           color: unit.color || '#4CAF50',
           semester: 2,
           lessons: (unit.lessons || []).map(id => semester2Data.lessons.find(l => l.id === id)).filter(Boolean)
         };
-        normalizedUnit.lessons.forEach(lesson => result.push({ lesson, unit: normalizedUnit, grade: { ...sem2Grade, id: 'grade1', name: 'الصف الأول الابتدائي', semesterName: 'الفصل الدراسي الثاني' }, semester: 2 }));
+        normalizedUnit.lessons.forEach(lesson => result.push({
+          lesson,
+          unit: normalizedUnit,
+          grade: { ...sem2Grade, id: 'grade1', name: 'الصف الأول الابتدائي', semesterName: 'الفصل الدراسي الثاني' },
+          semester: 2
+        }));
       });
     }
   }
@@ -695,14 +724,26 @@ function switchSemester(semesterNum, gradeId) {
 
 function _getGradeData(grade, semesterNum) {
   if (!grade) return null;
-  if (Number(semesterNum) === 2) {
-    if (grade.id === 'grade1' && window.semester2Data && semester2Data.grades) {
+  const semester = Number(semesterNum) === 2 ? 2 : 1;
+
+  if (grade.id === 'grade1') {
+    if (semester === 2 && window.semester2Data && semester2Data.grades) {
       const sem2Grade = semester2Data.grades.find(g => g.id === grade.id || g.id === grade.id + '-s2') || semester2Data.grades[0];
       if (sem2Grade) return _normalizeSem2Grade(sem2Grade);
     }
-    return { ...grade, semesterName: 'الفصل الدراسي الثاني', units: [] };
+    return {
+      ...grade,
+      semesterName: 'الفصل الدراسي الأول',
+      units: semester === 1 ? (grade.units || []) : []
+    };
   }
-  return { ...grade, semesterName: 'الفصل الدراسي الأول', units: grade.units || [] };
+
+  const units = (grade.units || []).filter(unit => Number(unit.semester || 1) === semester);
+  return {
+    ...grade,
+    semesterName: semester === 2 ? 'الفصل الدراسي الثاني' : 'الفصل الدراسي الأول',
+    units
+  };
 }
 
 function _normalizeSem2Grade(sem2Grade) {

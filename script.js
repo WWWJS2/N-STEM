@@ -114,6 +114,15 @@ function scrollToGrades() {
 
 // ===== التنقل بين الأقسام =====
 function showSection(name) {
+  // Prevent hidden assessment timers from running after a student leaves the activity.
+  if (name !== 'quiz' && state.quiz.timer) {
+    clearInterval(state.quiz.timer);
+    state.quiz.timer = null;
+  }
+  if (name !== 'games' && state.game.challengeTimer) {
+    clearInterval(state.game.challengeTimer);
+    state.game.challengeTimer = null;
+  }
   document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => {
     b.classList.remove('active');
@@ -669,6 +678,11 @@ function showUnits(gradeId) {
   state.selectedGradeId = gradeId;
   const semesters = getAvailableSemestersForGrade(gradeId);
   if (!semesters.includes(state.currentSemester)) state.currentSemester = semesters[0] || 1;
+  // Never land on an empty term when another published term has lessons.
+  if (getAllLessonsFlat(gradeId, state.currentSemester).length === 0) {
+    const available = semesters.find(sem => getAllLessonsFlat(gradeId, sem).length > 0);
+    if (available) state.currentSemester = available;
+  }
   state.currentGrade = grade;
   state.currentGradeData = grade;
   state.currentUnit = null;
@@ -778,7 +792,7 @@ function _renderUnitsForSemester(grade, semesterNum) {
   const lessonCount = units.reduce((sum,u) => sum + (u.lessons || []).length, 0);
   const completed = units.reduce((sum,u) => sum + (u.lessons || []).filter(l => scores[l.id] !== undefined).length, 0);
   const progress = lessonCount ? Math.round((completed / lessonCount) * 100) : 0;
-  const isEmptySecondSemester = Number(semesterNum) === 2 && units.length === 0;
+  const isEmptySemester = units.length === 0;
 
   view.innerHTML = `
     <button class="btn-back" onclick="renderLessonsSection()" aria-label="العودة للصفوف">
@@ -791,7 +805,7 @@ function _renderUnitsForSemester(grade, semesterNum) {
         <div>
           <span class="section-kicker section-kicker--light">${semLabel}</span>
           <h2>${gradeData.name}</h2>
-          <p>${isEmptySecondSemester ? 'هذه الخانة جاهزة لإضافة وحدات ودروس الفصل الدراسي الثاني.' : 'اختر وحدة لتبدأ رحلة التعلم، ثم انتقل بين الدرس والنشاط واللعبة والاختبار.'}</p>
+          <p>${isEmptySemester ? 'لم يُضف محتوى هذا الفصل الدراسي إلى الموقع حتى الآن.' : 'اختر وحدة لتبدأ رحلة التعلم، ثم انتقل بين الدرس والنشاط واللعبة والاختبار.'}</p>
         </div>
       </div>
       <div class="overview-stats">
@@ -802,11 +816,11 @@ function _renderUnitsForSemester(grade, semesterNum) {
       </div>
     </section>
 
-    ${isEmptySecondSemester ? `
+    ${isEmptySemester ? `
       <div class="card" style="max-width:720px;margin:24px auto;text-align:center;padding:42px 28px;border:2px dashed #b7c9d8;background:#f8fbfd">
         <div style="font-size:48px;margin-bottom:12px">📘</div>
-        <h3 style="margin:0 0 10px">الفصل الدراسي الثاني</h3>
-        <p style="margin:0;color:#58728a;line-height:1.9">لا توجد وحدات أو دروس مضافة بعد. هذه الخانة مخصصة للفصل الدراسي الثاني وسنبدأ بإضافة محتوى الصف الأول عند اعتماد الكتاب.</p>
+        <h3 style="margin:0 0 10px">${semLabel}</h3>
+        <p style="margin:0;color:#58728a;line-height:1.9">لا توجد وحدات أو دروس منشورة في ${semLabel} لهذا الصف حاليًا. يمكنك مراجعة الفصل الآخر من التبويب بالأعلى.</p>
       </div>
     ` : `
       <div class="cards-grid unit-grid">
@@ -2762,7 +2776,7 @@ function showQuizResult() {
   const percent = total > 0 ? Math.round((score / total) * 100) : 0;
 
   const prev = scores[state.quiz.lessonId] || 0;
-  if (percent > prev) {
+  if (scores[state.quiz.lessonId] === undefined || percent > prev) {
     scores[state.quiz.lessonId] = percent;
     localStorage.setItem('nawat_scores', JSON.stringify(scores));
   }

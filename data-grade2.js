@@ -4,7 +4,7 @@
 
 window.grade2Data = {
   "version": "1448-2026",
-  "source": "كتاب العلوم – الصف الثاني الابتدائي – الجزآن الأول والثاني من المقرر – مصنفان في الموقع ضمن الفصل الدراسي الثاني",
+  "source": "كتاب العلوم – الصف الثاني الابتدائي – الجزآن الأول والثاني من المقرر – موزعان في الموقع على الفصلين الدراسيين وفق تقسيم الوحدات 1-4 و5-6",
   "availableSemesters": [
     2
   ],
@@ -6561,7 +6561,7 @@ window.grade2Data = {
 })();
 ;(() => {
   const ROOT = window.grade2Data;
-  const CFG = {"label":"grade 2 semester 2","source":"كتاب العلوم - الصف الثاني الابتدائي - الجزآن الأول والثاني من المقرر - مصنفان في الموقع ضمن الفصل الدراسي الثاني","flatLessons":false};
+  const CFG = {"label":"grade 2 semester 2","source":"كتاب العلوم - الصف الثاني الابتدائي - الجزآن الأول والثاني من المقرر - موزعان في الموقع على الفصلين الدراسيين وفق تقسيم الوحدات 1-4 و5-6","flatLessons":false};
   const marker = "full-print-grade2-s2-v2";
   if (!ROOT || ROOT.__fullPrintUpgrade === marker) return;
 
@@ -6778,3 +6778,44 @@ window.grade2Data = {
   ROOT.__fullPrintUpgrade = marker;
 })();
 
+
+// تصحيح التقسيم الدراسي المعتمد: الوحدات 1-4 للفصل الأول، والوحدتان 5-6 للفصل الثاني.
+// يُنفّذ هذا التصحيح بعد جميع ترقيات المحتوى دون تكرار أي وحدة أو تغيير أوراق العمل.
+(function separateGrade2SemestersByUnit() {
+  'use strict';
+  const ROOT = window.grade2Data;
+  const MARK = 'grade2-s1-units1to4-s2-units5to6-1448-v1';
+  if (!ROOT || ROOT.__grade2SemesterBoundary === MARK) return;
+  const grade = (ROOT.grades || []).find(g => g.id === 'grade2');
+  if (!grade) return;
+
+  const units = grade.units || [];
+  const expectedUnitIds = Array.from({length: 6}, (_, i) => 'g2-unit' + (i + 1));
+  if (units.length !== 6 || units.some((u, i) =>
+      u.id !== expectedUnitIds[i] || !Array.isArray(u.lessons) || u.lessons.length !== 4)) {
+    console.error('Grade 2: unexpected curriculum structure; semester reassignment cancelled.');
+    return;
+  }
+  units.forEach((unit, index) => {
+    const semester = index < 4 ? 1 : 2;
+    unit.semester = semester;
+    unit.lessons.forEach(lesson => { lesson.semester = semester; });
+  });
+
+  const first = units.slice(0,4);
+  const second = units.slice(4);
+  ROOT.availableSemesters = [1,2];
+  ROOT.source = 'العلوم - الصف الثاني الابتدائي، طبعة 1448/2026؛ الوحدات 1-4 للفصل الأول، والوحدتان 5-6 للفصل الثاني.';
+  grade.semesterName = 'الفصلان الدراسيان الأول والثاني';
+  ROOT.semester1Curriculum = {
+    units: first.length,
+    lessons: first.reduce((n,u)=>n+u.lessons.length,0),
+    unitIds: first.map(u=>u.id)
+  };
+  ROOT.semester2Curriculum = {
+    units: second.length,
+    lessons: second.reduce((n,u)=>n+u.lessons.length,0),
+    unitIds: second.map(u=>u.id)
+  };
+  ROOT.__grade2SemesterBoundary = MARK;
+})();

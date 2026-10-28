@@ -88,11 +88,12 @@ function enterApp(gradeId = state.selectedGradeId || 'grade1') {
     }, 400);
   }
 
+  // Always reveal the lessons panel on entry; returning from games or quizzes
+  // must not leave the selected semester hidden behind a different panel.
+  showSection('lessons');
   renderLessonsSection();
-  renderGamesSection();
-  renderQuizSection();
-  initChatbot();
   showUnits(state.selectedGradeId);
+  initChatbot();
   updateAppGradeChip();
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -663,6 +664,7 @@ function renderLessonsSection() {
 function showUnits(gradeId) {
   const grade = getPrimaryGrade(gradeId);
   if (!grade) return;
+  showSection('lessons');
 
   state.selectedGradeId = gradeId;
   const semesters = getAvailableSemestersForGrade(gradeId);
@@ -708,6 +710,7 @@ function switchSemester(semesterNum, gradeId) {
   const id = gradeId || state.selectedGradeId;
   const semesters = getAvailableSemestersForGrade(id);
   if (!semesters.includes(semesterNum)) return;
+  showSection('lessons');
 
   state.currentSemester = semesterNum;
   state.currentUnit = null;
@@ -841,6 +844,7 @@ function _renderUnitsForSemester(grade, semesterNum) {
 function showLessons(unitId) {
   const grade = state.currentGradeData || state.currentGrade;
   if (!grade) return;
+  showSection('lessons');
   const unit = (grade.units || []).find(u => u.id === unitId);
   if (!unit) return;
   state.currentUnit = unit;
@@ -894,6 +898,7 @@ function showLesson(lessonId) {
   const grade = state.currentGrade;
   const unit = state.currentUnit;
   if (!unit) return;
+  showSection('lessons');
 
   let lesson = unit.lessons.find(l => l.id === lessonId);
   if (!lesson) return;

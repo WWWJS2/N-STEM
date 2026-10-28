@@ -13052,60 +13052,42 @@ window.grade4Data = {
 
 
 ;(() => {
+  // فصل الفصلين الدراسيين دون نسخ أو تكرار دروس أحدهما في الآخر.
   const ROOT = window.grade4Data;
-  const MARK = 'grade4-semester2-both-books-1448-v1';
-  if (!ROOT || ROOT.__semester2BothBooks === MARK) return;
-
-  const grade = ROOT.grades && ROOT.grades.find(g => g.id === 'grade4');
+  const VERSION = 'grade4-separated-semesters-1448-v2';
+  if (!ROOT || ROOT.__semesterSeparation === VERSION) return;
+  const grade = (ROOT.grades || []).find(g => g.id === 'grade4');
   if (!grade) return;
 
-  const originals = (grade.units || []).filter(u => !String(u.id || '').startsWith('g4-s2-'));
+  const originals = (grade.units || []).filter(u => /^g4-unit[1-7]$/.test(u.id));
+  if (originals.length !== 7 || originals.some(u => !Array.isArray(u.lessons))) {
+    console.warn('Grade 4: Unexpected textbook structure; semester separation was not changed.');
+    return;
+  }
 
-  // Preserve the semester-one content exactly as it was displayed before this update:
-  // units 1-3 remain in semester 1. Units 4-7 already belong to semester 2.
-  originals.forEach((unit, idx) => {
-    const semester = idx < 3 ? 1 : 2;
+  originals.forEach((unit, index) => {
+    const semester = index < 3 ? 1 : 2;
     unit.semester = semester;
     (unit.lessons || []).forEach(lesson => {
       lesson.semester = semester;
-      lesson.sourcePart = idx < 3 ? 'الجزء الأول' : 'الجزء الثاني';
+      lesson.sourcePart = semester === 1 ? 'الجزء الأول' : 'الجزء الثاني';
     });
   });
 
-  // The two books supplied for semester 2 together contain all seven units.
-  // Clone units 1-3 into semester 2 with unique IDs, leaving semester 1 untouched.
-  const semester2Part1 = originals.slice(0, 3).map((unit, ui) => {
-    const cloned = JSON.parse(JSON.stringify(unit));
-    cloned.id = 'g4-s2-unit' + (ui + 1);
-    cloned.semester = 2;
-    cloned.semesterSource = 'الفصل الدراسي الثاني - الجزء الأول من الكتاب';
-    cloned.lessons = (cloned.lessons || []).map((lesson, li) => {
-      lesson.id = 'g4-s2-u' + (ui + 1) + '-l' + (li + 1);
-      lesson.semester = 2;
-      lesson.sourcePart = 'الجزء الأول';
-      lesson.semesterSource = 'الفصل الدراسي الثاني';
-      lesson.fullBookReview = '1448-2026-page-by-page';
-      return lesson;
-    });
-    return cloned;
-  });
-
-  // Keep filtered order correct for both tabs:
-  // semester 1 => units 1,2,3
-  // semester 2 => units 1,2,3,4,5,6,7
-  const arranged = [];
-  for (let i = 0; i < originals.length; i++) {
-    arranged.push(originals[i]);
-    if (i < 3) arranged.push(semester2Part1[i]);
-  }
-
-  grade.units = arranged;
+  // الفصل الأول: الوحدات 1-3؛ الفصل الثاني: الوحدات 4-7.
+  // لا ننسخ الوحدات 1-3 إلى الفصل الثاني.
+  grade.units = originals;
+  const first = originals.filter(u => u.semester === 1);
+  const second = originals.filter(u => u.semester === 2);
+  const countLessons = units => units.reduce((n,u)=>n+(u.lessons||[]).length,0);
   ROOT.availableSemesters = [1, 2];
-  ROOT.semester2Curriculum = {
-    source: 'كتاب العلوم للصف الرابع الابتدائي - الجزء الأول والجزء الثاني - طبعة 1448-2026',
-    units: 7,
-    lessons: 24,
-    review: 'مراجعة كاملة للكتابين'
+  ROOT.semester1Curriculum = {
+    source: 'العلوم - الصف الرابع - الجزء الأول من المقرر - طبعة 1448-2026',
+    units: first.length, lessons: countLessons(first)
   };
-  ROOT.__semester2BothBooks = MARK;
+  ROOT.semester2Curriculum = {
+    source: 'العلوم - الصف الرابع - الجزء الثاني من المقرر - طبعة 1448-2026',
+    units: second.length, lessons: countLessons(second)
+  };
+  ROOT.__semesterSeparation = VERSION;
 })();
